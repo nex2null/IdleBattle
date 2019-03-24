@@ -94,6 +94,12 @@ export default class BattleCharacter {
     }
 
     addEffect(effect) {
+
+        // Make sure we can add the effect
+        if (!effect.canApply())
+            return;
+
+        // Apply the effect
         effect.onApply();
         this.effects.push(effect);
     }
@@ -101,5 +107,9 @@ export default class BattleCharacter {
     removeEffect(effect) {
         effect.onRemove();
         this.effects = this.effects.filter(x => x !== effect);
+    }
+
+    getEffect(name) {
+        return this.effects.find(x => x.name === name);
     }
 }

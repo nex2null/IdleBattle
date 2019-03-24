@@ -1,22 +1,16 @@
 import DamageType from '../damage-type';
+import BaseEffect from './base-effect';
 
-export default class {
+class DefenseEffect extends BaseEffect {
 
     constructor(character) {
+        super();
         this.character = character;
-    }
-    
-    onApply() {        
-    }
-
-    onRemove() {
+        this.name = 'Defended';
     }
 
     beforeActionPerformed() {
         this.character.removeEffect(this);
-    }
-
-    afterActionPerformed() {        
     }
 
     beforeDamageTaken(damage) {
@@ -24,7 +18,6 @@ export default class {
         if (damage.type === DamageType.Physical)
             damage.amount = damage.amount * .5;
     }
-
-    afterDamageTaken() {
-    }
 }
+
+export default DefenseEffect;

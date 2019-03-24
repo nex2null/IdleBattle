@@ -2,18 +2,24 @@ import GambitType from './gambit-type';
 import TargetType from '../target-type';
 import AttackSkill from '../skills/attack';
 import DefendSkill from '../skills/defend';
+import WebShootSkill from '../skills/web-shoot';
 
 export default class {
 
-    constructor(condition, conditionInput, type, actionName) {
+    constructor(condition, conditionInput, type, actionName, activationChance) {
         this.condition = condition;
         this.conditionInput = conditionInput;
         this.type = type;
         this.actionName = actionName;
         this.action = this.findAction(actionName);
+        this.activationChance = activationChance || 1;
     }
 
     getAction(user, characters) {
+
+        // Determine if we can activate
+        if (this.activationChance < 1 && Math.random() > this.activationChance)
+            return null;
 
         // Grab the potential matches for the condition
         var potentialTargets = this.condition.getTargets(user, characters);
@@ -41,5 +47,6 @@ export default class {
     findAction(actionName) {
         if (actionName === 'Attack') return new AttackSkill();
         if (actionName === 'Defend') return new DefendSkill();
+        if (actionName === 'Web Shoot') return new WebShootSkill();
     }
 }
