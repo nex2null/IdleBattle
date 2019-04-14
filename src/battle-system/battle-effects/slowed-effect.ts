@@ -1,30 +1,38 @@
 import BaseEffect from './base-effect';
+import BattleCharacter from '../battle-character';
 
 class SlowedEffect extends BaseEffect {
 
-    constructor(character, turnsToSlow) {
-        super();
-        this.character = character;
+    // Properties
+    turnsLeft: number;
+    removedSpeed: number = 0;
+
+    // Constructor
+    constructor(character: BattleCharacter, turnsToSlow: number) {
+        super(character, 'Slowed');
         this.turnsLeft = turnsToSlow;
-        this.name = 'Slowed';
     }
 
+    // Whether the effect can be applied
     canApply() {
         return this.character.getEffect(this.name) == null;
     }
-    
+
+    // Handle when the effect is applied
     onApply() {
         // Remove 50% of the character's speed
         this.removedSpeed = Math.floor(this.character.spd * .5);
         this.character.spd -= this.removedSpeed;
     }
 
+    // Handle when the effect is removed
     onRemove() {
         // Give the character its speed back
         if (this.removedSpeed)
             this.character.spd += this.removedSpeed;
     }
 
+    // Handle before an action is performed
     beforeActionPerformed() {
         this.turnsLeft--;
         if (this.turnsLeft <= 0)
