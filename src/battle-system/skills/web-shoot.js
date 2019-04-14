@@ -1,19 +1,19 @@
 import TargetType from '../target-type';
 import BattleFormulas from '../battle-formulas';
 import SlowedEffect from '../battle-effects/slowed-effect';
+import BaseSkill from './base-skill';
 
-export default class {
+class WebShootSkil extends BaseSkill {
 
     constructor() {
-        this.name = 'Web Shoot';
-        this.targetType = TargetType.Single;
+        super('Web Shoot', TargetType.Single);
     }
 
     calculateHit(user, target) {
         return BattleFormulas.calculateHit(user, target);
     }
 
-    performSkill(character, targets, battleLog) {
+    use(character, targets, battleLog) {
 
         // Only first target is ever relevant
         var target = targets[0];
@@ -22,8 +22,7 @@ export default class {
         var attackHits = this.calculateHit(character, target);
 
         // If the attack hits then apply the slow
-        if (attackHits)
-        {
+        if (attackHits) {
             // Add a slowed effect to the character
             var slowedEffect = new SlowedEffect(target, 3);
             target.addEffect(slowedEffect);
@@ -31,8 +30,7 @@ export default class {
             // Log
             battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}, they are slowed!`);
         }
-        else
-        {
+        else {
             battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}, but misses!`)
         }
     }
@@ -41,3 +39,5 @@ export default class {
         return target.getEffect('Slowed') == null;
     }
 }
+
+export default WebShootSkil;

@@ -2,14 +2,14 @@ import DamageType from '../damage-type';
 import TargetType from '../target-type';
 import BattleFormulas from '../battle-formulas';
 import Damage from '../battle-damage';
+import BaseSkill from './base-skill';
 
-export default class {
+class AttackSkill extends BaseSkill {
 
     constructor() {
-        this.name = 'Attack';
+        super('Attack', TargetType.Single);
         this.power = 16;
         this.damageType = DamageType.Physical;
-        this.targetType = TargetType.Single;
     }
 
     calculateHit(user, target) {
@@ -21,7 +21,7 @@ export default class {
         return new Damage(damageAmount, this.damageType);
     }
 
-    performSkill(character, targets, battleLog) {
+    use(character, targets, battleLog) {
 
         // Only first target is ever relevant
         var target = targets[0];
@@ -30,8 +30,7 @@ export default class {
         var attackHits = this.calculateHit(character, target);
 
         // If the attack hits calculate damage
-        if (attackHits)
-        {
+        if (attackHits) {
             // Calculate the damage on the target
             var damageToDo = this.calculateDamage(character, target);
 
@@ -42,8 +41,7 @@ export default class {
             battleLog.addMessage(`${character.name} attacks ${target.name} for ${damageToDo.amount} damage`);
             if (!target.isAlive()) battleLog.addMessage(`${target.name} has died`);
         }
-        else
-        {
+        else {
             battleLog.addMessage(`${character.name} attacks ${target.name}, but misses!`)
         }
     }
@@ -52,3 +50,5 @@ export default class {
         return target.isAlive();
     }
 }
+
+export default AttackSkill;

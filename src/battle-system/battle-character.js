@@ -9,9 +9,8 @@ export default class BattleCharacter {
         this.hp = args.hp;
         this.mp = args.mp;
         this.str = args.str;
-        this.def = args.def;
+        this.int = args.int;
         this.spd = args.spd;
-        this.eva = args.eva;
         this.characterType = args.characterType;
         this.hostileToCharacterType = args.hostileToCharacterType;
 
@@ -38,6 +37,15 @@ export default class BattleCharacter {
 
     act(characters, battleLog) {
 
+        // Do any pre-action work
+        this.beforeActionPerformed();
+
+        // If I am no longer ready to act after pre-action work then do nothing
+        if (!this.isReadyToAct()) {
+            this.actionPerformed();
+            return;
+        }
+
         // Grab the first valid gambit action
         var gambitAction;
         for (var i = 0; i < this.gambits.length; i++) {
@@ -52,10 +60,10 @@ export default class BattleCharacter {
             return;
         }
 
-        // If this is a skill action the perform the skill
+        // If this is a skill action then use the skill
         if (gambitAction.type === GambitType.Skill) {
-            gambitAction.action.performSkill(this, gambitAction.targets, battleLog);
-        }       
+            gambitAction.action.use(this, gambitAction.targets, battleLog);
+        }
 
         // Set that an action was performed
         this.actionPerformed();
@@ -73,7 +81,7 @@ export default class BattleCharacter {
         this.hp -= damage.amount;
 
         // Don't allow hp to become negative
-        this.hp = this.hp < 0 ? 0 : this.hp;        
+        this.hp = this.hp < 0 ? 0 : this.hp;
 
         // Allow effects to process damage taken
         this.effects.forEach(x => x.afterDamageTaken(damage));

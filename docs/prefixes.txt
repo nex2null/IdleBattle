@@ -1,0 +1,55 @@
+Add Physical Power
+{
+  Rusty: 1-10% - Level 1
+  Heavy: 11-20% - Level 10
+  Sharpened: 21-30% - Level 19
+  Serrated: 31-40% - Level 27
+  Wicked: 41-50% - Level 34
+  Vicious: 51-60% - Level 40
+  Bloodthirsty: 61-70% - Level 45
+  Cruel: 71-80% - Level 50
+  Tyrranical: 81-90% - Level 55
+  Merciless: 91-100% - Level 60
+}
+
+Add Cold Power
+{
+  Frosted: 1-10% - Level 1
+  Chilled: 11-20% - Level 10
+  Icy: 21-30% - Level 19
+  Arctic: 31-40% - Level 27
+  Frigid: 41-50% - Level 34
+  Freezing: 51-60% - Level 40
+  Frozen: 61-70% - Level 45
+  Glaciated: 71-80% - Level 50
+  Polar: 81-90% - Level 55
+  Entombing: 91-100% - Level 60
+}
+
+Add Fire Power
+{
+  Heated: 1-10% - Level 1
+  Smoldering: 11-20% - Level 10
+  Smoking: 21-30% - Level 19
+  Sizzling: 31-40% - Level 27
+  Burning: 41-50% - Level 34
+  Flaming: 51-60% - Level 40
+  Scorching: 61-70% - Level 45
+  Incinerating: 71-80% - Level 50
+  Blasting: 81-90% - Level 55
+  Cremating: 91-100% - Level 60
+}
+
+Add Lightning Power
+{
+  Humming: 1-10% - Level 1
+  Buzzing: 11-20% - Level 10
+  Snapping: 21-30% - Level 19
+  Popping: 31-40% - Level 27
+  Crackling: 41-50% - Level 34
+  Sparking: 51-60% - Level 40
+  Arcing: 61-70% - Level 45
+  Shocking: 71-80% - Level 50
+  Discharging: 81-90% - Level 55
+  Electrocuting: 91-100% - Level 60
+}

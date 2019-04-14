@@ -13,30 +13,21 @@ export default class battleManager {
         while (this.currentState != BattleStates.BattleOver) {
 
             // Sleep for a bit
-            await this.sleep(10);
+            await this.sleep(50);
 
             // Update all charges
             this.updateAllCharges();
 
-            // Grab the next character to act
+            // Grab the next character to act and verify we can find one
             var readyCharacter = this.characters.find(x => x.isReadyToAct());
-
-            // If no character was found then continue
             if (!readyCharacter)
-                continue;
-
-            // Do any pre-action work that needs to happen on the character
-            readyCharacter.beforeActionPerformed();
-
-            // Check that the character is still ready to act
-            if (!readyCharacter.isReadyToAct())
                 continue;
 
             // Have the character act
             readyCharacter.act(this.characters, this.battleLog);
 
             // Determine if the battle is over
-            this.determineBattleOver();            
+            this.determineBattleOver();
         }
 
         this.battleLog.addMessage('The battle has ended!');

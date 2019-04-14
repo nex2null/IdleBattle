@@ -1,0 +1,74 @@
+Stats
+{
+  Investable Stats
+  {
+    Strength
+      - Physical output
+
+    Intellect
+      - Magic output
+
+    Mana
+      - Mana
+
+    Vitality
+      - Health
+
+    Speed
+      - Charge generation
+
+    Evasion
+      - Hit evasion
+
+    Accuracy
+      - Negates evasion
+  }
+
+  Power Stats
+  {
+    Physical Power
+    - Increases physical damage done by a %
+
+    Fire Power
+      - Increases fire damage done by a %
+
+    Cold Power
+      - Increases cold damage done by a %
+
+    Lightning Power
+      - Increases lightning damage done by a %
+  }
+  
+  Resistance Stats
+  {
+    Physical Resistance
+      - Reduces physical damage done by a % (caps at 75%)
+
+    Fire Resistance
+      - Reduces fire damage done by a % (caps at 75%)
+
+    Cold Resistance
+      - Reduces cold damage done by a % (caps at 75%)
+
+    Lightning Resistance
+      - Reduces lightning damage done by a % (caps at 75%)
+
+    ** NOTES **
+    Starting at level 11 - -1% all resists per level
+  }
+
+  Utility Stats
+  {
+    Block Chance
+      - Increases chance to block an attack
+
+    Max Block Chance
+      - Increases maximum chance to block an attack
+    
+    Spell Block Chance
+      - Increases chance to block a spell
+
+    Max Spell Block Chance
+      - Increases maximum chance to block a spell
+  }
+}

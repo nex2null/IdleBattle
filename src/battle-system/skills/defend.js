@@ -1,16 +1,17 @@
 import DefenseEffect from '../battle-effects/defense-effect';
 import TargetType from '../target-type';
+import BaseSkill from './base-skill';
 
-export default class {
+class DefendSkill extends BaseSkill {
 
     constructor() {
-        this.name = 'Defend';
+        super('Defend', TargetType.Self);
         this.power = 0;
         this.damageType = null;
         this.targetType = TargetType.Self;
     }
 
-    performSkill(character, targets, battleLog) {
+    use(character, targets, battleLog) {
 
         // Add a defense effect to the character
         var defenseEffect = new DefenseEffect(character);
@@ -20,7 +21,9 @@ export default class {
         battleLog.addMessage(`${character.name} defends`);
     }
 
-    isBeneficialOn(target) {
+    isBeneficialOn() {
         return true;
     }
 }
+
+export default DefendSkill;
