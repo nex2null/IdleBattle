@@ -1,4 +1,4 @@
-import BattleCharacter from '../../battle-character';
+import BattleCharacter from '../../BattleCharacter';
 
 interface IGambitCondition {
   name: string;

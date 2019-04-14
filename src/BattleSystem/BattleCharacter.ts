@@ -1,9 +1,9 @@
-import GambitTypeEnum from './enums/gambit-type-enum';
-import BattleCharacterTypeEnum from './enums/battle-character-type-enum';
-import BaseEffect from './battle-effects/base-effect';
-import GambitAction from './gambits/gambit-action';
-import BattleLog from './battle-log';
-import BattleDamage from './battle-damage';
+import GambitTypeEnum from './Enums/GambitTypeEnum';
+import BattleCharacterTypeEnum from './Enums/BattleCharacterTypeEnum';
+import BaseEffect from './BattleEffects/BaseEffect';
+import GambitAction from './Gambits/GambitAction';
+import BattleLog from './BattleLog';
+import BattleDamage from './BattleDamage';
 
 export default class BattleCharacter {
 

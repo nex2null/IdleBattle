@@ -1,8 +1,8 @@
-import DefenseEffect from '../battle-effects/defense-effect';
-import TargetTypeEnum from '../enums/target-type-enum';
-import ISkill from './i-skill';
-import BattleCharacter from '../battle-character';
-import BattleLog from '../battle-log';
+import DefenseEffect from '../BattleEffects/DefenseEffect';
+import TargetTypeEnum from '../Enums/TargetTypeEnum';
+import ISkill from './ISkill';
+import BattleCharacter from '../BattleCharacter';
+import BattleLog from '../BattleLog';
 
 class DefendSkill implements ISkill {
 

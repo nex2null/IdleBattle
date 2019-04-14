@@ -1,10 +1,10 @@
-import GambitTypeEnum from '../enums/gambit-type-enum';
-import TargetTypeEnum from '../enums/target-type-enum';
-import IGambitCondition from './conditions/i-gambit-condition';
-import AttackSkill from '../skills/attack';
-import DefendSkill from '../skills/defend';
-import WebShootSkill from '../skills/web-shoot';
-import BattleCharacter from '../battle-character';
+import GambitTypeEnum from '../Enums/GambitTypeEnum';
+import TargetTypeEnum from '../Enums/TargetTypeEnum';
+import IGambitCondition from './Conditions/IGambitCondition';
+import AttackSkill from '../Skills/AttackSkill';
+import DefendSkill from '../Skills/DefendSkill';
+import WebShootSkill from '../Skills/WebShootSkill';
+import BattleCharacter from '../BattleCharacter';
 
 class GambitAction {
 

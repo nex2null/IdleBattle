@@ -30,11 +30,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import BattleManager from "./battle-system/battle-manager";
-import BattleLog from "./battle-system/battle-log";
-import Spider from "./battle-system/enemies/spider";
-import Hero from "./battle-system/enemies/hero";
-import BattleCharacterTypeEnum from "./battle-system/enums/battle-character-type-enum";
+import BattleManager from "./BattleSystem/BattleManager";
+import BattleLog from "./BattleSystem/BattleLog";
+import Spider from "./BattleSystem/Enemies/Spider";
+import Hero from "./BattleSystem/Enemies/Hero";
+import BattleCharacterTypeEnum from "./BattleSystem/Enums/BattleCharacterTypeEnum";
 
 var battleLog = new BattleLog();
 var characters = [

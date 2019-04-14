@@ -1,5 +1,5 @@
-import BattleCharacter from "./battle-character";
-import BattleDamage from './battle-damage';
+import BattleCharacter from "./BattleCharacter";
+import BattleDamage from './BattleDamage';
 
 // Determine if a hit is calculated
 export function calculateHit(attacker: BattleCharacter, defender: BattleCharacter) {

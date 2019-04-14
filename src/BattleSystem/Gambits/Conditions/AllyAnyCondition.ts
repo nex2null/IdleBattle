@@ -1,5 +1,5 @@
-import IGambitCondition from './i-gambit-condition';
-import BattleCharacter from '../../battle-character';
+import IGambitCondition from './IGambitCondition';
+import BattleCharacter from '../../BattleCharacter';
 
 class AllyAnyCondition implements IGambitCondition {
     name: string = 'Ally: any';

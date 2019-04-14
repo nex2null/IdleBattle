@@ -1,10 +1,10 @@
-import { calculateHit, processDamage } from '../battle-formulas';
-import ISkill from './i-skill';
-import DamageTypeEnum from '../enums/damage-type-enum';
-import BattleCharacter from '../battle-character';
-import BattleDamage from '../battle-damage';
-import BattleLog from '../battle-log';
-import TargetTypeEnum from '../enums/target-type-enum';
+import { calculateHit, processDamage } from '../BattleFormulas';
+import ISkill from './ISkill';
+import DamageTypeEnum from '../Enums/DamageTypeEnum';
+import BattleCharacter from '../BattleCharacter';
+import BattleDamage from '../BattleDamage';
+import BattleLog from '../BattleLog';
+import TargetTypeEnum from '../Enums/TargetTypeEnum';
 
 class AttackSkill implements ISkill {
 

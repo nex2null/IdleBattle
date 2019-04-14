@@ -1,4 +1,4 @@
-import DamageTypeEnum from './enums/damage-type-enum';
+import DamageTypeEnum from './Enums/DamageTypeEnum';
 
 class BattleDamage {
 

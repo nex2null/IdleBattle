@@ -1,6 +1,6 @@
-import TargetTypeEnum from '../enums/target-type-enum';
-import BattleCharacter from '../battle-character';
-import BattleLog from '../battle-log';
+import TargetTypeEnum from '../Enums/TargetTypeEnum';
+import BattleCharacter from '../BattleCharacter';
+import BattleLog from '../BattleLog';
 
 interface ISkill {
 

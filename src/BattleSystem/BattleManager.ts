@@ -1,7 +1,7 @@
-import BattleCharacterType from './enums/battle-character-type-enum';
-import BattleStateEnum from './enums/battle-state-enum';
-import BattleCharacter from './battle-character';
-import BattleLog from './battle-log';
+import BattleCharacterType from './Enums/BattleCharacterTypeEnum';
+import BattleStateEnum from './Enums/BattleStateEnum';
+import BattleCharacter from './BattleCharacter';
+import BattleLog from './BattleLog';
 
 class BattleManager {
 

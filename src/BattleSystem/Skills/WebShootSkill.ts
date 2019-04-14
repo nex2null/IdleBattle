@@ -1,9 +1,9 @@
-import TargetTypeEnum from '../enums/target-type-enum';
-import SlowedEffect from '../battle-effects/slowed-effect';
-import ISkill from './i-skill';
-import { calculateHit } from '../battle-formulas';
-import BattleCharacter from '../battle-character';
-import BattleLog from '../battle-log';
+import TargetTypeEnum from '../Enums/TargetTypeEnum';
+import SlowedEffect from '../BattleEffects/SlowedEffect';
+import ISkill from './ISkill';
+import { calculateHit } from '../BattleFormulas';
+import BattleCharacter from '../BattleCharacter';
+import BattleLog from '../BattleLog';
 
 class WebShootSkill implements ISkill {
 

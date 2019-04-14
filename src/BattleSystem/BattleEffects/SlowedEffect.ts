@@ -1,5 +1,5 @@
-import BaseEffect from './base-effect';
-import BattleCharacter from '../battle-character';
+import BaseEffect from './BaseEffect';
+import BattleCharacter from '../BattleCharacter';
 
 class SlowedEffect extends BaseEffect {
 

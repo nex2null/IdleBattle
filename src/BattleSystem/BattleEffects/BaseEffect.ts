@@ -1,6 +1,6 @@
-import BattleDamage from '../battle-damage';
-import BattleCharacter from '../battle-character';
-import IEffect from './i-effect';
+import BattleDamage from '../BattleDamage';
+import BattleCharacter from '../BattleCharacter';
+import IEffect from './IEffect';
 
 class BaseEffect implements IEffect {
 

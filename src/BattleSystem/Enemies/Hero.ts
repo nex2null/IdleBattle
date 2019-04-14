@@ -1,8 +1,8 @@
-import BattleCharacterTypeEnum from '../enums/battle-character-type-enum';
-import BattleCharacter from '../battle-character';
-import GambitAction from '../gambits/gambit-action';
-import GambitTypeEnum from '../enums/gambit-type-enum';
-import EnemyAnyCondition from '../gambits/conditions/enemy-any-condition';
+import BattleCharacterTypeEnum from '../Enums/BattleCharacterTypeEnum';
+import BattleCharacter from '../BattleCharacter';
+import GambitAction from '../Gambits/GambitAction';
+import GambitTypeEnum from '../Enums/GambitTypeEnum';
+import EnemyAnyCondition from '../Gambits/Conditions/EnemyAnyCondition';
 
 class Hero extends BattleCharacter {
     constructor(name: string) {

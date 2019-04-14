@@ -1,7 +1,7 @@
-import DamageTypeEnum from '../enums/damage-type-enum';
-import BaseEffect from './base-effect';
-import BattleCharacter from '../battle-character';
-import BattleDamage from '../battle-damage';
+import DamageTypeEnum from '../Enums/DamageTypeEnum';
+import BaseEffect from './BaseEffect';
+import BattleCharacter from '../BattleCharacter';
+import BattleDamage from '../BattleDamage';
 
 class DefenseEffect extends BaseEffect {
 
