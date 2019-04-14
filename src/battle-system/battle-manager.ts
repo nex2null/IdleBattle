@@ -1,16 +1,25 @@
-import BattleCharacterType from './battle-character-type';
-import BattleStates from './battle-states';
+import BattleCharacterType from './enums/battle-character-type-enum';
+import BattleStateEnum from './enums/battle-state-enum';
+import BattleCharacter from './battle-character';
+import BattleLog from './battle-log';
 
-export default class battleManager {
+class BattleManager {
 
-    constructor(characters, battleLog) {
-        this.currentState = BattleStates.BattleBegin;
+    // Properties
+    characters: Array<BattleCharacter>;
+    currentState: BattleStateEnum;
+    battleLog: BattleLog;
+
+    // Constructor
+    constructor(characters: Array<BattleCharacter>, battleLog: BattleLog) {
+        this.currentState = BattleStateEnum.BattleBegin;
         this.characters = characters;
         this.battleLog = battleLog;
     }
 
+    // Starts the battle
     async startBattle() {
-        while (this.currentState != BattleStates.BattleOver) {
+        while (this.currentState != BattleStateEnum.BattleOver) {
 
             // Sleep for a bit
             await this.sleep(50);
@@ -33,19 +42,24 @@ export default class battleManager {
         this.battleLog.addMessage('The battle has ended!');
     }
 
-    sleep(ms) {
+    // Sleep for a given number of milliseconds
+    sleep(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    updateAllCharges() {
+    // Update all the charges of the characters
+    updateAllCharges(): void {
         this.characters.forEach(x => x.updateCharge());
     }
 
-    determineBattleOver() {
+    // Determine if the battle is over
+    determineBattleOver(): void {
         var playerCharacters = this.characters.filter(x => x.characterType == BattleCharacterType.PlayerParty);
         var enemyCharacters = this.characters.filter(x => x.characterType == BattleCharacterType.EnemyParty);
 
         if (!playerCharacters.find(x => x.isAlive()) || !enemyCharacters.find(x => x.isAlive()))
-            this.currentState = BattleStates.BattleOver;
+            this.currentState = BattleStateEnum.BattleOver;
     }
 }
+
+export default BattleManager;

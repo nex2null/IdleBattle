@@ -1,8 +1,28 @@
-import GambitType from './gambits/gambit-type';
+import GambitTypeEnum from './enums/gambit-type-enum';
+import BattleCharacterTypeEnum from './enums/battle-character-type-enum';
+import BaseEffect from './battle-effects/base-effect';
+import GambitAction from './gambits/gambit-action';
+import BattleLog from './battle-log';
+import BattleDamage from './battle-damage';
 
 export default class BattleCharacter {
 
-    constructor(args) {
+    // Properties
+    name: string;
+    level: number;
+    hp: number;
+    mp: number;
+    str: number;
+    int: number;
+    spd: number;
+    currentCharge: number;
+    characterType: BattleCharacterTypeEnum;
+    hostileToCharacterType: BattleCharacterTypeEnum;
+    effects: Array<BaseEffect> = [];
+    gambits: Array<GambitAction> = [];
+
+    // Constructor
+    constructor(args: any) {
 
         this.name = args.name;
         this.level = args.level;
@@ -19,6 +39,7 @@ export default class BattleCharacter {
         this.gambits = args.gambits || [];
     }
 
+    // Updates the charge level of the character
     updateCharge() {
         if (!this.isAlive())
             return;
@@ -27,15 +48,18 @@ export default class BattleCharacter {
         this.currentCharge = this.currentCharge > 100 ? 100 : this.currentCharge;
     }
 
+    // Determines if the character is ready to act
     isReadyToAct() {
         return this.isAlive() && this.currentCharge >= 100;
     }
 
+    // Determines if the character is alive
     isAlive() {
         return this.hp > 0;
     }
 
-    act(characters, battleLog) {
+    // Has the character perform an action
+    act(characters: Array<BattleCharacter>, battleLog: BattleLog) {
 
         // Do any pre-action work
         this.beforeActionPerformed();
@@ -61,7 +85,7 @@ export default class BattleCharacter {
         }
 
         // If this is a skill action then use the skill
-        if (gambitAction.type === GambitType.Skill) {
+        if (gambitAction.type === GambitTypeEnum.Skill) {
             gambitAction.action.use(this, gambitAction.targets, battleLog);
         }
 
@@ -69,7 +93,7 @@ export default class BattleCharacter {
         this.actionPerformed();
     }
 
-    applyDamage(damage) {
+    applyDamage(damage: BattleDamage) {
 
         // Allow effects to modify damage before processing
         this.effects.forEach(x => x.beforeDamageTaken(damage));
@@ -101,7 +125,7 @@ export default class BattleCharacter {
         this.effects.forEach(x => x.afterActionPerformed());
     }
 
-    addEffect(effect) {
+    addEffect(effect: BaseEffect) {
 
         // Make sure we can add the effect
         if (!effect.canApply())
@@ -112,12 +136,12 @@ export default class BattleCharacter {
         this.effects.push(effect);
     }
 
-    removeEffect(effect) {
+    removeEffect(effect: BaseEffect) {
         effect.onRemove();
         this.effects = this.effects.filter(x => x !== effect);
     }
 
-    getEffect(name) {
+    getEffect(name: string) {
         return this.effects.find(x => x.name === name);
     }
 }
