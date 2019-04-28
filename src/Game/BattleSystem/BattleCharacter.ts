@@ -4,6 +4,7 @@ import BaseEffect from './BattleEffects/BaseEffect';
 import GambitAction from './Gambits/GambitAction';
 import BattleLog from './BattleLog';
 import BattleDamage from './BattleDamage';
+import { LootGenerationOption } from '../Itemization/LootGenerator';
 
 export default class BattleCharacter {
 
@@ -18,8 +19,11 @@ export default class BattleCharacter {
     currentCharge: number;
     characterType: BattleCharacterTypeEnum;
     hostileToCharacterType: BattleCharacterTypeEnum;
-    effects: Array<BaseEffect> = [];
-    gambits: Array<GambitAction> = [];
+    effects: Array<BaseEffect>;
+    gambits: Array<GambitAction>;
+    // TODO: Refactor enemy specific things to enemy base class
+    maxNumberOfItemsToDrop: number;
+    lootGenerationOptions: Array<LootGenerationOption> = [];
 
     // Constructor
     constructor(args: any) {
@@ -37,6 +41,10 @@ export default class BattleCharacter {
         this.effects = args.effects || [];
         this.currentCharge = args.currentCharge || 0;
         this.gambits = args.gambits || [];
+
+        // TODO: Refactor enemy specific things to enemy base class
+        this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;
+        this.lootGenerationOptions = args.lootGenerationOptions || [];
     }
 
     // Updates the charge level of the character

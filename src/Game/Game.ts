@@ -4,6 +4,7 @@ import Dungeon from './BattleSystem/Dungeon/Dungeon';
 import Spider from './BattleSystem/Enemies/Spider';
 import DungeonLevel from './BattleSystem/Dungeon/DungeonLevel';
 import BattleLog from './BattleSystem/BattleLog';
+import { LootGenerator } from './Itemization/LootGenerator';
 
 class Game {
 
@@ -29,10 +30,10 @@ class Game {
             return;
 
         // Create the dungeon
-        var dungeon = new Dungeon([
+        var dungeon = new Dungeon(1, [
             new DungeonLevel([new Spider('Spider 1'), new Spider('Spider 2')]),
-            new DungeonLevel([new Spider('Spider 3'), new Spider('Spider 4'), new Spider('Spider 5')]),
-            new DungeonLevel([new Spider('Spider 6'), new Spider('Spider 7'), new Spider('Spider 8'), new Spider('Spider 9')])
+            new DungeonLevel([new Spider('Spider 3')]),
+            new DungeonLevel([new Spider('Spider 4'), new Spider('Spider 5')])
         ]);
 
         // Create the battle
@@ -46,9 +47,33 @@ class Game {
 
     // Leave the current battle
     leaveBattle() {
-        // TODO: Loot here?
+
+        // Make sure we're in a battle
+        if (!this.currentBattle)
+            return;
+
+        // If we didn't lose the battle then get rewards
+        if (!this.currentBattle.isBattleLost()) {
+
+            // Modify XP by the number of levels we completed
+            var dungeon = this.currentBattle.dungeon;
+            var xpModified = dungeon.currentLevelNumber / dungeon.levels.length * 100;
+
+            // Get XP and gold
+            var dungeonDifficulty = this.currentBattle.dungeon.difficultyLevel;
+            this.town.totalExperience += Math.round(dungeonDifficulty * dungeonDifficulty * xpModified);
+
+            // Get Items
+            var defeatedEnemies = dungeon.getDefeatedEnemies();
+            for (var i = 0; i < defeatedEnemies.length; i++) {
+                var enemy = defeatedEnemies[i];
+                var items = LootGenerator.generateLoot(enemy.maxNumberOfItemsToDrop, enemy.lootGenerationOptions);
+                this.town.inventory.addItems(items);
+            }
+        }
+
+        // Leave the battle
         this.currentBattle = null;
-        this.town.totalExperience += 100;
     }
 }
 

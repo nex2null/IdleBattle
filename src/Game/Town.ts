@@ -1,9 +1,12 @@
 import PlayerCharacter from "./PlayerCharacter";
+import Inventory from './Itemization/Inventory';
 
 class Town {
 
     // Properties
     totalExperience: number;
+    totalGold: number;
+    inventory: Inventory;
     playerCharacters: Array<PlayerCharacter>;
 
     // Constructor
@@ -11,8 +14,12 @@ class Town {
 
         // TODO: Load town info
 
-        // Setup exp
+        // Setup properties
         this.totalExperience = 0;
+        this.totalGold = 0;
+
+        // Setup inventory
+        this.inventory = new Inventory();
 
         // Setup characters
         this.playerCharacters = [

@@ -4,6 +4,8 @@ import GambitAction from '../Gambits/GambitAction';
 import GambitTypeEnum from '../Enums/GambitTypeEnum';
 import EnemyAnyCondition from '../Gambits/Conditions/EnemyAnyCondition';
 import SelfCondition from '../Gambits/Conditions/SelfCondition';
+import { LootGenerationOption } from '@/Game/Itemization/LootGenerator';
+import ItemSuperTypeEnum from '@/Game/Itemization/Enums/ItemSuperTypeEnum';
 
 class Spider extends BattleCharacter {
     constructor(name: string) {
@@ -22,6 +24,10 @@ class Spider extends BattleCharacter {
                 new GambitAction(new SelfCondition(), null, GambitTypeEnum.Skill, 'Defend', 0.1),
                 new GambitAction(new EnemyAnyCondition(), null, GambitTypeEnum.Skill, 'Web Shoot', 0.1),
                 new GambitAction(new EnemyAnyCondition(), null, GambitTypeEnum.Skill, 'Attack')
+            ],
+            maxNumberOfItemsToDrop: 1,
+            lootGenerationOptions: [
+                new LootGenerationOption(null, ItemSuperTypeEnum.Equipment, null, 1, 25)
             ]
         })
     }

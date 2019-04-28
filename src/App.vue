@@ -1,7 +1,18 @@
 <template>
     <div id="app">
         <div id="town-details">
-            <strong>Experience: {{game.town.totalExperience}}</strong>
+            <div>
+                <strong>Experience: {{game.town.totalExperience}}</strong>
+            </div>
+            <div>
+                <strong>Gold: {{game.town.totalGold}}</strong>
+            </div>
+            <ul>
+                <li
+                    v-for="(item, index) in game.town.inventory.items"
+                    :key="`item-${index}`"
+                >{{item.type}}</li>
+            </ul>
         </div>
         <div id="battle-details">
             <BattleComponent></BattleComponent>

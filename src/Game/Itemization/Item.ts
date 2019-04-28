@@ -7,16 +7,19 @@ class Item {
     type: ItemTypeEnum;
     rarity: ItemRarityEnum;
     ilvl: number;
+    amount: number;
 
     // Constructor
     constructor(
         type: ItemTypeEnum,
         rarity: ItemRarityEnum,
-        ilvl: number
+        ilvl: number,
+        amount: number
     ) {
         this.type = type;
-        this.ilvl = ilvl;
         this.rarity = rarity;
+        this.ilvl = ilvl;
+        this.amount = amount;
     }
 }
 

@@ -1,14 +1,17 @@
 import DungeonLevel from './DungeonLevel';
+import BattleCharacter from '../BattleCharacter';
 
 class Dungeon {
 
     // Properties
+    difficultyLevel: number;
     levels: Array<DungeonLevel>;
     currentLevel: DungeonLevel;
     currentLevelNumber: number;
 
     // Constructor
-    constructor(levels: Array<DungeonLevel>) {
+    constructor(difficultyLevel: number, levels: Array<DungeonLevel>) {
+        this.difficultyLevel = difficultyLevel;
         this.levels = levels;
         this.currentLevel = levels[0];
         this.currentLevelNumber = 1;
@@ -30,6 +33,11 @@ class Dungeon {
     // Determine if the dungeon has been cleared
     public isCleared(): boolean {
         return this.levels[this.levels.length - 1].isCleared();
+    }
+
+    // Get defeated enemies
+    public getDefeatedEnemies(): Array<BattleCharacter> {
+        return this.levels.map(x => x.enemies.filter(y => !y.isAlive())).flat();
     }
 }
 

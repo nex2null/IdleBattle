@@ -7,17 +7,28 @@ import EquipmentSlotEnum from './Enums/EquipmentSlotEnum';
 import EquipmentAffix from './EquipmentAffix';
 import EquipmentImplicit from './EquipmentImplicit';
 import { implicitInformations } from './EquipmentImplicitInformation';
+import { getRandomInt } from '@/Utilities/RandomHelpers';
 
 class EquipmentForge {
 
-    createEquipment(
+    static createEquipment(
         baseType: ItemTypeEnum,
         rarity: ItemRarityEnum,
         ilvl: number): Equipment {
 
+        // Figure out how many prefixes / suffixes to generate
+        var prefixCount = getRandomInt(this.getMinAffixCountPerSlot(rarity), this.getMaxAffixCountPerSlot(rarity));
+        var suffixCount = getRandomInt(this.getMinAffixCountPerSlot(rarity), this.getMaxAffixCountPerSlot(rarity));
+
+        // Ensure rare items will always have at least 3 affixes
+        if (rarity == ItemRarityEnum.Rare && prefixCount + suffixCount < 3) {
+            if (getRandomInt(0, 1) == 0) prefixCount++;
+            else suffixCount++;
+        }
+
         // Generate prefixes and suffixes
-        var prefixes = this.generateAffixes(rarity, EquipmentAffixSlotEnum.Prefix, ilvl);
-        var suffixes = this.generateAffixes(rarity, EquipmentAffixSlotEnum.Suffix, ilvl);
+        var prefixes = this.generateAffixes(EquipmentAffixSlotEnum.Prefix, prefixCount, ilvl);
+        var suffixes = this.generateAffixes(EquipmentAffixSlotEnum.Suffix, suffixCount, ilvl);
         var affixes = prefixes.concat(suffixes);
 
         // Create the base equipment
@@ -29,11 +40,11 @@ class EquipmentForge {
             this.getEquipmentSlot(baseType),
             this.generateImplicits(baseType),
             affixes,
-            1)
+            this.getEquipmentLevel(baseType))
     }
 
     // Gets the slot for a given base type of equipment
-    private getEquipmentSlot(baseType: ItemTypeEnum): EquipmentSlotEnum {
+    private static getEquipmentSlot(baseType: ItemTypeEnum): EquipmentSlotEnum {
         switch (baseType) {
             case ItemTypeEnum.FrayedClothRobe: return EquipmentSlotEnum.ChestPiece;
             case ItemTypeEnum.RustedChainmail: return EquipmentSlotEnum.ChestPiece;
@@ -43,7 +54,7 @@ class EquipmentForge {
     }
 
     // Gets the level for a given base type of equipment
-    private getEquipmentLevel(baseType: ItemTypeEnum): number {
+    private static getEquipmentLevel(baseType: ItemTypeEnum): number {
         switch (baseType) {
             case ItemTypeEnum.FrayedClothRobe: return 1;
             case ItemTypeEnum.RustedChainmail: return 1;
@@ -53,7 +64,7 @@ class EquipmentForge {
     }
 
     // Generates all implicits for a piece of equipment
-    private generateImplicits(baseType: ItemTypeEnum): Array<EquipmentImplicit> {
+    private static generateImplicits(baseType: ItemTypeEnum): Array<EquipmentImplicit> {
 
         // Keep track of generated implicits
         var generatedImplicits: Array<EquipmentImplicit> = [];
@@ -67,7 +78,7 @@ class EquipmentForge {
             var implicit = baseTypeImplicits[i];
 
             // Get the implicit value
-            var implicitValue = this.getRandomIntBetween(implicit.minValue, implicit.maxValue);
+            var implicitValue = getRandomInt(implicit.minValue, implicit.maxValue);
 
             // Create the implicit
             generatedImplicits.push(new EquipmentImplicit(implicit.modifiedStat, implicitValue))
@@ -77,9 +88,9 @@ class EquipmentForge {
     }
 
     // Generates a random number of affixes for a piece of equipment
-    private generateAffixes(
-        rarity: ItemRarityEnum,
+    private static generateAffixes(
         affixSlot: EquipmentAffixSlotEnum,
+        amountToGenerate: number,
         ilvl: number
     ): Array<EquipmentAffix> {
 
@@ -91,16 +102,11 @@ class EquipmentForge {
             x.requiredLevel <= ilvl &&
             x.slot == affixSlot);
 
-        // Figure out how many affixes we want to generate
-        var amountToGenerate = this.getRandomIntBetween(
-            this.getMinAffixCountPerSlot(rarity),
-            this.getMaxAffixCountPerSlot(rarity));
-
         // Generate the affixes
         for (var i = 0; i < amountToGenerate; i++) {
 
             // Grab a random affix from our list of available ones
-            var randomAffix = filteredAffixes[this.getRandomInt(filteredAffixes.length)];
+            var randomAffix = filteredAffixes[getRandomInt(0, filteredAffixes.length)];
             if (randomAffix == null)
                 break;
 
@@ -109,7 +115,7 @@ class EquipmentForge {
             filteredAffixes = filteredAffixes.filter(x => x.modifiedStat != randomAffix.modifiedStat);
 
             // Roll a random number between the affix min/max
-            var affixValue = this.getRandomIntBetween(randomAffix.minValue, randomAffix.maxValue);
+            var affixValue = getRandomInt(randomAffix.minValue, randomAffix.maxValue);
 
             // Generate our affix
             generatedAffixes.push(new EquipmentAffix(randomAffix.type, affixValue));
@@ -119,7 +125,7 @@ class EquipmentForge {
     }
 
     // Get the minimum number of affixes (per slot) for an item rarity
-    private getMinAffixCountPerSlot(rarity: ItemRarityEnum): number {
+    private static getMinAffixCountPerSlot(rarity: ItemRarityEnum): number {
         switch (rarity) {
             case ItemRarityEnum.Normal: return 0;
             case ItemRarityEnum.Magic: return 1;
@@ -129,23 +135,13 @@ class EquipmentForge {
     }
 
     // Get the maximum number of affixes (per slot) of an item rarity
-    private getMaxAffixCountPerSlot(rarity: ItemRarityEnum): number {
+    private static getMaxAffixCountPerSlot(rarity: ItemRarityEnum): number {
         switch (rarity) {
             case ItemRarityEnum.Normal: return 0;
             case ItemRarityEnum.Magic: return 1;
             case ItemRarityEnum.Rare: return 3;
             default: throw new Error(`Could not find max affix count for item rarity: ${rarity}`);
         }
-    }
-
-    // Get a random number between 0 and max
-    private getRandomInt(max: number) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-
-    // Get a random number between two numbers (inclusive)
-    private getRandomIntBetween(min: number, max: number) {
-        return this.getRandomInt(max - min) + min;
     }
 }
 

@@ -25,7 +25,7 @@ class Equipment extends Item {
         affixes: Array<EquipmentAffix>,
         requiredLevel: number
     ) {
-        super(type, rarity, ilvl);
+        super(type, rarity, ilvl, 1);
         this.name = name;
         this.slot = slot;
         this.implicits = implicits;

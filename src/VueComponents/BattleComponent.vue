@@ -53,7 +53,7 @@
             <div v-if="isWaitingOnAdvancement">
                 <button @click="advanceLevel()">Advance Level</button>
             </div>
-            <div v-if="isBattleWon || isBattleLost">
+            <div v-if="isWaitingOnAdvancement || isBattleWon || isBattleLost">
                 <button @click="leaveBattle()">Leave Battle</button>
             </div>
         </div>
