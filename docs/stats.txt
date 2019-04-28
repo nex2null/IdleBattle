@@ -17,8 +17,8 @@ Stats
     Speed
       - Charge generation
 
-    Evasion
-      - Hit evasion
+    Dodge Change
+      - chance to dodge attacks
 
     Accuracy
       - Negates evasion

@@ -23,7 +23,7 @@ Add Cold Power
   Frozen: 61-70% - Level 45
   Glaciated: 71-80% - Level 50
   Polar: 81-90% - Level 55
-  Entombing: 91-100% - Level 60
+  Numbing: 91-100% - Level 60
 }
 
 Add Fire Power

@@ -1,0 +1,55 @@
+Cold Resistance
+{
+    Snow: 1-5% - Level 1
+    Hale: 6-10% - Level 10
+    Rime: 11-15% - Level 19
+    Yeti: 16-20% - Level 27
+    Blizzard: 21-25% - Level 34
+    Avalanche: 26-30% - Level 40
+    Tundra: 31-35% - Level 45
+    Winter: 36-40% - Level 50
+    Hibernation: 41-45% - Level 55
+    AbsoluteZero: 46-50% - Level 60
+}
+
+Fire Resistance
+{
+    Kindling: 1-5% - Level 1
+    Embers: 6-10% - Level 10
+    Drake: 11-15% - Level 19
+    Ashes: 16-20% - Level 27
+    Cinders: 21-25% - Level 34
+    Furnace: 26-30% - Level 40
+    Magma: 31-35% - Level 45
+    Inferno: 36-40% - Level 50
+    Volcano: 41-45% - Level 55
+    Nova: 46-50% - Level 60
+}
+
+Physical Resistance
+{
+    Rock: 1-5% - Level 1
+    Stone: 6-10% - Level 10
+    Iron: 11-15% - Level 19
+    Steel: 16-20% - Level 27
+    Barriers: 21-25% - Level 34
+    Garrison: 26-30% - Level 40
+    Fortress: 31-35% - Level 45
+    Castle: 36-40% - Level 50
+    Mountain: 41-45% - Level 55
+    Earth: 46-50% - Level 60
+}
+
+Lightning Resistance
+{
+    Clouds: 1-5% - Level 1
+    Squall: 6-10% - Level 10
+    Thunder: 11-15% - Level 19
+    Lightning: 16-20% - Level 27
+    Bolts: 21-25% - Level 34
+    Gale: 26-30% - Level 40
+    Tempest: 31-35% - Level 45
+    Tornado: 36-40% - Level 50
+    Vortex: 41-45% - Level 55
+    Maelstrom: 46-50% - Level 60
+}
