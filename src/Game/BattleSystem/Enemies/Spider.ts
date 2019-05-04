@@ -27,7 +27,8 @@ class Spider extends BattleCharacter {
             ],
             maxNumberOfItemsToDrop: 1,
             lootGenerationOptions: [
-                new LootGenerationOption(null, ItemSuperTypeEnum.Equipment, null, 1, 25)
+                new LootGenerationOption(null, ItemSuperTypeEnum.Equipment, null, 1, 25),
+                new LootGenerationOption(null, ItemSuperTypeEnum.Currency, null, 1, 100)
             ]
         })
     }

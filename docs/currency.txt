@@ -1,0 +1,15 @@
+convert item back to normal - Orb of Abolition - 4%
+convert item to magic item - Orb of Imbuing - 26%
+convert item to rare item - Orb of Conjury - 10%
+convert magic item to rare item - Orb of Promotion - 9%
+re-roll magic item - Orb of Mutation - 26%
+re-roll rare item - Orb of Pandemonium - 5%
+add affix to magic item - Orb of Thaumaturgy - 7%
+add affix to rare item - Orb of Fortune - 1%
+re-roll implicit values - Orb of Balance - 5%
+re-roll affix values - Orb of Discord - 3%
+freeze prefixes - Alpha Orb - .2%
+freeze suffixes - Omega Orb - .2%
+extract random affix from a magic item - Orb of Extraction - .3%
+extract random affix from a rare item - Orb of Distillation - .2%
+Increase the quality of the next dungeon - Orb of Empowerment - 4%

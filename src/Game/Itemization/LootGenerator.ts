@@ -32,6 +32,87 @@ class LootGenerationOption {
     }
 }
 
+// A currency drop rate
+class CurrencyDropRate {
+
+    // Properties
+    itemType: ItemTypeEnum;
+    chanceToDropPerThousand: number;
+
+    // Constructor
+    constructor(itemType: ItemTypeEnum, chanceToDropPerThousand: number) {
+        this.itemType = itemType;
+        this.chanceToDropPerThousand = chanceToDropPerThousand;
+    }
+}
+
+// Drops some currency
+class CurrencyDropper {
+
+    dropTable: any = [];
+
+    constructor(rates: Array<CurrencyDropRate>) {
+        this.initializeDropTable(rates);
+    }
+
+    initializeDropTable(rates: Array<CurrencyDropRate>): void {
+
+        var chanceToDropPerThousandSum = 0;
+
+        for (var i = 0; i < rates.length; i++) {
+
+            var itemType = rates[i].itemType;
+            var chanceToDropPerThousand = rates[i].chanceToDropPerThousand;
+
+            this.dropTable.push({
+                itemType: itemType,
+                minNumber: chanceToDropPerThousandSum + 1,
+                maxNumber: chanceToDropPerThousandSum + chanceToDropPerThousand
+            });
+
+            chanceToDropPerThousandSum += chanceToDropPerThousand;
+        }
+
+        debugger;
+        if (chanceToDropPerThousandSum != 1000)
+            throw new Error("Total drop rates did not equal 1000");
+    }
+
+    getRandomCurrency(ilvl: number): ItemTypeEnum {
+
+        // TODO: Do something with ilvl?
+
+        var randomNumber = getRandomInt(1, 1000);
+
+        for (var i = 0; i < this.dropTable.length; i++) {
+            var currentRow = this.dropTable[i];
+            if (randomNumber >= currentRow.minNumber && randomNumber <= currentRow.maxNumber)
+                return currentRow.itemType;
+        }
+
+        throw new Error("Item type could not be found");
+    }
+}
+
+// Initialize currency dropper
+var currencyDropper: CurrencyDropper = new CurrencyDropper([
+    new CurrencyDropRate(ItemTypeEnum.OrbOfAbolition, 40),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfImbuing, 260),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfConjury, 100),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfPromotion, 90),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfMutation, 260),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfPandemonium, 50),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfThaumaturgy, 70),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfFortune, 10),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfBalance, 50),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfDiscord, 30),
+    new CurrencyDropRate(ItemTypeEnum.AlphaOrb, 2),
+    new CurrencyDropRate(ItemTypeEnum.OmegaOrb, 2),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfExtraction, 4),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfDistillation, 2),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfEmpowerment, 30)
+]);
+
 // Generates loot
 class LootGenerator {
 
@@ -96,9 +177,11 @@ class LootGenerator {
         if (option.itemSuperType == ItemSuperTypeEnum.Equipment)
             return EquipmentForge.createEquipment(itemType, itemRarity, ilvl);
 
-        // Return the item
+        // If the item super type is a currency then drop some random currency
+        if (option.itemSuperType == ItemSuperTypeEnum.Currency)
+            return this.GetRandomCurrencyItem(ilvl);
 
-        return new Item(itemType, itemRarity, ilvl, 1);
+        throw new Error("Should never get here");
     }
 
     // Gets a random item type given a super type
@@ -121,6 +204,11 @@ class LootGenerator {
         if (randomNumber <= 50) return ItemRarityEnum.Normal;
         else if (randomNumber <= 85) return ItemRarityEnum.Magic;
         else return ItemRarityEnum.Rare;
+    }
+
+    private static GetRandomCurrencyItem(ilvl: number): Item {
+        var itemType = currencyDropper.getRandomCurrency(ilvl);
+        return new Item(itemType, ItemRarityEnum.Normal, 1, 1);
     }
 }
 
