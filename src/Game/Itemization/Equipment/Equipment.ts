@@ -1,8 +1,8 @@
-import Item from "./Item";
+import Item from "../Item";
 import EquipmentAffix from './EquipmentAffix';
-import ItemTypeEnum from './Enums/ItemTypeEnum';
-import ItemRarityEnum from './Enums/ItemRarityEnum';
-import EquipmentSlotEnum from './Enums/EquipmentSlotEnum';
+import ItemTypeEnum from '../Enums/ItemTypeEnum';
+import ItemRarityEnum from '../Enums/ItemRarityEnum';
+import EquipmentSlotEnum from '../Enums/EquipmentSlotEnum';
 import EquipmentImplicit from './EquipmentImplicit';
 
 class Equipment extends Item {

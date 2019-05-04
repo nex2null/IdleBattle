@@ -1,5 +1,5 @@
-import ItemTypeEnum from "./Enums/ItemTypeEnum";
-import StatEnum from '../Enums/StatEnum';
+import ItemTypeEnum from "../Enums/ItemTypeEnum";
+import StatEnum from '../../Enums/StatEnum';
 
 // Information about equipment implicits
 class EquipmentImplicitInformation {

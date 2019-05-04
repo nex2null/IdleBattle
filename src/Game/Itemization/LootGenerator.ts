@@ -4,7 +4,7 @@ import ItemRarityEnum from './Enums/ItemRarityEnum';
 import Item from './Item';
 import { itemInformations } from './ItemInformation';
 import { getRandomInt } from '@/Utilities/RandomHelpers';
-import EquipmentForge from './EquipmentForge';
+import EquipmentForge from './Equipment/EquipmentForge';
 
 // An option for generating a piece of loot
 class LootGenerationOption {
@@ -73,7 +73,6 @@ class CurrencyDropper {
             chanceToDropPerThousandSum += chanceToDropPerThousand;
         }
 
-        debugger;
         if (chanceToDropPerThousandSum != 1000)
             throw new Error("Total drop rates did not equal 1000");
     }

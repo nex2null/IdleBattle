@@ -1,9 +1,9 @@
-import EquipmentAffixSlotEnum from "./Enums/EquipmentAffixSlotEnum";
+import EquipmentAffixSlotEnum from "../Enums/EquipmentAffixSlotEnum";
 import { affixInformations } from './EquipmentAffixInformation';
 import Equipment from './Equipment';
-import ItemTypeEnum from './Enums/ItemTypeEnum';
-import ItemRarityEnum from './Enums/ItemRarityEnum';
-import EquipmentSlotEnum from './Enums/EquipmentSlotEnum';
+import ItemTypeEnum from '../Enums/ItemTypeEnum';
+import ItemRarityEnum from '../Enums/ItemRarityEnum';
+import EquipmentSlotEnum from '../Enums/EquipmentSlotEnum';
 import EquipmentAffix from './EquipmentAffix';
 import EquipmentImplicit from './EquipmentImplicit';
 import { implicitInformations } from './EquipmentImplicitInformation';

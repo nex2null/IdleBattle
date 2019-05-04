@@ -1,4 +1,4 @@
-import EquipmentAffixTypeEnum from "./Enums/EquipmentAffixTypeEnum";
+import EquipmentAffixTypeEnum from "../Enums/EquipmentAffixTypeEnum";
 
 class EquipmentAffix {
 

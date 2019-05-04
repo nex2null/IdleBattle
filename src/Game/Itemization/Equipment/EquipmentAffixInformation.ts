@@ -1,6 +1,6 @@
-import EquipmentAffixSlotEnum from "./Enums/EquipmentAffixSlotEnum";
-import EquipmentAffixTypeEnum from './Enums/EquipmentAffixTypeEnum';
-import StatEnum from '../Enums/StatEnum';
+import EquipmentAffixSlotEnum from "../Enums/EquipmentAffixSlotEnum";
+import EquipmentAffixTypeEnum from '../Enums/EquipmentAffixTypeEnum';
+import StatEnum from '../../Enums/StatEnum';
 
 // Information about equipment affixes
 class EquipmentAffixInformation {
