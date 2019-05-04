@@ -39,7 +39,7 @@ class Battle {
         while (this.currentState == BattleStateEnum.InBattle) {
 
             // Sleep for a bit
-            await this.sleep(50);
+            await this.sleep(1);
 
             // Update all charges
             this.updateAllCharges();
