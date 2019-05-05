@@ -1,5 +1,5 @@
 import EquipmentAffixSlotEnum from "../Enums/EquipmentAffixSlotEnum";
-import { affixInformations } from './EquipmentAffixInformation';
+import { affixInformations, EquipmentAffixInformation } from './EquipmentAffixInformation';
 import Equipment from './Equipment';
 import ItemTypeEnum from '../Enums/ItemTypeEnum';
 import ItemRarityEnum from '../Enums/ItemRarityEnum';
@@ -8,39 +8,34 @@ import EquipmentAffix from './EquipmentAffix';
 import EquipmentImplicit from './EquipmentImplicit';
 import { implicitInformations } from './EquipmentImplicitInformation';
 import { getRandomInt } from '@/Utilities/RandomHelpers';
+import EquipmentAffixTypeEnum from '../Enums/EquipmentAffixTypeEnum';
 
 class EquipmentForge {
 
+    // Creates a new piece of equipment
     static createEquipment(
         baseType: ItemTypeEnum,
         rarity: ItemRarityEnum,
-        ilvl: number): Equipment {
+        ilvl: number
+    ): Equipment {
 
-        // Figure out how many prefixes / suffixes to generate
-        var prefixCount = getRandomInt(this.getMinAffixCountPerSlot(rarity), this.getMaxAffixCountPerSlot(rarity));
-        var suffixCount = getRandomInt(this.getMinAffixCountPerSlot(rarity), this.getMaxAffixCountPerSlot(rarity));
-
-        // Ensure rare items will always have at least 3 affixes
-        if (rarity == ItemRarityEnum.Rare && prefixCount + suffixCount < 3) {
-            if (getRandomInt(0, 1) == 0) prefixCount++;
-            else suffixCount++;
-        }
-
-        // Generate prefixes and suffixes
-        var prefixes = this.generateAffixes(EquipmentAffixSlotEnum.Prefix, prefixCount, ilvl);
-        var suffixes = this.generateAffixes(EquipmentAffixSlotEnum.Suffix, suffixCount, ilvl);
-        var affixes = prefixes.concat(suffixes);
-
-        // Create the base equipment
-        return new Equipment(
+        // Create a normal item of the given base type
+        var equipment = new Equipment(
             baseType,
-            rarity,
+            ItemRarityEnum.Normal,
             ilvl,
             'Test Equipment',
             this.getEquipmentSlot(baseType),
             this.generateImplicits(baseType),
-            affixes,
-            this.getEquipmentLevel(baseType))
+            [],
+            this.getEquipmentLevel(baseType)
+        );
+
+        // If the rarity is magic or rare then upgrade the item to it
+        if (rarity == ItemRarityEnum.Magic || rarity == ItemRarityEnum.Rare)
+            this.upgradeEquipmentToRarity(equipment, rarity);
+
+        return equipment;
     }
 
     // Gets the slot for a given base type of equipment
@@ -141,6 +136,141 @@ class EquipmentForge {
             case ItemRarityEnum.Magic: return 1;
             case ItemRarityEnum.Rare: return 3;
             default: throw new Error(`Could not find max affix count for item rarity: ${rarity}`);
+        }
+    }
+
+    // Resets a piece of equipment back to normal status
+    public static resetEquipmentToNormal(equipment: Equipment): void {
+        equipment.affixes = [];
+        equipment.rarity = ItemRarityEnum.Normal;
+        equipment.craftingTags = [];
+    }
+
+    // Upgrades a normal equipment to magic
+    public static upgradeEquipmentToRarity(equipment: Equipment, rarity: ItemRarityEnum): void {
+
+        // Can't set items to normal rarity, downgrade rarity, or set an item to its own rarity
+        if (rarity == ItemRarityEnum.Normal ||
+            rarity == ItemRarityEnum.Magic && equipment.rarity == ItemRarityEnum.Rare ||
+            rarity == equipment.rarity)
+            return;
+
+        // If the item is a normal item the generate a cool name for it
+        // TODO
+
+        // Set the item rarity
+        equipment.rarity = rarity;
+
+        // Populate the affixes
+        this.populateEquipmentAffixes(equipment, false);
+    }
+
+    // Gets the affix information for a given type
+    private static getEquipmentAffixInformation(affixType: EquipmentAffixTypeEnum): EquipmentAffixInformation {
+
+        // Grab the affix information and sanity check
+        var affixInformation = affixInformations.find(x => x.type == affixType);
+        if (!affixInformation)
+            throw new Error(`Could not find affix information for type ${affixType}`);
+
+        return affixInformation;
+    }
+
+    // Populates equipment affixes
+    private static populateEquipmentAffixes(equipment: Equipment, clearExistingAffixes: boolean): void {
+
+        // Clear existing affixes if we should
+        if (clearExistingAffixes)
+            equipment.affixes = [];
+
+        // Get existing prefix/suffix counts on the item
+        var existingPrefixCount = equipment.affixes.filter(x =>
+            this.getEquipmentAffixInformation(x.type).slot == EquipmentAffixSlotEnum.Prefix).length;
+        var existingSuffixCount = equipment.affixes.filter(x =>
+            this.getEquipmentAffixInformation(x.type).slot == EquipmentAffixSlotEnum.Suffix).length;
+
+        // Figure out how many prefixes / suffixes to generate
+        var prefixCount = getRandomInt(existingPrefixCount ? 0 : this.getMinAffixCountPerSlot(equipment.rarity),
+            this.getMaxAffixCountPerSlot(equipment.rarity) - existingPrefixCount);
+        var suffixCount = getRandomInt(existingSuffixCount ? 0 : this.getMinAffixCountPerSlot(equipment.rarity),
+            this.getMaxAffixCountPerSlot(equipment.rarity) - existingSuffixCount);
+
+        // Make sure we always generate at least 1 new prefix/suffix if we are upgrading
+        if (prefixCount + suffixCount == 0) {
+            if (getRandomInt(0, 1) == 0) prefixCount++;
+            else suffixCount++;
+        }
+
+        // Ensure rare items will always have at least 3 affixes total
+        if (equipment.rarity == ItemRarityEnum.Rare && prefixCount + existingPrefixCount + suffixCount + existingSuffixCount < 3) {
+            if (getRandomInt(0, 1) == 0) prefixCount++;
+            else suffixCount++;
+        }
+
+        // Generate prefixes and suffixes
+        var prefixes = this.generateAffixes(EquipmentAffixSlotEnum.Prefix, prefixCount, equipment.ilvl);
+        var suffixes = this.generateAffixes(EquipmentAffixSlotEnum.Suffix, suffixCount, equipment.ilvl);
+        var generatedAffixes = prefixes.concat(suffixes);
+
+        // Set the affixes on the equipment
+        equipment.affixes = equipment.affixes.concat(generatedAffixes);
+    }
+
+    // Re-rolls all the affixes on a piece of equipment
+    public static reRollEquipmentAffixes(equipment: Equipment): void {
+        this.populateEquipmentAffixes(equipment, true);
+    }
+
+    // Adds a random affix to a piece of equipment
+    public static addRandomAffixToEquipment(equipment: Equipment): void {
+
+        // Get existing prefix/suffix counts on the item
+        var existingPrefixCount = equipment.affixes.filter(x =>
+            this.getEquipmentAffixInformation(x.type).slot == EquipmentAffixSlotEnum.Prefix).length;
+        var existingSuffixCount = equipment.affixes.filter(x =>
+            this.getEquipmentAffixInformation(x.type).slot == EquipmentAffixSlotEnum.Suffix).length;
+
+        // Sanity check that we are not at the max affixes already
+        var maxAffixCountPerSlot = this.getMaxAffixCountPerSlot(equipment.rarity);
+        if (existingPrefixCount == maxAffixCountPerSlot && existingSuffixCount == maxAffixCountPerSlot)
+            return;
+
+        // We need to determine which affix slot we will generate
+        var slotToGenerate: EquipmentAffixSlotEnum;
+        if (existingPrefixCount == maxAffixCountPerSlot)
+            slotToGenerate = EquipmentAffixSlotEnum.Suffix;
+        else if (existingSuffixCount == maxAffixCountPerSlot)
+            slotToGenerate = EquipmentAffixSlotEnum.Prefix;
+        else
+            slotToGenerate = getRandomInt(0, 1) == 1 ? EquipmentAffixSlotEnum.Prefix : EquipmentAffixSlotEnum.Suffix;
+
+        // Generate the affix and add to the equipment
+        var generatedAffix = this.generateAffixes(slotToGenerate, 1, equipment.ilvl);
+        if (generatedAffix.length)
+            equipment.affixes.push(generatedAffix[0]);
+    }
+
+    // Re-roll implicit values on equipment
+    public static reRollEquipmentImplicitValues(equipment: Equipment): void {
+        equipment.implicits = this.generateImplicits(equipment.type);
+    }
+
+    // Re-roll affix values on equipment
+    public static reRollEquipmentAffixValues(equipment: Equipment): void {
+
+        // Iterate through every affix
+        for (var i = 0; i < equipment.affixes.length; i++) {
+
+            // Grab the current affix
+            var currentAffix = equipment.affixes[i];
+
+            // Grab the affix information
+            var affixInformation = affixInformations.find(x => x.type == currentAffix.type);
+            if (!affixInformation)
+                continue;
+
+            // Re-roll the affix value
+            currentAffix.value = getRandomInt(affixInformation.minValue, affixInformation.maxValue);
         }
     }
 }

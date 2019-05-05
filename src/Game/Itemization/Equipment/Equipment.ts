@@ -13,6 +13,7 @@ class Equipment extends Item {
     implicits: Array<EquipmentImplicit>;
     affixes: Array<EquipmentAffix>;
     requiredLevel: number;
+    craftingTags: Array<string> = [];
 
     // Constructor
     constructor(

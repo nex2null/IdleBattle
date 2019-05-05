@@ -104,7 +104,7 @@ var currencyDropper: CurrencyDropper = new CurrencyDropper([
     new CurrencyDropRate(ItemTypeEnum.OrbOfThaumaturgy, 70),
     new CurrencyDropRate(ItemTypeEnum.OrbOfFortune, 10),
     new CurrencyDropRate(ItemTypeEnum.OrbOfBalance, 50),
-    new CurrencyDropRate(ItemTypeEnum.OrbOfDiscord, 30),
+    new CurrencyDropRate(ItemTypeEnum.OrbOfPerfection, 30),
     new CurrencyDropRate(ItemTypeEnum.AlphaOrb, 2),
     new CurrencyDropRate(ItemTypeEnum.OmegaOrb, 2),
     new CurrencyDropRate(ItemTypeEnum.OrbOfExtraction, 4),

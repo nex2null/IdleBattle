@@ -2,7 +2,7 @@ enum ItemRarityEnum {
     Normal = 'normal',
     Magic = 'magic',
     Rare = 'rare',
-    Legendary = 'legendary'
+    Unique = 'unique'
 }
 
 export default ItemRarityEnum;

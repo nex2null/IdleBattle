@@ -8,7 +8,6 @@ class Item {
     rarity: ItemRarityEnum;
     ilvl: number;
     amount: number;
-    tags: Array<string> = [];
 
     // Constructor
     constructor(

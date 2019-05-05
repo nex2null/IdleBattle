@@ -10,7 +10,7 @@ enum ItemTypeEnum {
     OrbOfThaumaturgy = 'orb-of-thaumaturgy',
     OrbOfFortune = 'orb-of-fortune',
     OrbOfBalance = 'orb-of-balance',
-    OrbOfDiscord = 'orb-of-discord',
+    OrbOfPerfection = 'orb-of-perfection',
     AlphaOrb = 'alpha-orb',
     OmegaOrb = 'omega-orb',
     OrbOfExtraction = 'orb-of-extraction',
