@@ -2,7 +2,8 @@
     <div id="app">
         <p>
             <router-link to="/">Go to Town</router-link>&nbsp;
-            <router-link to="/battle">Go to Battle</router-link>
+            <router-link to="/battle">Go to Battle</router-link>&nbsp;
+            <router-link to="/inventory">Go to Inventory</router-link>
         </p>
         <router-view></router-view>
     </div>

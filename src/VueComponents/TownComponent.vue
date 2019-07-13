@@ -6,12 +6,6 @@
         <div>
             <strong>Gold: {{game.town.totalGold}}</strong>
         </div>
-        <ul>
-            <li
-                v-for="(item, index) in game.town.inventory.items"
-                :key="`item-${index}`"
-            >{{item.type}} x{{item.amount}}</li>
-        </ul>
     </div>
 </template>
 
