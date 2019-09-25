@@ -1,0 +1,22 @@
+replicaCount: 2
+
+image:
+  repository: nex2null/idlebattle
+  tag: pineapple
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+
+canary:
+  replicaCount: 0
+  prodWeight: 100
+  canaryWeight: 0
+  image:
+    repository: nex2null/idlebattle
+    tag: canary-pineapple
+    pullPolicy: IfNotPresent
