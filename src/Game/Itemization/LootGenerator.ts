@@ -116,6 +116,7 @@ var currencyDropper: CurrencyDropper = new CurrencyDropper([
 class LootGenerator {
 
     public static generateLoot(
+        minItemsToGenerate: number,
         maxItemsToGenerate: number,
         options: Array<LootGenerationOption>
     ): Array<Item> {
@@ -124,7 +125,7 @@ class LootGenerator {
         var availableOptions = [...options];
 
         // Determine how many items to generate
-        var itemsToGenerate = getRandomInt(0, maxItemsToGenerate);
+        var itemsToGenerate = getRandomInt(minItemsToGenerate, maxItemsToGenerate);
 
         // Keep track of generated items
         var generatedItems: Array<Item> = [];
@@ -187,7 +188,7 @@ class LootGenerator {
     private static GetRandomItemType(superType: ItemSuperTypeEnum): ItemTypeEnum {
         // TODO: Make this not completely random, obviously
         var validItems = itemInformations.filter(x => x.itemSuperType == superType);
-        return validItems[getRandomInt(0, validItems.length)].itemType;
+        return validItems[getRandomInt(0, validItems.length - 1)].itemType;
     }
 
     // Gets a random item rarity given a super type
