@@ -1,4 +1,0 @@
-apiVersion: v1
-name: idle-battle
-description: Idle Battle test chart
-version: 0.0.1
