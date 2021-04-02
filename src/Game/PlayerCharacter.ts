@@ -3,6 +3,8 @@ import BattleCharacterTypeEnum from './BattleSystem/Enums/BattleCharacterTypeEnu
 import GambitAction from './BattleSystem/Gambits/GambitAction';
 import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyCondition';
 import GambitTypeEnum from './BattleSystem/Enums/GambitTypeEnum';
+import Equipment from "./Itemization/Equipment/Equipment";
+import PlayerCharacterEquipmentSlotEnum from "./Enums/PlayerCharacterEquipmentSlotEnum";
 
 class PlayerCharacter {
 
@@ -15,6 +17,9 @@ class PlayerCharacter {
     int: number;
     spd: number;
 
+    // Equipment
+    equipment: Map<PlayerCharacterEquipmentSlotEnum, Equipment | null>;
+
     // Constructor
     constructor(args: any) {
         this.name = args.name;
@@ -24,6 +29,7 @@ class PlayerCharacter {
         this.str = args.str;
         this.int = args.int;
         this.spd = args.spd;
+        this.equipment = new Map();
     }
 
     // Create a battle character representation of this player character

@@ -101,7 +101,7 @@ class EquipmentForge {
         for (var i = 0; i < amountToGenerate; i++) {
 
             // Grab a random affix from our list of available ones
-            var randomAffix = filteredAffixes[getRandomInt(0, filteredAffixes.length)];
+            var randomAffix = filteredAffixes[getRandomInt(0, filteredAffixes.length - 1)];
             if (randomAffix == null)
                 break;
 

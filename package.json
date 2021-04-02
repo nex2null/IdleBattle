@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "core-js": "^2.6.5",
+        "guid-typescript": "^1.0.9",
         "vue": "^2.6.10",
         "vue-class-component": "^7.0.2",
         "vue-property-decorator": "^8.1.0",
@@ -18,7 +19,7 @@
         "@vue/cli-plugin-babel": "^3.6.0",
         "@vue/cli-plugin-eslint": "^3.6.0",
         "@vue/cli-plugin-typescript": "^3.6.0",
-        "@vue/cli-service": "^3.6.0",
+        "@vue/cli-service": "^4.5.12",
         "@vue/eslint-config-typescript": "^4.0.0",
         "babel-eslint": "^10.0.1",
         "eslint": "^5.16.0",

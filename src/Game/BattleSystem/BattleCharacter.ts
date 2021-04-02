@@ -22,6 +22,7 @@ export default class BattleCharacter {
     effects: Array<BaseEffect>;
     gambits: Array<GambitAction>;
     // TODO: Refactor enemy specific things to enemy base class
+    minNumberOfItemsToDrop: number;
     maxNumberOfItemsToDrop: number;
     lootGenerationOptions: Array<LootGenerationOption> = [];
 
@@ -43,6 +44,7 @@ export default class BattleCharacter {
         this.gambits = args.gambits || [];
 
         // TODO: Refactor enemy specific things to enemy base class
+        this.minNumberOfItemsToDrop = args.minNumberOfItemsToDrop || 0;
         this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;
         this.lootGenerationOptions = args.lootGenerationOptions || [];
     }

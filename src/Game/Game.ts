@@ -67,7 +67,10 @@ class Game {
             var defeatedEnemies = dungeon.getDefeatedEnemies();
             for (var i = 0; i < defeatedEnemies.length; i++) {
                 var enemy = defeatedEnemies[i];
-                var items = LootGenerator.generateLoot(enemy.maxNumberOfItemsToDrop, enemy.lootGenerationOptions);
+                var items = LootGenerator.generateLoot(
+                    enemy.minNumberOfItemsToDrop,
+                    enemy.maxNumberOfItemsToDrop,
+                    enemy.lootGenerationOptions);
                 this.town.inventory.addItems(items);
             }
         }
