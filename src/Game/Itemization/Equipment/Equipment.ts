@@ -4,6 +4,7 @@ import ItemTypeEnum from '../Enums/ItemTypeEnum';
 import ItemRarityEnum from '../Enums/ItemRarityEnum';
 import EquipmentSlotEnum from '../Enums/EquipmentSlotEnum';
 import EquipmentImplicit from './EquipmentImplicit';
+import { Guid } from "guid-typescript";
 
 class Equipment extends Item {
 
@@ -14,6 +15,7 @@ class Equipment extends Item {
     affixes: Array<EquipmentAffix>;
     requiredLevel: number;
     craftingTags: Array<string> = [];
+    id: string;
 
     // Constructor
     constructor(
@@ -32,6 +34,7 @@ class Equipment extends Item {
         this.implicits = implicits;
         this.affixes = affixes;
         this.requiredLevel = requiredLevel;
+        this.id = Guid.create().toString();
     }
 }
 
