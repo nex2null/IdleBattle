@@ -6,16 +6,10 @@ import Game from './Game/Game';
 
 // Create a screen object.
 var screen = blessed.screen();
-var grid = new contrib.grid({ rows: 24, cols: 24, screen: screen });
+var grid = new contrib.grid({ rows: 36, cols: 48, screen: screen });
 
 // Create a box and attach to grid
-var box = grid.set(0, 0, 12, 12, blessed.box, {
-  content: `
-  {bold}UNDER CONSTRUCTION!{/bold} - Great things will be here soon.\n\n
-  You currently have {yellow-fg}${Game.getInstance().town.totalGold} gold{/yellow-fg}.\n\n
-  Please press {bold}ESCAPE{/bold} to exit.
-  `,
-  tags: true,
+var box = grid.set(0, 0, 26, 24, blessed.box, {
   border: {
     type: 'line'
   },
@@ -28,16 +22,14 @@ var box = grid.set(0, 0, 12, 12, blessed.box, {
 });
 
 //grid.set(row, col, rowSpan, colSpan, obj, opts)
-
-// Append some gauges to the grid
-var gauge = grid.set(2, 9, 3, 3, contrib.gauge, { label: 'Charge', percent: 80, showLabel: false, stroke: 'green' });
-var gauge_two = grid.set(8, 10, 3, 2, contrib.gauge, { label: 'Charge', percent: 20, showLabel: false, stroke: 'green' });
-
-// Handle screen resizes
-screen.on('resize', function () {
-  gauge.emit('attach');
-  gauge_two.emit('attach');
-});
+var text_one = grid.set(1, 28, 3, 10, blessed.text, { content: 'Brian' });
+var charge_one = grid.set(2, 1, 3, 6, contrib.gauge, { label: 'Charge', percent: 80, showLabel: false, stroke: 'green' });
+var hp_one = grid.set(2, 9, 3, 6, contrib.gauge, { label: 'HP', percent: 80, showLabel: false, stroke: 'red' });
+var ap_one = grid.set(2, 17, 3, 6, contrib.gauge, { label: 'AP', percent: 80, showLabel: false, stroke: 'blue' });
+var charge_two = grid.set(7, 1, 3, 6, contrib.gauge, { label: 'Charge', percent: 20, showLabel: false, stroke: 'green' });
+var charge_three = grid.set(12, 1, 3, 6, contrib.gauge, { label: 'Charge', percent: 80, showLabel: false, stroke: 'green' });
+var charge_four = grid.set(17, 1, 3, 6, contrib.gauge, { label: 'Charge', percent: 20, showLabel: false, stroke: 'green' });
+var charge_five = grid.set(22, 1, 3, 6, contrib.gauge, { label: 'Charge', percent: 80, showLabel: false, stroke: 'green' });
 
 // Quit on Escape, q, or Control-C.
 screen.key(['escape', 'C-c'], () => {
