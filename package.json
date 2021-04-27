@@ -38,6 +38,7 @@
     },
     "dependencies": {
         "blessed": "^0.1.81",
+        "blessed-contrib": "github:nex2null/blessed-contrib#gauge-updates",
         "guid-typescript": "^1.0.9"
     }
 }

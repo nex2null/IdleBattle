@@ -1,20 +1,15 @@
 #!/usr/bin/env node
 
 const blessed = require('blessed');
+const contrib = require('blessed-contrib');
 import Game from './Game/Game';
 
 // Create a screen object.
-var screen = blessed.screen({
-  smartCSR: true,
-  title: 'Command Line Idle - RPG'
-});
+var screen = blessed.screen();
+var grid = new contrib.grid({ rows: 24, cols: 24, screen: screen });
 
-// Create a box perfectly centered horizontally and vertically.
-var box = blessed.box({
-  top: 'center',
-  left: 'center',
-  width: '50%',
-  height: '50%',
+// Create a box and attach to grid
+var box = grid.set(0, 0, 12, 12, blessed.box, {
   content: `
   {bold}UNDER CONSTRUCTION!{/bold} - Great things will be here soon.\n\n
   You currently have {yellow-fg}${Game.getInstance().town.totalGold} gold{/yellow-fg}.\n\n
@@ -28,15 +23,21 @@ var box = blessed.box({
     fg: 'white',
     border: {
       fg: '#f0f0f0'
-    },
-    hover: {
-      bg: 'green'
     }
   }
 });
 
-// Append our box to the screen.
-screen.append(box);
+//grid.set(row, col, rowSpan, colSpan, obj, opts)
+
+// Append some gauges to the grid
+var gauge = grid.set(2, 9, 3, 3, contrib.gauge, { label: 'Charge', percent: 80, showLabel: false, stroke: 'green' });
+var gauge_two = grid.set(8, 10, 3, 2, contrib.gauge, { label: 'Charge', percent: 20, showLabel: false, stroke: 'green' });
+
+// Handle screen resizes
+screen.on('resize', function () {
+  gauge.emit('attach');
+  gauge_two.emit('attach');
+});
 
 // Quit on Escape, q, or Control-C.
 screen.key(['escape', 'C-c'], () => {
