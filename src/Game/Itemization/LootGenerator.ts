@@ -3,7 +3,7 @@ import ItemSuperTypeEnum from './Enums/ItemSuperTypeEnum';
 import ItemRarityEnum from './Enums/ItemRarityEnum';
 import Item from './Item';
 import { itemInformations } from './ItemInformation';
-import { getRandomInt } from '@/Utilities/RandomHelpers';
+import RandomHelpers from '../Utilities/RandomHelpers';
 import EquipmentForge from './Equipment/EquipmentForge';
 
 // An option for generating a piece of loot
@@ -81,7 +81,7 @@ class CurrencyDropper {
 
         // TODO: Do something with ilvl?
 
-        var randomNumber = getRandomInt(1, 1000);
+        var randomNumber = RandomHelpers.getRandomInt(1, 1000);
 
         for (var i = 0; i < this.dropTable.length; i++) {
             var currentRow = this.dropTable[i];
@@ -125,7 +125,7 @@ class LootGenerator {
         var availableOptions = [...options];
 
         // Determine how many items to generate
-        var itemsToGenerate = getRandomInt(minItemsToGenerate, maxItemsToGenerate);
+        var itemsToGenerate = RandomHelpers.getRandomInt(minItemsToGenerate, maxItemsToGenerate);
 
         // Keep track of generated items
         var generatedItems: Array<Item> = [];
@@ -188,7 +188,7 @@ class LootGenerator {
     private static GetRandomItemType(superType: ItemSuperTypeEnum): ItemTypeEnum {
         // TODO: Make this not completely random, obviously
         var validItems = itemInformations.filter(x => x.itemSuperType == superType);
-        return validItems[getRandomInt(0, validItems.length - 1)].itemType;
+        return validItems[RandomHelpers.getRandomInt(0, validItems.length - 1)].itemType;
     }
 
     // Gets a random item rarity given a super type
@@ -200,7 +200,7 @@ class LootGenerator {
             return ItemRarityEnum.Normal;
 
         // Figure out the item rarity
-        var randomNumber = getRandomInt(1, 100);
+        var randomNumber = RandomHelpers.getRandomInt(1, 100);
         if (randomNumber <= 50) return ItemRarityEnum.Normal;
         else if (randomNumber <= 85) return ItemRarityEnum.Magic;
         else return ItemRarityEnum.Rare;

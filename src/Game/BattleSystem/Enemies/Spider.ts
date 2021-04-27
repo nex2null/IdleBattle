@@ -4,9 +4,8 @@ import GambitAction from '../Gambits/GambitAction';
 import GambitTypeEnum from '../Enums/GambitTypeEnum';
 import EnemyAnyCondition from '../Gambits/Conditions/EnemyAnyCondition';
 import SelfCondition from '../Gambits/Conditions/SelfCondition';
-import { LootGenerationOption } from '@/Game/Itemization/LootGenerator';
-import ItemSuperTypeEnum from '@/Game/Itemization/Enums/ItemSuperTypeEnum';
-import ItemRarityEnum from '@/Game/Itemization/Enums/ItemRarityEnum';
+import { LootGenerationOption } from '../../Itemization/LootGenerator';
+import ItemSuperTypeEnum from '../../Itemization/Enums/ItemSuperTypeEnum';
 
 class Spider extends BattleCharacter {
     constructor(name: string) {

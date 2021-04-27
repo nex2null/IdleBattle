@@ -1,4 +1,4 @@
-import StatEnum from '@/Game/Enums/StatEnum';
+import StatEnum from '../../Enums/StatEnum';
 
 class EquipmentImplicit {
 

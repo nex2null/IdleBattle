@@ -7,7 +7,7 @@ import EquipmentSlotEnum from '../Enums/EquipmentSlotEnum';
 import EquipmentAffix from './EquipmentAffix';
 import EquipmentImplicit from './EquipmentImplicit';
 import { implicitInformations } from './EquipmentImplicitInformation';
-import { getRandomInt } from '@/Utilities/RandomHelpers';
+import RandomHelpers from '../../Utilities/RandomHelpers';
 import EquipmentAffixTypeEnum from '../Enums/EquipmentAffixTypeEnum';
 
 class EquipmentForge {
@@ -73,7 +73,7 @@ class EquipmentForge {
             var implicit = baseTypeImplicits[i];
 
             // Get the implicit value
-            var implicitValue = getRandomInt(implicit.minValue, implicit.maxValue);
+            var implicitValue = RandomHelpers.getRandomInt(implicit.minValue, implicit.maxValue);
 
             // Create the implicit
             generatedImplicits.push(new EquipmentImplicit(implicit.modifiedStat, implicitValue))
@@ -101,7 +101,7 @@ class EquipmentForge {
         for (var i = 0; i < amountToGenerate; i++) {
 
             // Grab a random affix from our list of available ones
-            var randomAffix = filteredAffixes[getRandomInt(0, filteredAffixes.length - 1)];
+            var randomAffix = filteredAffixes[RandomHelpers.getRandomInt(0, filteredAffixes.length - 1)];
             if (randomAffix == null)
                 break;
 
@@ -110,7 +110,7 @@ class EquipmentForge {
             filteredAffixes = filteredAffixes.filter(x => x.modifiedStat != randomAffix.modifiedStat);
 
             // Roll a random number between the affix min/max
-            var affixValue = getRandomInt(randomAffix.minValue, randomAffix.maxValue);
+            var affixValue = RandomHelpers.getRandomInt(randomAffix.minValue, randomAffix.maxValue);
 
             // Generate our affix
             generatedAffixes.push(new EquipmentAffix(randomAffix.type, affixValue));
@@ -190,20 +190,20 @@ class EquipmentForge {
             this.getEquipmentAffixInformation(x.type).slot == EquipmentAffixSlotEnum.Suffix).length;
 
         // Figure out how many prefixes / suffixes to generate
-        var prefixCount = getRandomInt(existingPrefixCount ? 0 : this.getMinAffixCountPerSlot(equipment.rarity),
+        var prefixCount = RandomHelpers.getRandomInt(existingPrefixCount ? 0 : this.getMinAffixCountPerSlot(equipment.rarity),
             this.getMaxAffixCountPerSlot(equipment.rarity) - existingPrefixCount);
-        var suffixCount = getRandomInt(existingSuffixCount ? 0 : this.getMinAffixCountPerSlot(equipment.rarity),
+        var suffixCount = RandomHelpers.getRandomInt(existingSuffixCount ? 0 : this.getMinAffixCountPerSlot(equipment.rarity),
             this.getMaxAffixCountPerSlot(equipment.rarity) - existingSuffixCount);
 
         // Make sure we always generate at least 1 new prefix/suffix if we are upgrading
         if (prefixCount + suffixCount == 0) {
-            if (getRandomInt(0, 1) == 0) prefixCount++;
+            if (RandomHelpers.getRandomInt(0, 1) == 0) prefixCount++;
             else suffixCount++;
         }
 
         // Ensure rare items will always have at least 3 affixes total
         if (equipment.rarity == ItemRarityEnum.Rare && prefixCount + existingPrefixCount + suffixCount + existingSuffixCount < 3) {
-            if (getRandomInt(0, 1) == 0) prefixCount++;
+            if (RandomHelpers.getRandomInt(0, 1) == 0) prefixCount++;
             else suffixCount++;
         }
 
@@ -242,7 +242,7 @@ class EquipmentForge {
         else if (existingSuffixCount == maxAffixCountPerSlot)
             slotToGenerate = EquipmentAffixSlotEnum.Prefix;
         else
-            slotToGenerate = getRandomInt(0, 1) == 1 ? EquipmentAffixSlotEnum.Prefix : EquipmentAffixSlotEnum.Suffix;
+            slotToGenerate = RandomHelpers.getRandomInt(0, 1) == 1 ? EquipmentAffixSlotEnum.Prefix : EquipmentAffixSlotEnum.Suffix;
 
         // Generate the affix and add to the equipment
         var generatedAffix = this.generateAffixes(slotToGenerate, 1, equipment.ilvl);
@@ -270,7 +270,7 @@ class EquipmentForge {
                 continue;
 
             // Re-roll the affix value
-            currentAffix.value = getRandomInt(affixInformation.minValue, affixInformation.maxValue);
+            currentAffix.value = RandomHelpers.getRandomInt(affixInformation.minValue, affixInformation.maxValue);
         }
     }
 }
