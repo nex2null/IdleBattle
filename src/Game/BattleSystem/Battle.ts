@@ -25,6 +25,13 @@ class Battle {
     this.updateCharactersInCurrentLevel();
   }
 
+  // Start the battle
+  public startBattle(): void {
+    if (this.currentState === BattleStateEnum.BattleBegin) {
+      this.currentState = BattleStateEnum.InBattle;
+    }
+  }
+
   // Process the battle
   public processBattle() {
 
