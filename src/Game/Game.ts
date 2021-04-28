@@ -23,11 +23,11 @@ class Game {
     }
 
     // Start a new battle
-    startBattle(dungeonId: number) {
+    startBattle(dungeonId: number): Battle {
 
         // Verify a battle is not already started
         if (this.currentBattle != null)
-            return;
+            return this.currentBattle;
 
         // Create the dungeon
         var dungeon = new Dungeon(1, [
@@ -40,9 +40,7 @@ class Game {
         var battleLog = new BattleLog();
         var playerBattleCharacters = this.town.playerCharacters.map(x => x.toBattleCharacter());
         this.currentBattle = new Battle(playerBattleCharacters, dungeon, battleLog);
-
-        // Lets go
-        this.currentBattle.startBattle();
+        return this.currentBattle;
     }
 
     // Leave the current battle

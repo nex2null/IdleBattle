@@ -55,7 +55,6 @@ export default class BattleCharacter {
             return;
 
         this.currentCharge += this.spd;
-        this.currentCharge = this.currentCharge > 100 ? 100 : this.currentCharge;
     }
 
     // Determines if the character is ready to act
