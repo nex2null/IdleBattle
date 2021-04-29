@@ -1,44 +1,39 @@
 // Imports
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
-import Battle from "../Game/BattleSystem/Battle";
-import BattleStateEnum from "../Game/BattleSystem/Enums/BattleStateEnum";
+import Battle from "../../Game/BattleSystem/Battle";
+import BattleStateEnum from "../../Game/BattleSystem/Enums/BattleStateEnum";
+import Game from "../../Game/Game";
+import ScreenManager from "../ScreenManager";
+import IScreen from "./IScreen";
+import TownScreen from "./TownScreen";
 
-class BattleScreen {
+class BattleScreen implements IScreen {
 
   // Properties
-  battle: Battle;
-  program: any;
-  screenElements: any;
   screen: any;
+  battle: Battle;
+  screenElements: any;
+  messageCount: number = 0;
+  handleSpaceKey: () => void = () => this.processBattle();
 
   // Constructor
-  constructor(program: any, battle: Battle) {
+  constructor(battle: Battle) {
+    this.screen = null;
     this.battle = battle;
-    this.program = program;
     this.screenElements = {};
   }
 
   //
   // Initializes the screen
   //
-  public initializeScreen() {
+  public initializeScreen(screen: any) {
 
-    // Create a screen
-    this.screen = blessed.screen({
-      terminal: 'xterm-256color',
-      fullUnicode: true
-    });
-
-    // Quit on Control-C.
-    this.screen.key(['C-c'], () => {
-      return process.exit(0);
-    });
+    // Save the screen
+    this.screen = screen;
 
     // Process battle on space
-    this.screen.key(['space'], () => {
-      this.processBattle();
-    });
+    this.screen.key(['space'], this.handleSpaceKey);
 
     // Create a continue prompt
     this.screenElements.continuePrompt = contrib.question({
@@ -61,9 +56,19 @@ class BattleScreen {
   }
 
   //
+  // Uninitializes the screen
+  //
+  public uninitializeScreen() {
+    this.screen.unkey(['space'], this.handleSpaceKey);
+  }
+
+  //
   // Processes the battle
   //
   private processBattle() {
+
+    if (this.battle.isBattleWon() || this.battle.isBattleLost())
+      return;
 
     if (this.battle.currentState === BattleStateEnum.InBattle) {
       this.battle.processBattle();
@@ -76,6 +81,10 @@ class BattleScreen {
         if (!data) process.exit(0);
         if (data) this.advanceLevel();
       });
+    }
+
+    if (this.battle.isBattleWon() || this.battle.isBattleLost()) {
+      this.logMessage("---- PRESS ESCAPE TO EXIT THE BATTLE ----");
     }
 
     this.screen.render();
@@ -126,22 +135,32 @@ class BattleScreen {
 
     this.screenElements.logBox.focus();
 
-    var x = 0;
     this.battle.battleLog.callback = (msg) => {
-      this.screenElements.logBox.insertBottom(`${x++}: ${msg}`);
-      this.screenElements.logBox.setScrollPerc(100);
-      this.screen.render();
+      this.logMessage(msg);
     }
 
-    this.screen.key(['pageup'], () => {
+    this.screenElements.logBox.key(['pageup'], () => {
       this.screenElements.logBox.scroll(-10);
       this.screen.render();
     });
 
-    this.screen.key(['pagedown'], () => {
+    this.screenElements.logBox.key(['pagedown'], () => {
       this.screenElements.logBox.scroll(10);
       this.screen.render();
     });
+
+    this.screenElements.logBox.key(['escape'], () => {
+      this.leaveBattle();
+    });
+  }
+
+  //
+  // Logs a message
+  //
+  private logMessage(message: string) {
+    this.screenElements.logBox.insertBottom(`${++this.messageCount}: ${message}`);
+    this.screenElements.logBox.setScrollPerc(100);
+    this.screen.render();
   }
 
   //
@@ -348,6 +367,16 @@ class BattleScreen {
       playerElements.hpGauge.setLabel(`HP: ${character.hp}`);
       playerElements.mpGauge.setLabel(`MP: ${character.mp}`);
     });
+  }
+
+  //
+  // Leaves the battle
+  //
+  private leaveBattle() {
+    if (this.battle.isBattleLost() || this.battle.isBattleWon()) {
+      Game.getInstance().leaveBattle();
+      ScreenManager.getInstance().loadScreen(new TownScreen());
+    }
   }
 }
 

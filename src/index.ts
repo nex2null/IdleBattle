@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-const blessed = require('blessed');
-const contrib = require('blessed-contrib');
-import Game from './Game/Game';
-import BattleScreen from './Screens/BattleScreen';
+// Imports
+import ScreenManager from "./UI/ScreenManager";
+import TownScreen from "./UI/Screens/TownScreen";
 
-var battle = Game.getInstance().startBattle(1);
-var screen = new BattleScreen(null, battle);
-screen.initializeScreen();
+// Initialize the screen manager
+var screenManager = ScreenManager.getInstance();
 
-battle.startBattle();
+// Load the town screen
+screenManager.loadScreen(new TownScreen());
