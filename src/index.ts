@@ -2,7 +2,9 @@
 
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
+
 import Battle from './Game/BattleSystem/Battle';
+import BattleStateEnum from './Game/BattleSystem/Enums/BattleStateEnum';
 import Game from './Game/Game';
 
 // Create a screen object.
@@ -11,12 +13,23 @@ var screen = blessed.screen({
   fullUnicode: true
 });
 
-// Quit on Escape, q, or Control-C.
-screen.key(['escape', 'C-c'], () => {
+// Quit on Control-C.
+screen.key(['C-c'], () => {
   return process.exit(0);
 });
 
 // screen.on('keypress', function (_: any, key: any) { console.log(key); });
+
+var continuePrompt = contrib.question({
+  parent: screen,
+  border: 'line',
+  height: 'shrink',
+  width: 'half',
+  top: 'center',
+  left: 'center',
+  label: ' {blue-fg}Question{/blue-fg} ',
+  tags: true
+});
 
 var battle = Game.getInstance().startBattle(1);
 battle.processBattle();
@@ -27,9 +40,25 @@ var screenElements: any = {};
 renderBattleCharacters(screen, screenElements, battle);
 
 screen.key(['space'], () => {
-  battle.processBattle();
-  updateBattleCharacters(screenElements, battle);
+
+  if (battle.currentState === BattleStateEnum.InBattle) {
+    battle.processBattle();
+    updateBattleCharacters(screenElements, battle);
+  }
+
+  if (battle.currentState === BattleStateEnum.LevelCleared) {
+    continuePrompt.ask('Level Cleared! Continue?: ', function (err: any, data: any) {
+      if (err) throw err;
+      if (!data) process.exit(0);
+      battle.advanceLevel();
+    });
+  }
+
   screen.render();
+});
+
+screen.key(['tab'], () => {
+  screen.focusNext();
 });
 
 // Render the screen.
@@ -95,16 +124,6 @@ function renderLog(screen: any, battle: Battle) {
 
   box.key(['home'], () => {
     box.setScrollPerc(0);
-    screen.render();
-  });
-
-  screen.key(['left'], () => {
-    screen.focusPrevious();
-    screen.render();
-  });
-
-  screen.key(['right'], () => {
-    screen.focusNext();
     screen.render();
   });
 }
