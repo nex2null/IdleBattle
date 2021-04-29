@@ -2,7 +2,6 @@
 
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
-
 import Battle from './Game/BattleSystem/Battle';
 import BattleStateEnum from './Game/BattleSystem/Enums/BattleStateEnum';
 import Game from './Game/Game';
@@ -18,8 +17,6 @@ screen.key(['C-c'], () => {
   return process.exit(0);
 });
 
-// screen.on('keypress', function (_: any, key: any) { console.log(key); });
-
 var continuePrompt = contrib.question({
   parent: screen,
   border: 'line',
@@ -27,8 +24,8 @@ var continuePrompt = contrib.question({
   width: 'half',
   top: 'center',
   left: 'center',
-  label: ' {blue-fg}Question{/blue-fg} ',
-  tags: true
+  okayText: 'Continue',
+  cancelText: 'Escape'
 });
 
 var battle = Game.getInstance().startBattle(1);
@@ -47,18 +44,14 @@ screen.key(['space'], () => {
   }
 
   if (battle.currentState === BattleStateEnum.LevelCleared) {
-    continuePrompt.ask('Level Cleared! Continue?: ', function (err: any, data: any) {
+    continuePrompt.ask('Level Cleared! Continue?', function (err: any, data: any) {
       if (err) throw err;
       if (!data) process.exit(0);
-      battle.advanceLevel();
+      if (data) advanceLevel(screen, screenElements, battle);
     });
   }
 
   screen.render();
-});
-
-screen.key(['tab'], () => {
-  screen.focusNext();
 });
 
 // Render the screen.
@@ -66,6 +59,12 @@ screen.render();
 
 // Start the battle
 battle.startBattle();
+
+function advanceLevel(screen: any, screenElements: any, battle: Battle) {
+  battle.advanceLevel();
+  renderBattleCharacters(screen, screenElements, battle);
+  screen.render();
+}
 
 function renderLog(screen: any, battle: Battle) {
   var box = blessed.box({
@@ -107,28 +106,24 @@ function renderLog(screen: any, battle: Battle) {
     screen.render();
   }
 
-  box.key(['pageup'], () => {
+  screen.key(['pageup'], () => {
     box.scroll(-10);
     screen.render();
   });
 
-  box.key(['pagedown'], () => {
+  screen.key(['pagedown'], () => {
     box.scroll(10);
-    screen.render();
-  });
-
-  box.key(['end'], () => {
-    box.setScrollPerc(100);
-    screen.render();
-  });
-
-  box.key(['home'], () => {
-    box.setScrollPerc(0);
     screen.render();
   });
 }
 
 function renderBattleCharacters(screen: any, screenElements: any, battle: Battle) {
+
+  // If we already have screen elements, remove them before initializing
+  if (screenElements.playersBox)
+    screen.remove(screenElements.playersBox);
+  if (screenElements.enemiesBox)
+    screen.remove(screenElements.enemiesBox);
 
   screenElements.playersBox = blessed.box({
     top: 0,

@@ -1,0 +1,1 @@
+Get keypresses - screen.on('keypress', function (_: any, key: any) { console.log(key); });
