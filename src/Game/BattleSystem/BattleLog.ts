@@ -2,6 +2,7 @@ class BattleLog {
 
   // Properties
   messages: Array<string> = [];
+  callback: (str: string) => any = () => { };
 
   // Constructor
   constructor() {
@@ -13,6 +14,7 @@ class BattleLog {
       this.messages.shift();
 
     this.messages.push(message);
+    this.callback(message);
   }
 }
 

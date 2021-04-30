@@ -65,6 +65,7 @@ class GambitAction {
         if (actionName === 'Attack') return new AttackSkill();
         if (actionName === 'Defend') return new DefendSkill();
         if (actionName === 'Web Shoot') return new WebShootSkill();
+        return null;
     }
 }
 

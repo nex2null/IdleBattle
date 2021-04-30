@@ -12,7 +12,9 @@ export default class BattleCharacter {
     name: string;
     level: number;
     hp: number;
+    maxHp: number;
     mp: number;
+    maxMp: number;
     str: number;
     int: number;
     spd: number;
@@ -31,8 +33,8 @@ export default class BattleCharacter {
 
         this.name = args.name;
         this.level = args.level;
-        this.hp = args.hp;
-        this.mp = args.mp;
+        this.hp = this.maxHp = args.hp;
+        this.mp = this.maxMp = args.mp;
         this.str = args.str;
         this.int = args.int;
         this.spd = args.spd;
@@ -55,7 +57,6 @@ export default class BattleCharacter {
             return;
 
         this.currentCharge += this.spd;
-        this.currentCharge = this.currentCharge > 100 ? 100 : this.currentCharge;
     }
 
     // Determines if the character is ready to act
@@ -119,6 +120,10 @@ export default class BattleCharacter {
 
         // Allow effects to process damage taken
         this.effects.forEach(x => x.afterDamageTaken(damage));
+
+        // If the character has died, set charge to 0
+        if (!this.isAlive())
+            this.currentCharge = 0;
     }
 
     beforeActionPerformed() {

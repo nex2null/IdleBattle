@@ -1,55 +1,44 @@
 {
-    "name": "idlebattle",
-    "version": "0.1.0",
-    "private": true,
+    "name": "cli-rpg",
+    "version": "1.0.0",
+    "description": "Idle RPG with a command line interface",
+    "main": "./dist/index.js",
+    "bin": {
+        "cli-rpg": "dist/index.js"
+    },
     "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint"
+        "type-check": "tsc --noEmit",
+        "type-check:watch": "npm run type-check -- --watch",
+        "build": "npm run build:types && npm run build:js",
+        "build:types": "tsc --emitDeclarationOnly",
+        "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
+        "start": "npm run build && node dist/index.js",
+        "local": "npm run build && npm install -g"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nex2null/IdleBattle.git"
+    },
+    "keywords": [],
+    "author": "Brian Workman",
+    "license": "CC0",
+    "bugs": {
+        "url": "https://github.com/nex2null/IdleBattle/issues"
+    },
+    "homepage": "https://github.com/nex2null/IdleBattle#readme",
+    "devDependencies": {
+        "@babel/cli": "^7.13.16",
+        "@babel/core": "^7.13.16",
+        "@babel/plugin-proposal-class-properties": "^7.13.0",
+        "@babel/plugin-transform-runtime": "^7.13.15",
+        "@babel/preset-env": "^7.13.15",
+        "@babel/preset-typescript": "^7.13.0",
+        "@types/node": "^15.0.0",
+        "typescript": "^4.2.4"
     },
     "dependencies": {
-        "core-js": "^2.6.5",
-        "guid-typescript": "^1.0.9",
-        "vue": "^2.6.10",
-        "vue-class-component": "^7.0.2",
-        "vue-property-decorator": "^8.1.0",
-        "vue-router": "^3.0.6"
-    },
-    "devDependencies": {
-        "@vue/cli-plugin-babel": "^3.6.0",
-        "@vue/cli-plugin-eslint": "^3.6.0",
-        "@vue/cli-plugin-typescript": "^3.6.0",
-        "@vue/cli-service": "^4.5.12",
-        "@vue/eslint-config-typescript": "^4.0.0",
-        "babel-eslint": "^10.0.1",
-        "eslint": "^5.16.0",
-        "eslint-plugin-vue": "^5.0.0",
-        "typescript": "^3.4.3",
-        "vue-template-compiler": "^2.5.21"
-    },
-    "eslintConfig": {
-        "root": true,
-        "env": {
-            "node": true
-        },
-        "extends": [
-            "plugin:vue/essential",
-            "eslint:recommended",
-            "@vue/typescript"
-        ],
-        "rules": {},
-        "parserOptions": {
-            "parser": "@typescript-eslint/parser"
-        }
-    },
-    "postcss": {
-        "plugins": {
-            "autoprefixer": {}
-        }
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions",
-        "not ie <= 8"
-    ]
+        "blessed": "^0.1.81",
+        "blessed-contrib": "github:nex2null/blessed-contrib",
+        "guid-typescript": "^1.0.9"
+    }
 }

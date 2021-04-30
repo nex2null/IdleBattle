@@ -1,29 +1,9 @@
-# sample-battle-system
+## CLI-RPG - Command Line Idle: RPG
 
-## Project setup
-```
-npm install
-```
+#### Description
+An incremental/idle RPG that you can play in a terminal
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+#### Build Instructions
+> npm install   
+npm run local  
+cli-rpg
