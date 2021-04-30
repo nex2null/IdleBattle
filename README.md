@@ -1,6 +1,9 @@
-cli-rpg - Command Line Idle: RPG
+## CLI-RPG - Command Line Idle: RPG
 
-# Build Instructions
+#### Description
+An incremental/idle RPG that you can play in a terminal
+
+#### Build Instructions
 npm install
 npm run local
 cli-rpg
