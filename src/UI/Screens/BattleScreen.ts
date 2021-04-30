@@ -4,6 +4,7 @@ const contrib = require('blessed-contrib');
 import Battle from "../../Game/BattleSystem/Battle";
 import BattleStateEnum from "../../Game/BattleSystem/Enums/BattleStateEnum";
 import Game from "../../Game/Game";
+import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
@@ -15,7 +16,6 @@ class BattleScreen implements IScreen {
   battle: Battle;
   screenElements: any;
   messageCount: number = 0;
-  handleSpaceKey: () => void = () => this.processBattle();
 
   // Constructor
   constructor(battle: Battle) {
@@ -31,9 +31,6 @@ class BattleScreen implements IScreen {
 
     // Save the screen
     this.screen = screen;
-
-    // Process battle on space
-    this.screen.key(['space'], this.handleSpaceKey);
 
     // Create a continue prompt
     this.screenElements.continuePrompt = contrib.question({
@@ -53,13 +50,25 @@ class BattleScreen implements IScreen {
 
     // Render the screen
     this.screen.render();
+
+    // Start the battle loop
+    this.startBattleLoop();
+  }
+
+  //
+  // Starts the battle processing loop
+  //
+  private async startBattleLoop() {
+    while (this.battle.currentState === BattleStateEnum.InBattle) {
+      await UIHelpers.delay(250);
+      this.processBattle();
+    }
   }
 
   //
   // Uninitializes the screen
   //
   public uninitializeScreen() {
-    this.screen.unkey(['space'], this.handleSpaceKey);
   }
 
   //
@@ -78,13 +87,16 @@ class BattleScreen implements IScreen {
     if (this.battle.currentState === BattleStateEnum.LevelCleared) {
       this.screenElements.continuePrompt.ask('Level Cleared! Continue?', (err: any, data: any) => {
         if (err) throw err;
-        if (!data) process.exit(0);
+        if (!data) this.leaveBattle();
         if (data) this.advanceLevel();
       });
     }
 
     if (this.battle.isBattleWon() || this.battle.isBattleLost()) {
-      this.logMessage("---- PRESS ESCAPE TO EXIT THE BATTLE ----");
+      this.logMessage("{red-fg}---- PRESS ESCAPE TO EXIT THE BATTLE ----{/red-fg}");
+      this.screenElements.logBox.key(['escape'], () => {
+        this.leaveBattle();
+      });
     }
 
     this.screen.render();
@@ -97,6 +109,7 @@ class BattleScreen implements IScreen {
     this.battle.advanceLevel();
     this.renderBattleCharacters();
     this.screen.render();
+    this.startBattleLoop();
   }
 
   //
@@ -123,6 +136,7 @@ class BattleScreen implements IScreen {
           }
         }
       },
+      tags: true,
       keys: true,
       scrollable: true,
       scrollbar: {
@@ -147,10 +161,6 @@ class BattleScreen implements IScreen {
     this.screenElements.logBox.key(['pagedown'], () => {
       this.screenElements.logBox.scroll(10);
       this.screen.render();
-    });
-
-    this.screenElements.logBox.key(['escape'], () => {
-      this.leaveBattle();
     });
   }
 
@@ -341,6 +351,11 @@ class BattleScreen implements IScreen {
       // Grab the elements for this player
       var playerElements = this.screenElements.playerCharacters[character.name];
 
+      // Update name if character has died
+      if (!character.isAlive()) {
+        playerElements.playerNameBox.setContent(`{gray-fg}${character.name}{/gray-fg}`);
+      }
+
       // Update gauge values
       playerElements.chargeGauge.setPercent(character.currentCharge);
       playerElements.hpGauge.setPercent((character.hp / character.maxHp) * 100);
@@ -356,6 +371,11 @@ class BattleScreen implements IScreen {
 
       // Grab the elements for this player
       var playerElements: any = this.screenElements.enemyCharacters[character.name];
+
+      // Update name if character has died
+      if (!character.isAlive()) {
+        playerElements.playerNameBox.setContent(`{gray-fg}${character.name}{/gray-fg}`);
+      }
 
       // Update gauge values
       playerElements.chargeGauge.setPercent(character.currentCharge);
@@ -373,10 +393,8 @@ class BattleScreen implements IScreen {
   // Leaves the battle
   //
   private leaveBattle() {
-    if (this.battle.isBattleLost() || this.battle.isBattleWon()) {
-      Game.getInstance().leaveBattle();
-      ScreenManager.getInstance().loadScreen(new TownScreen());
-    }
+    Game.getInstance().leaveBattle();
+    ScreenManager.getInstance().loadScreen(new TownScreen());
   }
 }
 

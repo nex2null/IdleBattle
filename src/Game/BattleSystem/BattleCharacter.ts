@@ -120,6 +120,10 @@ export default class BattleCharacter {
 
         // Allow effects to process damage taken
         this.effects.forEach(x => x.afterDamageTaken(damage));
+
+        // If the character has died, set charge to 0
+        if (!this.isAlive())
+            this.currentCharge = 0;
     }
 
     beforeActionPerformed() {

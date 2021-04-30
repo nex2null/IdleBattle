@@ -21,15 +21,8 @@ class Battle {
     this.playerCharacters = playerCharacters;
     this.dungeon = dungeon;
     this.battleLog = battleLog;
-    this.currentState = BattleStateEnum.BattleBegin;
+    this.currentState = BattleStateEnum.InBattle;
     this.updateCharactersInCurrentLevel();
-  }
-
-  // Start the battle
-  public startBattle(): void {
-    if (this.currentState === BattleStateEnum.BattleBegin) {
-      this.currentState = BattleStateEnum.InBattle;
-    }
   }
 
   // Process the battle

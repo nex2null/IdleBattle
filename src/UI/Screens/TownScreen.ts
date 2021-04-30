@@ -103,7 +103,6 @@ class TownScreen implements IScreen {
 
     // Initialize a new battle
     var battle = Game.getInstance().startBattle(1);
-    battle.startBattle();
 
     // Switch to the battle screen
     ScreenManager.getInstance().loadScreen(new BattleScreen(battle));
