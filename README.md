@@ -4,6 +4,6 @@
 An incremental/idle RPG that you can play in a terminal
 
 #### Build Instructions
-npm install
-npm run local
+> npm install   
+npm run local  
 cli-rpg
