@@ -6,6 +6,7 @@ const contrib = require('blessed-contrib');
 import Game from "../../Game/Game";
 import ScreenManager from "../ScreenManager";
 import BattleScreen from "./BattleScreen";
+import EquipmentScreen from "./EquipmentScreen";
 import IScreen from "./IScreen";
 
 class TownScreen implements IScreen {
@@ -75,12 +76,16 @@ class TownScreen implements IScreen {
       if (selectedItem === 'Battle')
         this.StartBattle();
 
+      if (selectedItem === 'Equipment')
+        ScreenManager.getInstance().loadScreen(new EquipmentScreen());
+
       else if (selectedItem === 'Exit')
         process.exit(0);
     });
 
     townMenu.setItems([
       'Battle',
+      'Equipment',
       'Exit'
     ]);
 

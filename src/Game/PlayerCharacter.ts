@@ -4,7 +4,7 @@ import GambitAction from './BattleSystem/Gambits/GambitAction';
 import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyCondition';
 import GambitTypeEnum from './BattleSystem/Enums/GambitTypeEnum';
 import Equipment from "./Itemization/Equipment/Equipment";
-import PlayerCharacterEquipmentSlotEnum from "./Enums/PlayerCharacterEquipmentSlotEnum";
+import EquipmentSlotEnum from "./Itemization/Enums/EquipmentSlotEnum";
 
 class PlayerCharacter {
 
@@ -18,7 +18,7 @@ class PlayerCharacter {
     spd: number;
 
     // Equipment
-    equipment: Map<PlayerCharacterEquipmentSlotEnum, Equipment | null>;
+    equipment: Map<EquipmentSlotEnum, Equipment | null>;
 
     // Constructor
     constructor(args: any) {

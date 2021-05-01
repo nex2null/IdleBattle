@@ -9,11 +9,12 @@ import EquipmentImplicit from './EquipmentImplicit';
 import { implicitInformations } from './EquipmentImplicitInformation';
 import RandomHelpers from '../../Utilities/RandomHelpers';
 import EquipmentAffixTypeEnum from '../Enums/EquipmentAffixTypeEnum';
+import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
 class EquipmentForge {
 
     // Creates a new piece of equipment
-    static createEquipment(
+    public static createEquipment(
         baseType: ItemTypeEnum,
         rarity: ItemRarityEnum,
         ilvl: number
@@ -156,7 +157,11 @@ class EquipmentForge {
             return;
 
         // If the item is a normal item the generate a cool name for it
-        // TODO
+        equipment.name = uniqueNamesGenerator({
+            dictionaries: [adjectives, animals],
+            separator: ' ',
+            length: 2
+        });
 
         // Set the item rarity
         equipment.rarity = rarity;
