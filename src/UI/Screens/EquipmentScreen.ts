@@ -18,6 +18,7 @@ class EquipmentScreen implements IScreen {
   screenElements: any = {};
   currentPlayerIndex: number = 0;
   town: Town;
+  displayedEquipment: Array<Equipment> = [];
 
   // Constructor
   constructor() {
@@ -182,9 +183,11 @@ class EquipmentScreen implements IScreen {
     this.screenElements.characterNameLabel.key(['left'], () => this.setCurrentPlayer(this.currentPlayerIndex - 1));
     this.screenElements.chestBox.key(['up'], () => this.screenElements.characterNameLabel.focus());
     this.screenElements.chestBox.key(['down'], () => this.screenElements.bootsBox.focus());
-    this.screenElements.chestBox.key(['enter'], () => this.loadEquipment(EquipmentSlotEnum.ChestPiece));
+    this.screenElements.chestBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.ChestPiece));
     this.screenElements.bootsBox.key(['up'], () => this.screenElements.chestBox.focus());
-    this.screenElements.equipmentListBox.key(['escape'], () => this.unloadEquipment());
+    this.screenElements.equipmentListBox.key(['escape'], () => this.unloadEquipmentList());
+    this.screenElements.equipmentListBox.on('select', (el: any, sel: any) => this.handleEquipmentSelected(el, sel));
+    this.screenElements.equipmentListBox.on('select item', (el: any, sel: any) => this.handleEquipmentFocused(el, sel));
 
     // Draw screen
     this.screen.append(this.screenElements.characterBox);
@@ -230,26 +233,54 @@ class EquipmentScreen implements IScreen {
     this.screen.render();
   }
 
-  private loadEquipment(slot: EquipmentSlotEnum) {
+  //
+  // Loads all the equipment for a given slot
+  //
+  private loadEquipmentList(slot: EquipmentSlotEnum) {
 
     // Grab all the items of the given equipment slot
-    var allEquipmentOfSlot = this.town.inventory.items
+    this.displayedEquipment = this.town.inventory.items
       .filter(x => x.superType === ItemSuperTypeEnum.Equipment)
       .map(x => x as Equipment)
-      .filter(x => x.slot === slot);
+      .filter(x => x.slot === slot)
 
     // Set the items
-    this.screenElements.equipmentListBox.setItems(allEquipmentOfSlot.map(x => x.name));
+    this.screenElements.equipmentListBox.setItems(this.displayedEquipment.map(x => x.name));
+
+    // Grab the current focused element and set it's border to green
+    this.screen.focused.style.border.fg = 'green';
 
     // Focus on the list
     this.screen.focusPush(this.screenElements.equipmentListBox);
   }
 
-  private unloadEquipment() {
+  //
+  // Unloads the list of equipment
+  //
+  private unloadEquipmentList() {
 
+    // Unload the list of items
     this.screenElements.equipmentListBox.setItems([]);
+
+    // Pop the focus and set the focused element's border to white
     this.screen.focusPop();
+    this.screen.focused.style.border.fg = 'white';
     this.screen.render();
+  }
+
+  //
+  // Handles when an equipment is focused
+  //
+  private handleEquipmentFocused(element: any, index: any) {
+    var equipment = this.displayedEquipment[index];
+    console.log(equipment.name + " - " + equipment.id);
+  }
+
+  //
+  // Handles when an equipment is selected
+  //
+  private handleEquipmentSelected(element: any, index: any) {
+    console.log('SELECTED: ' + element.getText() + " (element " + index + ")");
   }
 }
 
