@@ -206,8 +206,11 @@ class EquipmentScreen implements IScreen {
     this.screenElements.chestBox.key(['down'], () => this.screenElements.bootsBox.focus());
     this.screenElements.chestBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.ChestPiece));
     this.screenElements.chestBox.key(['escape'], () => this.exitScreen());
+    this.screenElements.chestBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.ChestPiece));
     this.screenElements.bootsBox.key(['up'], () => this.screenElements.chestBox.focus());
+    this.screenElements.bootsBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.Boots));
     this.screenElements.bootsBox.key(['escape'], () => this.exitScreen());
+    this.screenElements.bootsBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Boots));
     this.screenElements.equipmentListBox.key(['escape'], () => this.unloadEquipmentList());
     this.screenElements.equipmentListBox.on('select', (el: any, sel: any) => this.handleEquipmentListSelected(el, sel));
     this.screenElements.equipmentListBox.on('select item', (el: any, sel: any) => this.handleEquipmentListFocused(el, sel));
@@ -258,6 +261,15 @@ class EquipmentScreen implements IScreen {
     // then set it to the first character
     else if (this.currentPlayerIndex >= this.town.playerCharacters.length)
       this.currentPlayerIndex = 0;
+
+    // Refresh the equipped equipment
+    this.refreshEquippedEquipment();
+  }
+
+  //
+  // Refreshes the equipped equipment
+  //
+  private refreshEquippedEquipment() {
 
     // Grab the current character
     var character = this.town.playerCharacters[this.currentPlayerIndex];
@@ -314,8 +326,8 @@ class EquipmentScreen implements IScreen {
     this.screen.focusPop();
     this.screen.focused.style.border.fg = 'white';
 
-    // Set the current player to redraw their equipment if it changed
-    this.setCurrentPlayer(this.currentPlayerIndex);
+    // Refresh the equipped equipment
+    this.refreshEquippedEquipment();
   }
 
   //
@@ -338,6 +350,8 @@ class EquipmentScreen implements IScreen {
 
     // Grab the selected equipment
     var equipment = this.displayedEquipment[index];
+    if (!equipment)
+      return;
 
     // Grab the current character
     var character = this.town.playerCharacters[this.currentPlayerIndex];
@@ -356,6 +370,7 @@ class EquipmentScreen implements IScreen {
     // Clear all the selected equipment box's children
     var i = this.screenElements.selectedEquipmentDetailsBox.children.length;
     while (--i > 0) this.screenElements.selectedEquipmentDetailsBox.children[i].detach();
+    this.screen.render();
   }
 
   //
@@ -386,6 +401,24 @@ class EquipmentScreen implements IScreen {
 
     // Render the screen
     this.screen.render();
+  }
+
+  //
+  // Unequips an equipment in the given slot
+  //
+  private unequipEquipment(slot: EquipmentSlotEnum) {
+
+    // Grab the current character
+    var character = this.town.playerCharacters[this.currentPlayerIndex];
+
+    // Unequip the slot
+    Equipper.unequipItem(character, slot);
+
+    // Clear the equipped item details
+    this.clearCurrentEquipmentDetails();
+
+    // Refresh the equipped equipment
+    this.refreshEquippedEquipment();
   }
 
   //
