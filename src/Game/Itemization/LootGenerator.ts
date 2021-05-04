@@ -208,7 +208,7 @@ class LootGenerator {
 
     private static GetRandomCurrencyItem(ilvl: number): Item {
         var itemType = currencyDropper.getRandomCurrency(ilvl);
-        return new Item(itemType, ItemRarityEnum.Normal, 1, 1);
+        return new Item(itemType, ItemSuperTypeEnum.Currency, ItemRarityEnum.Normal, 1, 1);
     }
 }
 

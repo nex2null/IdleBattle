@@ -5,6 +5,7 @@ import ItemRarityEnum from '../Enums/ItemRarityEnum';
 import EquipmentSlotEnum from '../Enums/EquipmentSlotEnum';
 import EquipmentImplicit from './EquipmentImplicit';
 import { Guid } from "guid-typescript";
+import ItemSuperTypeEnum from "../Enums/ItemSuperTypeEnum";
 
 class Equipment extends Item {
 
@@ -28,7 +29,7 @@ class Equipment extends Item {
         affixes: Array<EquipmentAffix>,
         requiredLevel: number
     ) {
-        super(type, rarity, ilvl, 1);
+        super(type, ItemSuperTypeEnum.Equipment, rarity, ilvl, 1);
         this.name = name;
         this.slot = slot;
         this.implicits = implicits;

@@ -1,16 +1,22 @@
+import StatEnum from "../../Enums/StatEnum";
+import EquipmentAffixSlotEnum from "../Enums/EquipmentAffixSlotEnum";
 import EquipmentAffixTypeEnum from "../Enums/EquipmentAffixTypeEnum";
 
 class EquipmentAffix {
 
-    // Properties
-    type: EquipmentAffixTypeEnum;
-    value: number;
+  // Properties
+  type: EquipmentAffixTypeEnum;
+  slot: EquipmentAffixSlotEnum;
+  modifiedStat: StatEnum;
+  value: number;
 
-    // Constructor
-    constructor(type: EquipmentAffixTypeEnum, value: number) {
-        this.type = type;
-        this.value = value;
-    }
+  // Constructor
+  constructor(type: EquipmentAffixTypeEnum, slot: EquipmentAffixSlotEnum, modifiedStat: StatEnum, value: number) {
+    this.type = type;
+    this.modifiedStat = modifiedStat;
+    this.slot = slot;
+    this.value = value;
+  }
 }
 
 export default EquipmentAffix;

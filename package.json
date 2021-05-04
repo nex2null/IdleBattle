@@ -39,6 +39,7 @@
     "dependencies": {
         "blessed": "^0.1.81",
         "blessed-contrib": "github:nex2null/blessed-contrib",
-        "guid-typescript": "^1.0.9"
+        "guid-typescript": "^1.0.9",
+        "unique-names-generator": "^4.4.0"
     }
 }

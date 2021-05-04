@@ -1,8 +1,5 @@
 enum EquipmentSlotEnum {
-    OneHanded = 'one-handed',
-    TwoHanded = 'two-handed',
-    MainHand = 'main-hand',
-    OffHand = 'off-hand',
+    Weapon = 'weapon',
     ChestPiece = 'chest-piece',
     Boots = 'boots'
 }
