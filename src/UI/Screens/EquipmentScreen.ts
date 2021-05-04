@@ -420,7 +420,7 @@ class EquipmentScreen implements IScreen {
   private clearSelectedEquipmentDetails() {
     // Clear all the selected equipment box's children
     var i = this.screenElements.selectedEquipmentDetailsBox.children.length;
-    while (i--) this.screenElements.selectedEquipmentDetailsBox.children[i].detach();
+    while (--i > 0) this.screenElements.selectedEquipmentDetailsBox.children[i].detach();
   }
 
   //
