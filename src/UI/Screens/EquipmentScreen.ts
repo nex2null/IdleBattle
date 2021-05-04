@@ -2,7 +2,6 @@
 
 // Imports
 const blessed = require('blessed');
-const contrib = require('blessed-contrib');
 import Game from "../../Game/Game";
 import EquipmentAffixSlotEnum from "../../Game/Itemization/Enums/EquipmentAffixSlotEnum";
 import EquipmentSlotEnum from "../../Game/Itemization/Enums/EquipmentSlotEnum";
