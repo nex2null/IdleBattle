@@ -11,7 +11,7 @@ class Equipper {
     //
     // Handle equipping an item to a player character
     //
-    equipItem(item: Equipment, character: PlayerCharacter) {
+    public static equipItem(item: Equipment, character: PlayerCharacter) {
 
         // Check if the character is of the required level
         if (character.level < item.requiredLevel)
@@ -32,7 +32,7 @@ class Equipper {
     //
     // Handle unequipping an item from a player character
     //
-    unequipItem(character: PlayerCharacter, equipmentSlot: EquipmentSlotEnum) {
+    public static unequipItem(character: PlayerCharacter, equipmentSlot: EquipmentSlotEnum) {
 
         // Get the equipped item
         var equippedItem = character.equipment.get(equipmentSlot);
