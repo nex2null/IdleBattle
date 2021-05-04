@@ -11,7 +11,7 @@ import TownScreen from "./UI/Screens/TownScreen";
 // Generate 10 rare equipments and add them to the inventory
 for (var i = 0; i < 10; i++) {
   var item = EquipmentForge.createEquipment(
-    ItemTypeEnum.FrayedClothRobe,
+    i % 3 == 0 ? ItemTypeEnum.FrayedClothRobe : ItemTypeEnum.RustedChainmail,
     i % 2 == 0 ? ItemRarityEnum.Magic : ItemRarityEnum.Rare,
     1);
 

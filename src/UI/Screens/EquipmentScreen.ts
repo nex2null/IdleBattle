@@ -3,6 +3,8 @@
 // Imports
 const blessed = require('blessed');
 import Game from "../../Game/Game";
+import EquipmentAffixSlotEnum from "../../Game/Itemization/Enums/EquipmentAffixSlotEnum";
+import EquipmentAffixTypeEnum from "../../Game/Itemization/Enums/EquipmentAffixTypeEnum";
 import EquipmentSlotEnum from "../../Game/Itemization/Enums/EquipmentSlotEnum";
 import ItemSuperTypeEnum from "../../Game/Itemization/Enums/ItemSuperTypeEnum";
 import Equipment from "../../Game/Itemization/Equipment/Equipment";
@@ -160,20 +162,27 @@ class EquipmentScreen implements IScreen {
       keys: true
     });
 
-    this.screenElements.equipmentDetailsBox = blessed.box({
+    this.screenElements.selectedEquipmentDetailsBox = blessed.box({
       top: 0,
       left: 72,
+      height: 25,
       width: 40,
-      height: 50,
+      content: '',
+      label: 'Selected Equipment',
       border: {
         type: 'line'
-      },
-      label: 'Details',
-      style: {
-        fg: 'white',
-        border: {
-          fg: 'white'
-        }
+      }
+    });
+
+    this.screenElements.currentEquipmentDetailsBox = blessed.box({
+      top: 25,
+      left: 72,
+      height: 25,
+      width: 40,
+      content: '',
+      label: 'Current Equipment',
+      border: {
+        type: 'line'
       }
     });
 
@@ -192,7 +201,8 @@ class EquipmentScreen implements IScreen {
     // Draw screen
     this.screen.append(this.screenElements.characterBox);
     this.screen.append(this.screenElements.equipmentListBox);
-    this.screen.append(this.screenElements.equipmentDetailsBox);
+    this.screen.append(this.screenElements.selectedEquipmentDetailsBox);
+    this.screen.append(this.screenElements.currentEquipmentDetailsBox);
 
     // Set focus to character name
     this.screenElements.characterNameLabel.focus();
@@ -262,6 +272,9 @@ class EquipmentScreen implements IScreen {
     // Unload the list of items
     this.screenElements.equipmentListBox.setItems([]);
 
+    // Clear the equipment details
+    this.clearSelectedEquipmentDetails();
+
     // Pop the focus and set the focused element's border to white
     this.screen.focusPop();
     this.screen.focused.style.border.fg = 'white';
@@ -272,8 +285,142 @@ class EquipmentScreen implements IScreen {
   // Handles when an equipment is focused
   //
   private handleEquipmentFocused(element: any, index: any) {
+
+    // Clear the current selected equipment details 
+    this.clearSelectedEquipmentDetails();
+
+    // Grab the selected equipment
     var equipment = this.displayedEquipment[index];
-    console.log(equipment.name + " - " + equipment.id);
+
+    // Start at the 0th line
+    var currentLine = 0;
+
+    // Name
+    blessed.box({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      height: 1,
+      width: 38,
+      content: `Name: ${equipment.name}`
+    });
+
+    // Type
+    blessed.box({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      height: 1,
+      width: 38,
+      content: `Type: ${equipment.type}`
+    });
+
+    // Rarity
+    blessed.box({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      height: 1,
+      width: 38,
+      content: `Rarity: ${equipment.rarity}`
+    });
+
+    // Line
+    blessed.line({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      left: 'center',
+      orientation: 'horizontal',
+      width: 38
+    });
+
+    // Implicits label
+    blessed.box({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      height: 1,
+      width: 38,
+      content: `Implicits:`
+    });
+
+    // Implicits
+    equipment.implicits.forEach(implicit => {
+      blessed.box({
+        parent: this.screenElements.selectedEquipmentDetailsBox,
+        top: currentLine++,
+        height: 1,
+        width: 38,
+        content: `${implicit.stat} - ${implicit.value}`
+      });
+    });
+
+    // Line
+    blessed.line({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      left: 'center',
+      orientation: 'horizontal',
+      width: 38
+    });
+
+    // Prefixes label
+    blessed.box({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      height: 1,
+      width: 38,
+      content: `Prefixes:`
+    });
+
+    // Prefixes
+    equipment
+      .affixes
+      .filter(x => x.slot === EquipmentAffixSlotEnum.Prefix).forEach(prefix => {
+        blessed.box({
+          parent: this.screenElements.selectedEquipmentDetailsBox,
+          top: currentLine++,
+          height: 1,
+          width: 38,
+          content: `${prefix.modifiedStat} - ${prefix.value}`
+        });
+      });
+
+    // Line
+    blessed.line({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      left: 'center',
+      orientation: 'horizontal',
+      width: 38
+    });
+
+    // Suffixes label
+    blessed.box({
+      parent: this.screenElements.selectedEquipmentDetailsBox,
+      top: currentLine++,
+      height: 1,
+      width: 38,
+      content: `Suffixes:`
+    });
+
+    // Suffixes
+    equipment
+      .affixes
+      .filter(x => x.slot === EquipmentAffixSlotEnum.Suffix).forEach(suffix => {
+        blessed.box({
+          parent: this.screenElements.selectedEquipmentDetailsBox,
+          top: currentLine++,
+          height: 1,
+          width: 38,
+          content: `${suffix.modifiedStat} - ${suffix.value}`
+        });
+      });
+  }
+
+  //
+  // Clears the selected equipment details box
+  //
+  private clearSelectedEquipmentDetails() {
+    // Clear all the selected equipment box's children
+    var i = this.screenElements.selectedEquipmentDetailsBox.children.length;
+    while (i--) this.screenElements.selectedEquipmentDetailsBox.children[i].detach();
   }
 
   //
