@@ -1,5 +1,6 @@
 import PlayerCharacter from "./PlayerCharacter";
 import Inventory from './Itemization/Inventory';
+import Equipment from "./Itemization/Equipment/Equipment";
 
 class Town {
 
@@ -8,6 +9,7 @@ class Town {
     totalGold: number;
     inventory: Inventory;
     playerCharacters: Array<PlayerCharacter>;
+    equipmentBeingForged: Equipment | null = null;
 
     // Constructor
     constructor() {
