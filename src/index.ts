@@ -9,7 +9,7 @@ import ScreenManager from "./UI/ScreenManager";
 import TownScreen from "./UI/Screens/TownScreen";
 
 // Generate 10 rare equipments and add them to the inventory
-for (var i = 0; i < 10; i++) {
+for (var i = 0; i < 50; i++) {
   var item = EquipmentForge.createEquipment(
     i % 3 == 0 ? ItemTypeEnum.FrayedClothRobe : ItemTypeEnum.RustedChainmail,
     i % 2 == 0 ? ItemRarityEnum.Magic : ItemRarityEnum.Rare,

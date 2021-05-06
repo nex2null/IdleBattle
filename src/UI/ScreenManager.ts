@@ -55,8 +55,7 @@ class ScreenManager {
 
     // Detach all the screen's children from the blessed screen
     var i = this.blessedScreen.children.length;
-    while (i--) this.blessedScreen.children[i].detach();
-    this.blessedScreen.realloc();
+    while (i--) this.blessedScreen.children[i].destroy();
     this.blessedScreen.render();
   }
 }
