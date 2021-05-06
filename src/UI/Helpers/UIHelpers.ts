@@ -16,12 +16,28 @@ class UIHelpers {
   }
 
   //
+  // Clear blessed element
+  //
+  static clearBlessedElement(blessedElement: any, ignoreLabel: boolean = false) {
+
+    var i = blessedElement.children.length - 1;
+
+    // Grab the children to destroy
+    var childrenToDestroy = blessedElement
+      .children
+      .filter((x: any) => !ignoreLabel || !x._isLabel);
+
+    // Destroy the children
+    childrenToDestroy.forEach((x: any) => x.destroy());
+  }
+
+  //
   // Renders equipment details to a blessed box
   //
-  static renderEquipmentDetailsToBox(equipment: Equipment, blessedBox: any) {
+  static renderEquipmentDetailsToBox(equipment: Equipment, blessedBox: any, lineToStartAt: number = 0) {
 
-    // Start at the 0th line
-    var currentLine = 0;
+    // Set the current lie
+    var currentLine = lineToStartAt;
 
     // Name
     blessed.box({

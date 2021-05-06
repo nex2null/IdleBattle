@@ -367,9 +367,7 @@ class EquipmentScreen implements IScreen {
   // Clears the selected equipment details box
   //
   private clearSelectedEquipmentDetails() {
-    // Clear all the selected equipment box's children
-    var i = this.screenElements.selectedEquipmentDetailsBox.children.length;
-    while (--i > 0) this.screenElements.selectedEquipmentDetailsBox.children[i].destroy();
+    UIHelpers.clearBlessedElement(this.screenElements.selectedEquipmentDetailsBox);
     this.screen.render();
   }
 
@@ -377,9 +375,7 @@ class EquipmentScreen implements IScreen {
   // Clears the current equipment details box
   //
   private clearCurrentEquipmentDetails() {
-    // Clear all the selected equipment box's children
-    var i = this.screenElements.currentEquipmentDetailsBox.children.length;
-    while (--i > 0) this.screenElements.currentEquipmentDetailsBox.children[i].destroy();
+    UIHelpers.clearBlessedElement(this.screenElements.currentEquipmentDetailsBox);
     this.screen.render();
   }
 

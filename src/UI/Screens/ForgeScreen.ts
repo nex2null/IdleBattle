@@ -2,8 +2,13 @@
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
 import Game from "../../Game/Game";
+import EquipmentAffixSlotEnum from "../../Game/Itemization/Enums/EquipmentAffixSlotEnum";
+import ItemRarityEnum from "../../Game/Itemization/Enums/ItemRarityEnum";
 import ItemSuperTypeEnum from "../../Game/Itemization/Enums/ItemSuperTypeEnum";
+import ItemTypeEnum from "../../Game/Itemization/Enums/ItemTypeEnum";
 import Equipment from "../../Game/Itemization/Equipment/Equipment";
+import EquipmentForge from "../../Game/Itemization/Equipment/EquipmentForge";
+import Item from "../../Game/Itemization/Item";
 import Town from "../../Game/Town";
 import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
@@ -114,7 +119,8 @@ class ForgeScreen implements IScreen {
       hidden: true,
       border: {
         type: 'line'
-      }
+      },
+      label: 'Equipment Details'
     });
 
     // Set key bindings
@@ -130,11 +136,7 @@ class ForgeScreen implements IScreen {
     this.screen.append(this.screenElements.forgeDisplay);
 
     // Set menu items
-    this.screenElements.forgeMenu.setItems([
-      'Load Equipment',
-      'Unload Equipment',
-      'Exit'
-    ]);
+    this.setMenuItems();
 
     // Set menu callback
     this.screenElements.forgeMenu.on('select', (el: any, idx: any) => this.processMenuSelection(el, idx));
@@ -144,6 +146,39 @@ class ForgeScreen implements IScreen {
 
     // Render the equipment being forged
     this.renderEquipmentBeingForged();
+  }
+
+  private setMenuItems() {
+
+    // Start with the base items
+    var items = [
+      'Load Equipment',
+      'Unload Equipment'
+    ];
+
+    // Grab all the currencies
+    var currencies = this.town.inventory.items.filter(x => x.superType === ItemSuperTypeEnum.Currency);
+
+    // Add currency menu items
+    items.push(`Orb of Pandemonium - ${this.getCurrencyCount(currencies, ItemTypeEnum.OrbOfPandemonium)}`)
+
+    // Add the exit item
+    items.push('Exit');
+
+    // Set the menu items
+    this.screenElements.forgeMenu.setItems(items);
+  }
+
+  //
+  // Gets the count of a given currency
+  //
+  private getCurrencyCount(currencies: Array<Item>, currencyType: ItemTypeEnum): number {
+
+    var amounts = currencies
+      .filter(x => x.type === currencyType)
+      .map(x => x.amount);
+
+    return amounts.length == 0 ? 0 : amounts.reduce((previousValue, currentValue) => previousValue + currentValue);
   }
 
   //
@@ -162,6 +197,38 @@ class ForgeScreen implements IScreen {
     // Handle unload
     else if (element.getText() === 'Unload Equipment')
       this.unloadEquipment();
+
+    // Handle orb of pandemonium
+    else if (element.getText().match(/orb of pandemonium/i))
+      this.useOrbofPandemonium();
+  }
+
+  private useOrbofPandemonium() {
+
+    // Grab an orb from the inventory
+    var orb = this.town.inventory.items.find(x => x.type === ItemTypeEnum.OrbOfPandemonium);
+    if (!orb)
+      return;
+
+    // Make sure the loaded equipment is rare
+    var loadedEquipment = this.town.equipmentBeingForged;
+    if (!loadedEquipment || loadedEquipment.rarity !== ItemRarityEnum.Rare)
+      return;
+
+    // Re-roll the equipment
+    EquipmentForge.reRollEquipmentAffixes(loadedEquipment);
+
+    // Remove the orb from the inventory
+    this.town.inventory.removeItem(orb);
+
+    // Update menu items
+    this.setMenuItems();
+
+    // Render the forged equipment
+    this.renderEquipmentBeingForged();
+
+    // Render the screen
+    this.screen.render();
   }
 
   //
@@ -239,12 +306,11 @@ class ForgeScreen implements IScreen {
     if (!equipment)
       return;
 
-    // Destroy all the children of the equipment table details
-    var i = this.screenElements.equipmentTableDetails.children.length;
-    while (--i > 0) this.screenElements.equipmentTableDetails.children[i].destroy();
+    // Clear the equipment table details
+    UIHelpers.clearBlessedElement(this.screenElements.equipmentTableDetails, true);
 
     // Display the equipment
-    UIHelpers.renderEquipmentDetailsToBox(equipment, this.screenElements.equipmentTableDetails);
+    UIHelpers.renderEquipmentDetailsToBox(equipment, this.screenElements.equipmentTableDetails, 1);
   }
 
   //
@@ -289,18 +355,168 @@ class ForgeScreen implements IScreen {
   //
   private renderEquipmentBeingForged() {
 
+    // Box to render to
+    var blessedBox = this.screenElements.loadedEquipmentDisplay;
+
+    // Clear the box
+    UIHelpers.clearBlessedElement(blessedBox);
+
     // Grab the equipment being forged
     var equipment = this.town.equipmentBeingForged;
 
     // If there is no equipment being forged then no need to process further
     if (!equipment) {
-      this.screenElements.loadedEquipmentDisplay.setContent('No Equipment Loaded');
+      blessedBox.setContent('No Equipment Loaded');
       this.screen.render();
       return;
     }
 
-    // Render the equipment
-    this.screenElements.loadedEquipmentDisplay.setContent(equipment.name);
+    // Start at the 0th line
+    var currentLine = 0;
+
+    // Name
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `Name: ${equipment.name}`
+    });
+
+    // Type
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `Type: ${equipment.type}`
+    });
+
+    // Slot
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `Slot: ${equipment.slot}`
+    });
+
+    // Rarity
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `Rarity: ${equipment.rarity}`
+    });
+
+    // iLvl
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `iLvl: ${equipment.ilvl}`
+    });
+
+    // Required level
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `Required Lvl: ${equipment.requiredLevel}`
+    });
+
+    // Line
+    blessed.line({
+      parent: blessedBox,
+      top: currentLine++,
+      orientation: 'horizontal',
+      width: blessedBox.width - 2
+    });
+
+    // Implicits label
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `Implicits:`
+    });
+
+    // Implicits
+    equipment.implicits.forEach(implicit => {
+      blessed.box({
+        parent: blessedBox,
+        top: currentLine++,
+        height: 1,
+        width: blessedBox.width - 2,
+        content: `${implicit.stat} - ${implicit.value}`
+      });
+    });
+
+    // Line
+    blessed.line({
+      parent: blessedBox,
+      top: currentLine++,
+      orientation: 'horizontal',
+      width: blessedBox.width - 2
+    });
+
+    // Prefixes label
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `Prefixes:`
+    });
+
+    // Prefixes
+    equipment
+      .affixes
+      .filter(x => x.slot === EquipmentAffixSlotEnum.Prefix).forEach(prefix => {
+        blessed.box({
+          parent: blessedBox,
+          top: currentLine++,
+          height: 1,
+          width: blessedBox.width - 2,
+          content: `${prefix.type} (${prefix.modifiedStat}) - ${prefix.value}`
+        });
+      });
+
+    // Line
+    blessed.line({
+      parent: blessedBox,
+      top: currentLine++,
+      orientation: 'horizontal',
+      width: blessedBox.width - 2
+    });
+
+    // Suffixes label
+    blessed.box({
+      parent: blessedBox,
+      top: currentLine++,
+      height: 1,
+      width: blessedBox.width - 2,
+      content: `Suffixes:`
+    });
+
+    // Suffixes
+    equipment
+      .affixes
+      .filter(x => x.slot === EquipmentAffixSlotEnum.Suffix).forEach(suffix => {
+        blessed.box({
+          parent: blessedBox,
+          top: currentLine++,
+          height: 1,
+          width: blessedBox.width - 2,
+          content: `${suffix.type} (${suffix.modifiedStat}) - ${suffix.value}`
+        });
+      });
+
+    // Render
     this.screen.render();
   }
 

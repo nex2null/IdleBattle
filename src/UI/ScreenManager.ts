@@ -1,5 +1,6 @@
 // Imports
 const blessed = require('blessed');
+import UIHelpers from "./Helpers/UIHelpers";
 import IScreen from "./Screens/IScreen";
 
 class ScreenManager {
@@ -54,8 +55,7 @@ class ScreenManager {
       return;
 
     // Detach all the screen's children from the blessed screen
-    var i = this.blessedScreen.children.length;
-    while (i--) this.blessedScreen.children[i].destroy();
+    UIHelpers.clearBlessedElement(this.blessedScreen);
     this.blessedScreen.render();
   }
 }
