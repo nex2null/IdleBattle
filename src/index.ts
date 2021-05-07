@@ -3,10 +3,8 @@
 // Imports
 import Game from "./Game/Game";
 import ItemRarityEnum from "./Game/Itemization/Enums/ItemRarityEnum";
-import ItemSuperTypeEnum from "./Game/Itemization/Enums/ItemSuperTypeEnum";
 import ItemTypeEnum from "./Game/Itemization/Enums/ItemTypeEnum";
 import EquipmentForge from "./Game/Itemization/Equipment/EquipmentForge";
-import Item from "./Game/Itemization/Item";
 import ScreenManager from "./UI/ScreenManager";
 import TownScreen from "./UI/Screens/TownScreen";
 
@@ -20,8 +18,8 @@ for (var i = 0; i < 50; i++) {
   Game.getInstance().town.inventory.addItem(item);
 }
 
-// Generate 10 orbs of pandemonium and add them to the inventory
-Game.getInstance().town.inventory.addItem(new Item(ItemTypeEnum.OrbOfPandemonium, ItemSuperTypeEnum.Currency, ItemRarityEnum.Normal, 1, 10));
+// Give the town 100k gold to play with
+Game.getInstance().town.totalGold = 100000;
 
 // Initialize the screen manager
 var screenManager = ScreenManager.getInstance();

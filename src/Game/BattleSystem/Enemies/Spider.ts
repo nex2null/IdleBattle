@@ -6,6 +6,7 @@ import EnemyAnyCondition from '../Gambits/Conditions/EnemyAnyCondition';
 import SelfCondition from '../Gambits/Conditions/SelfCondition';
 import { LootGenerationOption } from '../../Itemization/LootGenerator';
 import ItemSuperTypeEnum from '../../Itemization/Enums/ItemSuperTypeEnum';
+import ItemTypeEnum from '../../Itemization/Enums/ItemTypeEnum';
 
 class Spider extends BattleCharacter {
     constructor(name: string) {
@@ -28,8 +29,7 @@ class Spider extends BattleCharacter {
             minNumberOfItemsToDrop: 0,
             maxNumberOfItemsToDrop: 1,
             lootGenerationOptions: [
-                new LootGenerationOption(null, ItemSuperTypeEnum.Currency, null, 1, 50),
-                new LootGenerationOption(null, ItemSuperTypeEnum.Equipment, null, 1, 100)
+                new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 50)
             ]
         })
     }

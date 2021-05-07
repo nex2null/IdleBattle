@@ -5,10 +5,8 @@ import Game from "../../Game/Game";
 import EquipmentAffixSlotEnum from "../../Game/Itemization/Enums/EquipmentAffixSlotEnum";
 import ItemRarityEnum from "../../Game/Itemization/Enums/ItemRarityEnum";
 import ItemSuperTypeEnum from "../../Game/Itemization/Enums/ItemSuperTypeEnum";
-import ItemTypeEnum from "../../Game/Itemization/Enums/ItemTypeEnum";
 import Equipment from "../../Game/Itemization/Equipment/Equipment";
 import EquipmentForge from "../../Game/Itemization/Equipment/EquipmentForge";
-import Item from "../../Game/Itemization/Item";
 import Town from "../../Game/Town";
 import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
@@ -41,7 +39,7 @@ class ForgeScreen implements IScreen {
       top: 0,
       left: 0,
       width: 40,
-      height: 50,
+      height: 40,
       border: {
         type: 'line'
       },
@@ -56,6 +54,19 @@ class ForgeScreen implements IScreen {
         }
       },
       keys: true
+    });
+
+    // Forge menu
+    this.screenElements.forgeMenuDetails = blessed.box({
+      top: 40,
+      left: 0,
+      width: 40,
+      height: 10,
+      border: {
+        type: 'line'
+      },
+      label: 'Menu Details',
+      tags: true
     });
 
     // Forge display
@@ -133,13 +144,15 @@ class ForgeScreen implements IScreen {
 
     // Append items to screen
     this.screen.append(this.screenElements.forgeMenu);
+    this.screen.append(this.screenElements.forgeMenuDetails);
     this.screen.append(this.screenElements.forgeDisplay);
+
+    // Set menu callbacks
+    this.screenElements.forgeMenu.on('select', (el: any, idx: any) => this.processMenuSelection(el, idx));
+    this.screenElements.forgeMenu.on('select item', (el: any, sel: any) => this.updateMenuDetails(el, sel));
 
     // Set menu items
     this.setMenuItems();
-
-    // Set menu callback
-    this.screenElements.forgeMenu.on('select', (el: any, idx: any) => this.processMenuSelection(el, idx));
 
     // Set focus to character name
     this.screenElements.forgeMenu.focus();
@@ -148,37 +161,21 @@ class ForgeScreen implements IScreen {
     this.renderEquipmentBeingForged();
   }
 
+  //
+  // Sets the menu items
+  //
   private setMenuItems() {
 
-    // Start with the base items
+    // Generate the list of items
     var items = [
       'Load Equipment',
-      'Unload Equipment'
+      'Unload Equipment',
+      'Re-roll Affixes',
+      'Exit'
     ];
-
-    // Grab all the currencies
-    var currencies = this.town.inventory.items.filter(x => x.superType === ItemSuperTypeEnum.Currency);
-
-    // Add currency menu items
-    items.push(`Orb of Pandemonium - ${this.getCurrencyCount(currencies, ItemTypeEnum.OrbOfPandemonium)}`)
-
-    // Add the exit item
-    items.push('Exit');
 
     // Set the menu items
     this.screenElements.forgeMenu.setItems(items);
-  }
-
-  //
-  // Gets the count of a given currency
-  //
-  private getCurrencyCount(currencies: Array<Item>, currencyType: ItemTypeEnum): number {
-
-    var amounts = currencies
-      .filter(x => x.type === currencyType)
-      .map(x => x.amount);
-
-    return amounts.length == 0 ? 0 : amounts.reduce((previousValue, currentValue) => previousValue + currentValue);
   }
 
   //
@@ -198,31 +195,109 @@ class ForgeScreen implements IScreen {
     else if (element.getText() === 'Unload Equipment')
       this.unloadEquipment();
 
-    // Handle orb of pandemonium
-    else if (element.getText().match(/orb of pandemonium/i))
-      this.useOrbofPandemonium();
+    // Handle re-rolling affixes
+    else if (element.getText() === 'Re-roll Affixes')
+      this.rerollAffixes();
   }
 
-  private useOrbofPandemonium() {
+  //
+  // Update menu details
+  //
+  private updateMenuDetails(element: any, index: any) {
 
-    // Grab an orb from the inventory
-    var orb = this.town.inventory.items.find(x => x.type === ItemTypeEnum.OrbOfPandemonium);
-    if (!orb)
-      return;
+    // Get details box
+    var menuDetailsBox = this.screenElements.forgeMenuDetails;
 
-    // Make sure the loaded equipment is rare
+    // Get selected item text
+    var selectedText = element.getText();
+
+    // Handle exit
+    if (selectedText === 'Exit') {
+      menuDetailsBox.setContent('Exit the Forge')
+    }
+
+    // Handle load
+    else if (selectedText === 'Load Equipment') {
+      menuDetailsBox.setContent('Loads an equipment into the Forge')
+    }
+
+    // Handle unload
+    else if (selectedText === 'Unload Equipment') {
+      menuDetailsBox.setContent('Unloads an equipment from the Forge');
+    }
+
+    // Handle re-rolling affixes
+    else if (selectedText === 'Re-roll Affixes') {
+      menuDetailsBox.setContent(`Re-rolls the loaded equipment's affixes\n\nCost:\n${this.getActionCostString(selectedText)}`)
+    }
+
+    this.screen.render();
+  }
+
+  //
+  // Get the cost for an action as a string
+  //
+  private getActionCostString(actionName: string) {
+
+    // Grab cost and sanity check
+    var cost = this.getActionCost(actionName);
+    if (!cost)
+      return 'Unknown';
+
+    // Handle gold
+    var costString = '';
+    costString += `{yellow-fg}Gold: ${cost.gold}{/yellow-fg}`;
+
+    // TODO: Handle reagents
+
+    // Return the cost string
+    return costString;
+  }
+
+  //
+  // Get the cost for an action
+  //
+  private getActionCost(actionName: string): any {
+
+    // Check for loaded equipment
     var loadedEquipment = this.town.equipmentBeingForged;
-    if (!loadedEquipment || loadedEquipment.rarity !== ItemRarityEnum.Rare)
+    if (!loadedEquipment)
+      return null;
+
+    // Handle re-roll affixes
+    if (actionName == 'Re-roll Affixes') {
+
+      // Set the rarity modifier
+      var rarityModifier = loadedEquipment.rarity == ItemRarityEnum.Rare ? 2 : 1;
+
+      // Return cost
+      return {
+        gold: 100 * loadedEquipment.ilvl * rarityModifier,
+        reagents: []
+      }
+    }
+  }
+
+  //
+  // Re-rolls affixes on the loaded item
+  //
+  private rerollAffixes() {
+
+    // Grab the loaded equipment
+    var loadedEquipment = this.town.equipmentBeingForged;
+    if (!loadedEquipment)
       return;
+
+    // Make sure we have enough gold to pay the cost
+    var cost = this.getActionCost('Re-roll Affixes');
+    if (!cost || cost.gold > this.town.totalGold)
+      return;
+
+    // Decrement the gold cost from the town's gold
+    this.town.totalGold -= cost.gold;
 
     // Re-roll the equipment
     EquipmentForge.reRollEquipmentAffixes(loadedEquipment);
-
-    // Remove the orb from the inventory
-    this.town.inventory.removeItem(orb);
-
-    // Update menu items
-    this.setMenuItems();
 
     // Render the forged equipment
     this.renderEquipmentBeingForged();
@@ -243,6 +318,13 @@ class ForgeScreen implements IScreen {
       .items
       .filter(x => x.superType === ItemSuperTypeEnum.Equipment)
       .map(x => x as Equipment);
+
+    // Clear any existing rows in the table
+    var tableItems = this.screenElements.equipmentTable.rows;
+    if (tableItems) {
+      tableItems.clearItems();
+      tableItems._listInitialized = false;
+    }
 
     // Set the tables data
     this.screenElements.equipmentTable.setData({
@@ -535,3 +617,239 @@ class ForgeScreen implements IScreen {
 }
 
 export default ForgeScreen;
+
+
+/* OLD CURRENCY ITEM CODE
+
+// Orb of abolition
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfAbolition,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+        // Verify the equipment is not normal
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity == ItemRarityEnum.Normal)
+            return false;
+
+        // Reset the equipment back to normal
+        EquipmentForge.resetEquipmentToNormal(targetEquipment);
+        return true;
+    })
+);
+
+// Orb of imbuing
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfImbuing,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+        // Verify the equipment is normal
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity != ItemRarityEnum.Normal)
+            return false;
+
+        // Upgrade the equipment to magic
+        EquipmentForge.upgradeEquipmentToRarity(targetEquipment, ItemRarityEnum.Magic);
+        return true;
+    })
+);
+
+// Orb of conjury
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfImbuing,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+        // Verify the equipment is normal
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity != ItemRarityEnum.Normal)
+            return false;
+
+        // Upgrade the equipment to rare
+        EquipmentForge.upgradeEquipmentToRarity(targetEquipment, ItemRarityEnum.Rare);
+        return true;
+    })
+);
+
+// Orb of conjury
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfImbuing,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+        // Verify the equipment is normal
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity != ItemRarityEnum.Normal)
+            return false;
+
+        // Upgrade the equipment to rare
+        EquipmentForge.upgradeEquipmentToRarity(targetEquipment, ItemRarityEnum.Rare);
+        return true;
+    })
+);
+
+// Orb of promotion
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfPromotion,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+        // Verify the equipment is magic
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity != ItemRarityEnum.Magic)
+            return false;
+
+        // Upgrade the equipment to rare
+        EquipmentForge.upgradeEquipmentToRarity(targetEquipment, ItemRarityEnum.Rare);
+        return true;
+    })
+);
+
+// Orb of mutation
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfMutation,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+        // Verify the equipment is magic
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity != ItemRarityEnum.Magic)
+            return false;
+
+        // Re-roll the equipment affixes
+        EquipmentForge.reRollEquipmentAffixes(targetEquipment);
+        return true;
+    })
+);
+
+// Orb of pandemonium
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfPandemonium,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+        // Verify the equipment is rare
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity != ItemRarityEnum.Rare)
+            return false;
+
+        // Re-roll the equipment affixes
+        EquipmentForge.reRollEquipmentAffixes(targetEquipment);
+        return true;
+    })
+);
+
+// Orb of thaumaturgy
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfThaumaturgy,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+
+        // Verify the equipment is magic
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity != ItemRarityEnum.Magic)
+            return false;
+
+        // Get the existing equipment affix count
+        var existingAffixCount = targetEquipment.affixes.length;
+
+        // Attempt to add an affix to the equipment
+        EquipmentForge.addRandomAffixToEquipment(targetEquipment);
+
+        // If an affix was added then the item was successful, otherwise it was not
+        return existingAffixCount < targetEquipment.affixes.length;
+    })
+);
+
+// Orb of fortune
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfThaumaturgy,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+
+        // Verify the equipment is rare
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.rarity != ItemRarityEnum.Rare)
+            return false;
+
+        // Get the existing equipment affix count
+        var existingAffixCount = targetEquipment.affixes.length;
+
+        // Attempt to add an affix to the equipment
+        EquipmentForge.addRandomAffixToEquipment(targetEquipment);
+
+        // If an affix was added then the item was successful, otherwise it was not
+        return existingAffixCount < targetEquipment.affixes.length;
+    })
+);
+
+// Orb of balance
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfBalance,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+        var targetEquipment = <Equipment>targetItem;
+        EquipmentForge.reRollEquipmentImplicitValues(targetEquipment);
+        return true;
+    })
+);
+
+// Orb of perfection
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfPerfection,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+
+        // Verify the equipment has affixes
+        var targetEquipment = <Equipment>targetItem;
+        if (!targetEquipment.affixes.length)
+            return false;
+
+        // Re-roll the affix values
+        EquipmentForge.reRollEquipmentAffixValues(targetEquipment);
+        return true;
+    })
+);
+
+// Alpha orb
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfPerfection,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+
+        // Verify the equipment does not already have frozen prefixes
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.craftingTags.find(x => x == EquipmentCraftingTagEnum.PrefixesCannotBeChanged))
+            return false;
+
+        // Add the prefixes cannot be changed tag
+        targetEquipment.craftingTags.push(EquipmentCraftingTagEnum.PrefixesCannotBeChanged);
+        return true;
+    })
+);
+
+// Omega orb
+itemInformations.push(new CurrencyInformation(
+    ItemTypeEnum.OrbOfPerfection,
+    true,
+    ItemSuperTypeEnum.Equipment,
+    (targetItem: Item | null): boolean => {
+
+        // Verify the equipment does not already have frozen suffixes
+        var targetEquipment = <Equipment>targetItem;
+        if (targetEquipment.craftingTags.find(x => x == EquipmentCraftingTagEnum.SuffixesCannotBeChanged))
+            return false;
+
+        // Add the suffixes cannot be changed tag
+        targetEquipment.craftingTags.push(EquipmentCraftingTagEnum.SuffixesCannotBeChanged);
+        return true;
+    })
+);
+
+ */
