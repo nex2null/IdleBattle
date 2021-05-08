@@ -26,9 +26,7 @@ class EquipmentImplicitInformation {
 
 // Collection of equipment implicits
 var implicitInformations = new Array<EquipmentImplicitInformation>();
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.RustedChainmail, StatEnum.Hp, 15, 30));
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WornLeatherChest, StatEnum.DodgeChance, 1, 5));
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.FrayedClothRobe, StatEnum.Intelligence, 1, 5));
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.FrayedClothRobe, StatEnum.Mp, 1, 5));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderSilkRobe, StatEnum.Intelligence, 1, 5));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderSilkRobe, StatEnum.Mp, 1, 5));
 
 export { EquipmentImplicitInformation, implicitInformations };

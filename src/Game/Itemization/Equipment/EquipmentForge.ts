@@ -3,13 +3,13 @@ import { affixInformations, EquipmentAffixInformation } from './EquipmentAffixIn
 import Equipment from './Equipment';
 import ItemTypeEnum from '../Enums/ItemTypeEnum';
 import ItemRarityEnum from '../Enums/ItemRarityEnum';
-import EquipmentSlotEnum from '../Enums/EquipmentSlotEnum';
 import EquipmentAffix from './EquipmentAffix';
 import EquipmentImplicit from './EquipmentImplicit';
 import { implicitInformations } from './EquipmentImplicitInformation';
 import RandomHelpers from '../../Utilities/RandomHelpers';
 import EquipmentAffixTypeEnum from '../Enums/EquipmentAffixTypeEnum';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
+import { EquipmentInformation, itemInformations } from "../ItemInformation";
 
 class EquipmentForge {
 
@@ -20,16 +20,19 @@ class EquipmentForge {
     ilvl: number
   ): Equipment {
 
+    // Get the equipment information for the base type
+    var equipmentInformation = itemInformations.find(x => x.itemType == baseType) as EquipmentInformation;
+
     // Create a normal item of the given base type
     var equipment = new Equipment(
       baseType,
       ItemRarityEnum.Normal,
       ilvl,
-      'Test Equipment',
-      this.getEquipmentSlot(baseType),
+      equipmentInformation.itemName,
+      equipmentInformation.slot,
       this.generateImplicits(baseType),
       [],
-      this.getEquipmentLevel(baseType)
+      equipmentInformation.requiredLvl
     );
 
     // If the rarity is magic or rare then upgrade the item to it
@@ -37,26 +40,6 @@ class EquipmentForge {
       this.upgradeEquipmentToRarity(equipment, rarity);
 
     return equipment;
-  }
-
-  // Gets the slot for a given base type of equipment
-  private static getEquipmentSlot(baseType: ItemTypeEnum): EquipmentSlotEnum {
-    switch (baseType) {
-      case ItemTypeEnum.FrayedClothRobe: return EquipmentSlotEnum.ChestPiece;
-      case ItemTypeEnum.RustedChainmail: return EquipmentSlotEnum.ChestPiece;
-      case ItemTypeEnum.WornLeatherChest: return EquipmentSlotEnum.ChestPiece;
-      default: throw new Error(`Could not find slot for item type: ${baseType}`);
-    }
-  }
-
-  // Gets the level for a given base type of equipment
-  private static getEquipmentLevel(baseType: ItemTypeEnum): number {
-    switch (baseType) {
-      case ItemTypeEnum.FrayedClothRobe: return 1;
-      case ItemTypeEnum.RustedChainmail: return 1;
-      case ItemTypeEnum.WornLeatherChest: return 1;
-      default: throw new Error(`Could not find required level for item type: ${baseType}`);
-    }
   }
 
   // Generates all implicits for a piece of equipment
@@ -124,7 +107,7 @@ class EquipmentForge {
   private static getMinAffixCountPerSlot(rarity: ItemRarityEnum): number {
     switch (rarity) {
       case ItemRarityEnum.Normal: return 0;
-      case ItemRarityEnum.Magic: return 1;
+      case ItemRarityEnum.Magic: return 0;
       case ItemRarityEnum.Rare: return 1;
       default: throw new Error(`Could not find max affix count for item rarity: ${rarity}`);
     }
@@ -134,7 +117,7 @@ class EquipmentForge {
   private static getMaxAffixCountPerSlot(rarity: ItemRarityEnum): number {
     switch (rarity) {
       case ItemRarityEnum.Normal: return 0;
-      case ItemRarityEnum.Magic: return 1;
+      case ItemRarityEnum.Magic: return 0;
       case ItemRarityEnum.Rare: return 3;
       default: throw new Error(`Could not find max affix count for item rarity: ${rarity}`);
     }
@@ -183,6 +166,10 @@ class EquipmentForge {
 
   // Populates equipment affixes
   private static populateEquipmentAffixes(equipment: Equipment, clearExistingAffixes: boolean): void {
+
+    // If the equipment is normal rarity then do nothing
+    if (equipment.rarity === ItemRarityEnum.Normal)
+      return;
 
     // Clear existing affixes if we should
     if (clearExistingAffixes)

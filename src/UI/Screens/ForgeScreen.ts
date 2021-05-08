@@ -5,13 +5,23 @@ import Game from "../../Game/Game";
 import EquipmentAffixSlotEnum from "../../Game/Itemization/Enums/EquipmentAffixSlotEnum";
 import ItemRarityEnum from "../../Game/Itemization/Enums/ItemRarityEnum";
 import ItemSuperTypeEnum from "../../Game/Itemization/Enums/ItemSuperTypeEnum";
+import ItemTypeEnum from "../../Game/Itemization/Enums/ItemTypeEnum";
 import Equipment from "../../Game/Itemization/Equipment/Equipment";
 import EquipmentForge from "../../Game/Itemization/Equipment/EquipmentForge";
+import { EquipmentInformation, itemInformations } from "../../Game/Itemization/ItemInformation";
 import Town from "../../Game/Town";
 import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
+
+enum ForgeMenuItemsEnum {
+  CraftEquipment = 'Craft Equipment',
+  LoadEquipment = 'Load Equipment',
+  UnloadEquipment = 'Unload Equipment',
+  ReRollAffixes = 'Re-roll Affixes',
+  Exit = 'Exit'
+}
 
 class ForgeScreen implements IScreen {
 
@@ -20,6 +30,7 @@ class ForgeScreen implements IScreen {
   screenElements: any = {};
   town: Town;
   displayedEquipment: Array<Equipment> = [];
+  craftableEquipment: Array<EquipmentInformation> = [];
 
   // Constructor
   constructor() {
@@ -134,13 +145,78 @@ class ForgeScreen implements IScreen {
       label: 'Equipment Details'
     });
 
+    // Craftable equipment table
+    this.screenElements.craftableEquipmentTable = contrib.table({
+      parent: this.screenElements.forgeDisplay,
+      keys: true,
+      fg: 'white',
+      selectedFg: 'white',
+      selectedBg: 'blue',
+      interactive: true,
+      width: 68,
+      height: 21,
+      columnSpacing: 5, // in chars
+      columnWidth: [15, 10, 25], // in chars
+      hidden: true,
+      scrollbar: {
+        style: {
+          bg: 'white'
+        }
+      }
+    });
+
+    // Crafting cost details
+    this.screenElements.craftingCostDetails = blessed.box({
+      parent: this.screenElements.forgeDisplay,
+      top: 21,
+      left: 3,
+      width: 62,
+      height: 25,
+      hidden: true,
+      border: {
+        type: 'line'
+      },
+      label: 'Crafting Cost'
+    });
+
+    // Crafting cost table
+    this.screenElements.craftingCostTable = contrib.table({
+      parent: this.screenElements.craftingCostDetails,
+      top: 1,
+      keys: false,
+      fg: 'white',
+      interactive: false,
+      width: 60,
+      height: 20,
+      columnSpacing: 5,
+      columnWidth: [15, 10, 10]
+    });
+
+    // Message box
+    this.screenElements.messageBox = blessed.message({
+      parent: this.screenElements.craftingCostDetails,
+      top: 'center',
+      left: 'center',
+      width: 'shrink',
+      height: 'shrink',
+      border: {
+        type: 'line'
+      },
+      hidden: true
+    })
+
     // Set key bindings
     this.screenElements.forgeMenu.key(['escape'], () => this.screenElements.forgeMenu.select(this.screenElements.forgeMenu.fuzzyFind('Exit')));
     this.screenElements.equipmentTable.rows.key(['escape'], () => this.hideEquipmentTable());
+    this.screenElements.craftableEquipmentTable.rows.key(['escape'], () => this.hideCraftTable());
 
     // Set equipment table callbacks
     this.screenElements.equipmentTable.rows.on('select', (el: any, sel: any) => this.handleEquipmentSelected(el, sel));
     this.screenElements.equipmentTable.rows.on('select item', (el: any, sel: any) => this.handleEquipmentFocused(el, sel));
+
+    // Set crafting table callbacks
+    this.screenElements.craftableEquipmentTable.rows.on('select', (el: any, sel: any) => this.handleCraftingItemSelected(el, sel));
+    this.screenElements.craftableEquipmentTable.rows.on('select item', (el: any, sel: any) => this.handleCraftingItemFocused(el, sel));
 
     // Append items to screen
     this.screen.append(this.screenElements.forgeMenu);
@@ -149,10 +225,13 @@ class ForgeScreen implements IScreen {
 
     // Set menu callbacks
     this.screenElements.forgeMenu.on('select', (el: any, idx: any) => this.processMenuSelection(el, idx));
-    this.screenElements.forgeMenu.on('select item', (el: any, sel: any) => this.updateMenuDetails(el, sel));
+    this.screenElements.forgeMenu.on('select item', (el: any, sel: any) => this.forgeMenuItemFocused(el, sel));
 
     // Set menu items
     this.setMenuItems();
+
+    // Populate the craft table
+    this.populateCraftTable();
 
     // Set focus to character name
     this.screenElements.forgeMenu.focus();
@@ -168,10 +247,11 @@ class ForgeScreen implements IScreen {
 
     // Generate the list of items
     var items = [
-      'Load Equipment',
-      'Unload Equipment',
-      'Re-roll Affixes',
-      'Exit'
+      ForgeMenuItemsEnum.CraftEquipment,
+      ForgeMenuItemsEnum.LoadEquipment,
+      ForgeMenuItemsEnum.UnloadEquipment,
+      ForgeMenuItemsEnum.ReRollAffixes,
+      ForgeMenuItemsEnum.Exit
     ];
 
     // Set the menu items
@@ -183,51 +263,74 @@ class ForgeScreen implements IScreen {
   //
   private processMenuSelection(element: any, index: any) {
 
+    var selectedText = element.getText();
+
     // Handle exit
-    if (element.getText() === 'Exit')
+    if (selectedText === ForgeMenuItemsEnum.Exit)
       this.exitScreen();
 
-    // Handle load
-    else if (element.getText() === 'Load Equipment')
+    // Handle craft equipment
+    else if (selectedText === ForgeMenuItemsEnum.CraftEquipment)
+      this.displayCraftTable();
+
+    // Handle load equipment
+    else if (selectedText === ForgeMenuItemsEnum.LoadEquipment)
       this.displayEquipmentTable();
 
-    // Handle unload
-    else if (element.getText() === 'Unload Equipment')
+    // Handle unload equipment
+    else if (selectedText === ForgeMenuItemsEnum.UnloadEquipment)
       this.unloadEquipment();
 
     // Handle re-rolling affixes
-    else if (element.getText() === 'Re-roll Affixes')
+    else if (selectedText === ForgeMenuItemsEnum.ReRollAffixes)
       this.rerollAffixes();
+
+    // Trigger re-focus to update menu costs
+    this.forgeMenuItemFocused(element, index);
   }
 
   //
-  // Update menu details
+  // Handle forge menu item focused
   //
-  private updateMenuDetails(element: any, index: any) {
-
-    // Get details box
-    var menuDetailsBox = this.screenElements.forgeMenuDetails;
+  private forgeMenuItemFocused(element: any, index: any) {
 
     // Get selected item text
     var selectedText = element.getText();
 
+    // Render the menu details
+    this.renderMenuDetails(selectedText);
+  }
+
+  //
+  // Render menu details
+  //
+  private renderMenuDetails(selectedText: string) {
+
+    // Get details box
+    var menuDetailsBox = this.screenElements.forgeMenuDetails;
+
     // Handle exit
-    if (selectedText === 'Exit') {
+    if (selectedText === ForgeMenuItemsEnum.Exit) {
       menuDetailsBox.setContent('Exit the Forge')
     }
 
-    // Handle load
-    else if (selectedText === 'Load Equipment') {
+    // Handle craft equipment
+    else if (selectedText === ForgeMenuItemsEnum.CraftEquipment) {
+      menuDetailsBox.setContent('Crafts a new equipment base');
+    }
+
+    // Handle load equipment
+    else if (selectedText === ForgeMenuItemsEnum.LoadEquipment) {
       menuDetailsBox.setContent('Loads an equipment into the Forge')
     }
 
-    // Handle unload
-    else if (selectedText === 'Unload Equipment') {
+    // Handle unload equipment
+    else if (selectedText === ForgeMenuItemsEnum.UnloadEquipment) {
       menuDetailsBox.setContent('Unloads an equipment from the Forge');
     }
 
     // Handle re-rolling affixes
-    else if (selectedText === 'Re-roll Affixes') {
+    else if (selectedText === ForgeMenuItemsEnum.ReRollAffixes) {
       menuDetailsBox.setContent(`Re-rolls the loaded equipment's affixes\n\nCost:\n${this.getActionCostString(selectedText)}`)
     }
 
@@ -246,9 +349,10 @@ class ForgeScreen implements IScreen {
 
     // Handle gold
     var costString = '';
-    costString += `{yellow-fg}Gold: ${cost.gold}{/yellow-fg}`;
+    costString += `{yellow-fg}Gold: ${cost.gold}{/yellow-fg} (have: {yellow-fg}${this.town.totalGold}{/})`;
 
-    // TODO: Handle reagents
+    // Handle reagents
+    cost.reagents.forEach((x: any) => costString += `\n${x.name}: ${x.amount} (have: ${this.town.inventory.getItemCount(x.type)})`);
 
     // Return the cost string
     return costString;
@@ -264,46 +368,175 @@ class ForgeScreen implements IScreen {
     if (!loadedEquipment)
       return null;
 
+    // Grab the equipment information
+    var equipmentInformation = itemInformations
+      .find(x => x.itemType === loadedEquipment?.type) as EquipmentInformation;
+
     // Handle re-roll affixes
-    if (actionName == 'Re-roll Affixes') {
+    if (actionName == ForgeMenuItemsEnum.ReRollAffixes) {
+
+      // Action is not allowed for normal equipment
+      if (loadedEquipment.rarity === ItemRarityEnum.Normal)
+        return null;
 
       // Set the rarity modifier
       var rarityModifier = loadedEquipment.rarity == ItemRarityEnum.Rare ? 2 : 1;
 
+      // Populate reagents
+      var reagentCost: any[] = [];
+      equipmentInformation.forgeReagentCost.forEach((requiredAmount: number, itemType: ItemTypeEnum) => {
+        reagentCost.push({
+          type: itemType,
+          name: itemInformations.find(x => x.itemType == itemType)?.itemName,
+          amount: requiredAmount
+        });
+      });
+
       // Return cost
       return {
         gold: 100 * loadedEquipment.ilvl * rarityModifier,
-        reagents: []
+        reagents: reagentCost
       }
     }
   }
 
   //
-  // Re-rolls affixes on the loaded item
+  // Populates the craft table with craftable equipment
   //
-  private rerollAffixes() {
+  private populateCraftTable() {
 
-    // Grab the loaded equipment
-    var loadedEquipment = this.town.equipmentBeingForged;
-    if (!loadedEquipment)
-      return;
+    // Set the list of craftable equipment
+    this.craftableEquipment = itemInformations
+      .filter(x => x.itemSuperType === ItemSuperTypeEnum.Equipment)
+      .map(x => x as EquipmentInformation)
+      .filter(x => x.craftable);
 
-    // Make sure we have enough gold to pay the cost
-    var cost = this.getActionCost('Re-roll Affixes');
-    if (!cost || cost.gold > this.town.totalGold)
-      return;
+    // Clear any existing rows in the table
+    var tableItems = this.screenElements.craftableEquipmentTable.rows;
+    if (tableItems) {
+      tableItems.clearItems();
+      tableItems._listInitialized = false;
+    }
 
-    // Decrement the gold cost from the town's gold
-    this.town.totalGold -= cost.gold;
+    // Set the tables data
+    this.screenElements.craftableEquipmentTable.setData({
+      headers: [' Slot', ' Req. Lvl', ' Name'],
+      data: this.craftableEquipment.map(x => [x.slot, x.ilvl, x.itemName])
+    });
+  }
 
-    // Re-roll the equipment
-    EquipmentForge.reRollEquipmentAffixes(loadedEquipment);
+  //
+  // Displays the craft table
+  //
+  private displayCraftTable() {
 
-    // Render the forged equipment
-    this.renderEquipmentBeingForged();
+    // Hide the loaded equipment display
+    // and show the craftable equipment table and crafting cost details
+    this.screenElements.loadedEquipmentDisplay.hide();
+    this.screenElements.craftableEquipmentTable.show();
+    this.screenElements.craftingCostDetails.show();
 
-    // Render the screen
+    // Focus on the table
+    this.screenElements.craftableEquipmentTable.focus();
+
+    // Select the first element on the craft table
+    this.screenElements.craftableEquipmentTable.rows.select(0);
+    this.handleCraftingItemFocused(null, 0);
+
+    // Render
     this.screen.render();
+  }
+
+  //
+  // Hide the craft table
+  //
+  private hideCraftTable() {
+
+    // Hide the craftable equipment table and crafting cost details
+    // and show the loaded equipment display
+    this.screenElements.craftableEquipmentTable.hide();
+    this.screenElements.craftingCostDetails.hide();
+    this.screenElements.loadedEquipmentDisplay.show();
+
+    // Focus on the forge menu
+    this.screenElements.forgeMenu.focus();
+
+    // Render
+    this.screen.render();
+  }
+
+  //
+  // Handles crafting item being selected
+  //
+  private handleCraftingItemSelected(element: any, index: any) {
+
+    // Grab equipment information and sanity check
+    var equipmentInformation = this.craftableEquipment[index];
+    if (!equipmentInformation)
+      return;
+
+    // Verify we can afford the costs
+    var canAfford = true;
+    equipmentInformation.craftingCost.forEach((requiredAmount: number, itemType: ItemTypeEnum) => {
+      var currentAmount = this.town.inventory.getItemCount(itemType);
+      if (currentAmount < requiredAmount) {
+        canAfford = false;
+        return false;
+      }
+    });
+
+    // If we cannot afford the costs notify the user
+    if (!canAfford) {
+      this.screenElements.messageBox.display('{red-fg}Cannot afford crafting cost{/}', 0);
+      this.screenElements.messageBox.setFront();
+      this.screenElements.messageBox.focus();
+      this.screen.render();
+      return;
+    }
+
+    // Craft the equipment
+    // TODO: Figure out what ilvl to set
+    this.town.inventory.addItem(EquipmentForge.createEquipment(
+      equipmentInformation.itemType,
+      ItemRarityEnum.Normal,
+      equipmentInformation.ilvl));
+
+    // Decrement crafting materials
+    equipmentInformation.craftingCost.forEach((requiredAmount: number, itemType: ItemTypeEnum) => {
+      this.town.inventory.removeItem(itemType, requiredAmount);
+    });
+
+    // Trigger the crafting item focus to redraw crafting costs
+    this.handleCraftingItemFocused(element, index);
+
+    // Render
+    this.screen.render();
+  }
+
+  //
+  // Handles crafting item being focused
+  //
+  private handleCraftingItemFocused(element: any, index: any) {
+
+    // Grab equipment information and sanity check
+    var equipmentInformation = this.craftableEquipment[index];
+    if (!equipmentInformation)
+      return;
+
+    // Get the crafting cost data
+    var craftingCostData: any[] = [];
+    equipmentInformation.craftingCost.forEach((requiredAmount: number, itemType: ItemTypeEnum) => {
+      craftingCostData.push([
+        itemInformations.find(x => x.itemType == itemType)?.itemName,
+        requiredAmount,
+        this.town.inventory.getItemCount(itemType)])
+    });
+
+    // Set the crafting cost data
+    this.screenElements.craftingCostTable.setData({
+      headers: [' Item', ' Need', ' Have'],
+      data: craftingCostData
+    });
   }
 
   //
@@ -407,7 +640,7 @@ class ForgeScreen implements IScreen {
     this.town.equipmentBeingForged = equipment;
 
     // Remove the equipment from the inventory
-    this.town.inventory.removeItem(equipment);
+    this.town.inventory.removeEquipment(equipment);
 
     // Render the equipment and hide the equipment table
     this.renderEquipmentBeingForged();
@@ -430,6 +663,48 @@ class ForgeScreen implements IScreen {
 
     // Render the equipment
     this.renderEquipmentBeingForged();
+  }
+
+  //
+  // Re-rolls affixes on the loaded item
+  //
+  private rerollAffixes() {
+
+    // Grab the loaded equipment
+    var loadedEquipment = this.town.equipmentBeingForged;
+    if (!loadedEquipment)
+      return;
+
+    // Make sure the loaded equipment is not normal rarity
+    if (loadedEquipment.rarity === ItemRarityEnum.Normal)
+      return;
+
+    // Make sure we have enough gold to pay the cost
+    var cost = this.getActionCost(ForgeMenuItemsEnum.ReRollAffixes);
+    if (!cost || cost.gold > this.town.totalGold)
+      return;
+
+    // Make sure we have enough reagents to pay the cost
+    for (var i = 0; i < cost.reagents.length; i++) {
+      var reagent = cost.reagents[i];
+      if (this.town.inventory.getItemCount(reagent.type) < reagent.amount)
+        return;
+    }
+
+    // Decrement the gold cost from the town's gold
+    this.town.totalGold -= cost.gold;
+
+    // Decrement the reagents from the inventory item
+    cost.reagents.forEach((x: any) => this.town.inventory.removeItem(x.type, x.amount));
+
+    // Re-roll the equipment
+    EquipmentForge.reRollEquipmentAffixes(loadedEquipment);
+
+    // Render the forged equipment
+    this.renderEquipmentBeingForged();
+
+    // Render the screen
+    this.screen.render();
   }
 
   //

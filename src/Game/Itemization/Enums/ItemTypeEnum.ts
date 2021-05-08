@@ -4,8 +4,6 @@ enum ItemTypeEnum {
     SpiderFang = 'spider-fang',
 
     // Equipment
-    RustedChainmail = 'rusted-chainmail',
-    WornLeatherChest = 'worn-leather-chest',
-    FrayedClothRobe = 'frayed-cloth-robe'
+    SpiderSilkRobe = 'spider-silk-robe'
 }
 export default ItemTypeEnum;
