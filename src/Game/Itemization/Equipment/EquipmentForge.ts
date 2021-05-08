@@ -117,7 +117,7 @@ class EquipmentForge {
   private static getMaxAffixCountPerSlot(rarity: ItemRarityEnum): number {
     switch (rarity) {
       case ItemRarityEnum.Normal: return 0;
-      case ItemRarityEnum.Magic: return 0;
+      case ItemRarityEnum.Magic: return 1;
       case ItemRarityEnum.Rare: return 3;
       default: throw new Error(`Could not find max affix count for item rarity: ${rarity}`);
     }
