@@ -60,7 +60,7 @@ class BattleScreen implements IScreen {
   //
   private async startBattleLoop() {
     while (this.battle.currentState === BattleStateEnum.InBattle) {
-      await UIHelpers.delay(250);
+      await UIHelpers.delay(175);
       this.processBattle();
     }
   }

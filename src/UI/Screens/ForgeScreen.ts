@@ -5,9 +5,8 @@ import Game from "../../Game/Game";
 import EquipmentAffixSlotEnum from "../../Game/Itemization/Enums/EquipmentAffixSlotEnum";
 import ItemRarityEnum from "../../Game/Itemization/Enums/ItemRarityEnum";
 import ItemSuperTypeEnum from "../../Game/Itemization/Enums/ItemSuperTypeEnum";
-import ItemTypeEnum from "../../Game/Itemization/Enums/ItemTypeEnum";
 import Equipment from "../../Game/Itemization/Equipment/Equipment";
-import EquipmentForge from "../../Game/Itemization/Equipment/EquipmentForge";
+import { EquipmentForge, ForgeActionsEnum, ForgeCost } from "../../Game/Itemization/Equipment/EquipmentForge";
 import { EquipmentInformation, itemInformations } from "../../Game/Itemization/ItemInformation";
 import Town from "../../Game/Town";
 import UIHelpers from "../Helpers/UIHelpers";
@@ -15,6 +14,9 @@ import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
 
+//
+// The menu items a user can perform
+//
 enum ForgeMenuItemsEnum {
   CraftEquipment = 'Craft Equipment',
   LoadEquipment = 'Load Equipment',
@@ -23,6 +25,18 @@ enum ForgeMenuItemsEnum {
   Exit = 'Exit'
 }
 
+//
+// Map the menu items to forge actions
+//
+var menuItemsToForgeActions: Map<ForgeMenuItemsEnum, ForgeActionsEnum>
+  = new Map<ForgeMenuItemsEnum, ForgeActionsEnum>([
+    [ForgeMenuItemsEnum.CraftEquipment, ForgeActionsEnum.CraftEquipment],
+    [ForgeMenuItemsEnum.ReRollAffixes, ForgeActionsEnum.ReRollAffixes]
+  ]);
+
+//
+// The forge screen
+//
 class ForgeScreen implements IScreen {
 
   // Properties
@@ -331,7 +345,7 @@ class ForgeScreen implements IScreen {
 
     // Handle re-rolling affixes
     else if (selectedText === ForgeMenuItemsEnum.ReRollAffixes) {
-      menuDetailsBox.setContent(`Re-rolls the loaded equipment's affixes\n\nCost:\n${this.getActionCostString(selectedText)}`)
+      menuDetailsBox.setContent(`Re-rolls the loaded equipment's affixes\n\nCost:\n${this.getActionCostString(ForgeMenuItemsEnum.ReRollAffixes)}`)
     }
 
     this.screen.render();
@@ -340,64 +354,32 @@ class ForgeScreen implements IScreen {
   //
   // Get the cost for an action as a string
   //
-  private getActionCostString(actionName: string) {
+  private getActionCostString(menuItem: ForgeMenuItemsEnum) {
+
+    // Grab loaded equipment and sanity check
+    var equipmentBeingForged = this.town.equipmentBeingForged;
+    if (!equipmentBeingForged)
+      return 'Unknown';
+
+    // Grab the forge action
+    var forgeAction = menuItemsToForgeActions.get(menuItem);
+    if (!forgeAction)
+      return;
 
     // Grab cost and sanity check
-    var cost = this.getActionCost(actionName);
-    if (!cost)
+    var forgeCost = EquipmentForge.getActionCost(equipmentBeingForged, forgeAction)
+    if (!forgeCost)
       return 'Unknown';
 
     // Handle gold
     var costString = '';
-    costString += `{yellow-fg}Gold: ${cost.gold}{/yellow-fg} (have: {yellow-fg}${this.town.totalGold}{/})`;
+    costString += `{yellow-fg}Gold: ${forgeCost.gold}{/yellow-fg} (have: {yellow-fg}${this.town.totalGold}{/})`;
 
     // Handle reagents
-    cost.reagents.forEach((x: any) => costString += `\n${x.name}: ${x.amount} (have: ${this.town.inventory.getItemCount(x.type)})`);
+    forgeCost.reagents.forEach(x => costString += `\n${x.itemName}: ${x.amountRequired} (have: ${this.town.inventory.getItemCount(x.itemType)})`);
 
     // Return the cost string
     return costString;
-  }
-
-  //
-  // Get the cost for an action
-  //
-  private getActionCost(actionName: string): any {
-
-    // Check for loaded equipment
-    var loadedEquipment = this.town.equipmentBeingForged;
-    if (!loadedEquipment)
-      return null;
-
-    // Grab the equipment information
-    var equipmentInformation = itemInformations
-      .find(x => x.itemType === loadedEquipment?.type) as EquipmentInformation;
-
-    // Handle re-roll affixes
-    if (actionName == ForgeMenuItemsEnum.ReRollAffixes) {
-
-      // Action is not allowed for normal equipment
-      if (loadedEquipment.rarity === ItemRarityEnum.Normal)
-        return null;
-
-      // Set the rarity modifier
-      var rarityModifier = loadedEquipment.rarity == ItemRarityEnum.Rare ? 2 : 1;
-
-      // Populate reagents
-      var reagentCost: any[] = [];
-      equipmentInformation.forgeReagentCost.forEach((requiredAmount: number, itemType: ItemTypeEnum) => {
-        reagentCost.push({
-          type: itemType,
-          name: itemInformations.find(x => x.itemType == itemType)?.itemName,
-          amount: requiredAmount
-        });
-      });
-
-      // Return cost
-      return {
-        gold: 100 * loadedEquipment.ilvl * rarityModifier,
-        reagents: reagentCost
-      }
-    }
   }
 
   //
@@ -477,9 +459,9 @@ class ForgeScreen implements IScreen {
 
     // Verify we can afford the costs
     var canAfford = true;
-    equipmentInformation.craftingCost.forEach((requiredAmount: number, itemType: ItemTypeEnum) => {
-      var currentAmount = this.town.inventory.getItemCount(itemType);
-      if (currentAmount < requiredAmount) {
+    equipmentInformation.craftingReagents.forEach(x => {
+      var currentAmount = this.town.inventory.getItemCount(x.itemType);
+      if (currentAmount < x.amountRequired) {
         canAfford = false;
         return false;
       }
@@ -502,8 +484,8 @@ class ForgeScreen implements IScreen {
       equipmentInformation.ilvl));
 
     // Decrement crafting materials
-    equipmentInformation.craftingCost.forEach((requiredAmount: number, itemType: ItemTypeEnum) => {
-      this.town.inventory.removeItem(itemType, requiredAmount);
+    equipmentInformation.craftingReagents.forEach(x => {
+      this.town.inventory.removeItem(x.itemType, x.amountRequired);
     });
 
     // Trigger the crafting item focus to redraw crafting costs
@@ -525,11 +507,11 @@ class ForgeScreen implements IScreen {
 
     // Get the crafting cost data
     var craftingCostData: any[] = [];
-    equipmentInformation.craftingCost.forEach((requiredAmount: number, itemType: ItemTypeEnum) => {
+    equipmentInformation.craftingReagents.forEach(reagent => {
       craftingCostData.push([
-        itemInformations.find(x => x.itemType == itemType)?.itemName,
-        requiredAmount,
-        this.town.inventory.getItemCount(itemType)])
+        reagent.itemName,
+        reagent.amountRequired,
+        this.town.inventory.getItemCount(reagent.itemType)])
     });
 
     // Set the crafting cost data
@@ -675,36 +657,19 @@ class ForgeScreen implements IScreen {
     if (!loadedEquipment)
       return;
 
-    // Make sure the loaded equipment is not normal rarity
-    if (loadedEquipment.rarity === ItemRarityEnum.Normal)
-      return;
-
     // Make sure we have enough gold to pay the cost
-    var cost = this.getActionCost(ForgeMenuItemsEnum.ReRollAffixes);
-    if (!cost || cost.gold > this.town.totalGold)
+    var cost = EquipmentForge.getActionCost(loadedEquipment, ForgeActionsEnum.ReRollAffixes);
+    if (!cost || !EquipmentForge.canAffordForgeCost(cost))
       return;
 
-    // Make sure we have enough reagents to pay the cost
-    for (var i = 0; i < cost.reagents.length; i++) {
-      var reagent = cost.reagents[i];
-      if (this.town.inventory.getItemCount(reagent.type) < reagent.amount)
-        return;
-    }
-
-    // Decrement the gold cost from the town's gold
-    this.town.totalGold -= cost.gold;
-
-    // Decrement the reagents from the inventory item
-    cost.reagents.forEach((x: any) => this.town.inventory.removeItem(x.type, x.amount));
+    // Spend the cost
+    EquipmentForge.spendForgeCost(cost);
 
     // Re-roll the equipment
     EquipmentForge.reRollEquipmentAffixes(loadedEquipment);
 
     // Render the forged equipment
     this.renderEquipmentBeingForged();
-
-    // Render the screen
-    this.screen.render();
   }
 
   //

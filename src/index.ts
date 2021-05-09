@@ -5,7 +5,7 @@ import Game from "./Game/Game";
 import ItemRarityEnum from "./Game/Itemization/Enums/ItemRarityEnum";
 import ItemSuperTypeEnum from "./Game/Itemization/Enums/ItemSuperTypeEnum";
 import ItemTypeEnum from "./Game/Itemization/Enums/ItemTypeEnum";
-import EquipmentForge from "./Game/Itemization/Equipment/EquipmentForge";
+import { EquipmentForge } from "./Game/Itemization/Equipment/EquipmentForge";
 import Item from "./Game/Itemization/Item";
 import ScreenManager from "./UI/ScreenManager";
 import TownScreen from "./UI/Screens/TownScreen";

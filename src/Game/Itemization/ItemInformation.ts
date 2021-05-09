@@ -2,6 +2,7 @@ import ItemTypeEnum from "./Enums/ItemTypeEnum";
 import ItemSuperTypeEnum from './Enums/ItemSuperTypeEnum';
 import ItemRarityEnum from "./Enums/ItemRarityEnum";
 import EquipmentSlotEnum from "./Enums/EquipmentSlotEnum";
+import { ForgeCost, ForgeReagentCost } from "./Equipment/EquipmentForge";
 
 // Information about items
 class ItemInformation {
@@ -54,8 +55,8 @@ class EquipmentInformation extends ItemInformation {
   requiredLvl: number;
   slot: EquipmentSlotEnum;
   craftable: boolean;
-  craftingCost: Map<ItemTypeEnum, number>;
-  forgeReagentCost: Map<ItemTypeEnum, number>;
+  craftingReagents: Array<ForgeReagentCost>;
+  baseForgeReagents: Array<ForgeReagentCost>;
   isUnique: boolean;
 
   // Constructor
@@ -66,16 +67,16 @@ class EquipmentInformation extends ItemInformation {
     requiredLvl: number,
     slot: EquipmentSlotEnum,
     craftable: boolean,
-    craftingCost: Map<ItemTypeEnum, number>,
-    forgeReagentCost: Map<ItemTypeEnum, number>,
+    craftingReagents: Array<ForgeReagentCost>,
+    baseForgeReagents: Array<ForgeReagentCost>,
     isUnique: boolean = false
   ) {
     super(itemType, equipmentName, ItemSuperTypeEnum.Equipment, ilvl, 1);
     this.requiredLvl = requiredLvl;
     this.slot = slot;
     this.craftable = craftable;
-    this.craftingCost = craftingCost;
-    this.forgeReagentCost = forgeReagentCost;
+    this.craftingReagents = craftingReagents;
+    this.baseForgeReagents = baseForgeReagents;
     this.isUnique = isUnique;
   }
 }
@@ -98,12 +99,8 @@ itemInformations.push(new EquipmentInformation(
   1,
   EquipmentSlotEnum.ChestPiece,
   true,
-  new Map<ItemTypeEnum, number>([
-    [ItemTypeEnum.SpiderFang, 5]
-  ]),
-  new Map<ItemTypeEnum, number>([
-    [ItemTypeEnum.SpiderFang, 1]
-  ])
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 5)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 1)),
 ));
 
 export { MaterialInformation, EquipmentInformation, ItemInformation, itemInformations };

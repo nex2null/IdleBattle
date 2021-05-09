@@ -10,8 +10,122 @@ import RandomHelpers from '../../Utilities/RandomHelpers';
 import EquipmentAffixTypeEnum from '../Enums/EquipmentAffixTypeEnum';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 import { EquipmentInformation, itemInformations } from "../ItemInformation";
+import Game from "../../Game";
+
+//
+// A cost to use a forge action
+//
+class ForgeCost {
+
+  // Properties
+  gold: number;
+  reagents: Array<ForgeReagentCost>;
+
+  // Constructor
+  constructor(
+    gold: number,
+    reagents: Array<ForgeReagentCost>
+  ) {
+    this.gold = gold;
+    this.reagents = reagents;
+  }
+}
+
+//
+// A cost in reagents to use a forge action
+//
+class ForgeReagentCost {
+
+  // Properties
+  itemType: ItemTypeEnum;
+  itemName: string;
+  amountRequired: number;
+
+  // Constructor
+  constructor(
+    itemType: ItemTypeEnum,
+    itemName: string,
+    amountRequired: number
+  ) {
+    this.itemType = itemType;
+    this.itemName = itemName;
+    this.amountRequired = amountRequired;
+  }
+}
+
+//
+// The actions you can perform at the forge
+//
+enum ForgeActionsEnum {
+  CraftEquipment = 'Craft Equipment',
+  ReRollAffixes = 'Re-roll Affixes'
+}
 
 class EquipmentForge {
+
+  //
+  // Get the cost for an action
+  //
+  static getActionCost(equipment: Equipment, action: ForgeActionsEnum): ForgeCost | null {
+
+    // Grab the equipment information
+    var equipmentInformation = itemInformations
+      .find(x => x.itemType === equipment?.type) as EquipmentInformation;
+
+    // Handle re-roll affixes
+    if (action == ForgeActionsEnum.ReRollAffixes) {
+
+      // Action is not allowed for normal equipment
+      if (equipment.rarity === ItemRarityEnum.Normal)
+        return null;
+
+      // Set the rarity modifier
+      var rarityModifier = equipment.rarity == ItemRarityEnum.Rare ? 3 : 1;
+
+      // Return cost
+      return new ForgeCost(100 * equipment.ilvl * rarityModifier, equipmentInformation.baseForgeReagents);
+    }
+
+    return null;
+  }
+
+  //
+  // Determine if forge costs can be afforded
+  //
+  static canAffordForgeCost(cost: ForgeCost): boolean {
+
+    // Grab the town
+    var town = Game.getInstance().town;
+
+    // Can the gold be afforded?
+    if (town.totalGold < cost.gold)
+      return false;
+
+    // Can the reagents be afforded?
+    for (var i = 0; i < cost.reagents.length; i++) {
+      var reagent = cost.reagents[i];
+      if (town.inventory.getItemCount(reagent.itemType) < reagent.amountRequired)
+        return false;
+    }
+
+    // If we make it here we can afford the cost
+    return true;
+  }
+
+  //
+  // Spends forge costs from town inventory
+  //
+  static spendForgeCost(cost: ForgeCost) {
+
+    // Grab the town
+    var town = Game.getInstance().town;
+
+    // Decrement the gold cost from the town's gold
+    town.totalGold -= cost.gold;
+
+    // Decrement the reagents from the inventory item
+    cost.reagents.forEach(x => town.inventory.removeItem(x.itemType, x.amountRequired));
+  }
 
   // Creates a new piece of equipment
   public static createEquipment(
@@ -267,4 +381,4 @@ class EquipmentForge {
   }
 }
 
-export default EquipmentForge;
+export { ForgeActionsEnum, ForgeCost, ForgeReagentCost, EquipmentForge };
