@@ -259,17 +259,36 @@ class ForgeScreen implements IScreen {
   //
   private setMenuItems() {
 
-    // Generate the list of items
-    var items = [
-      ForgeMenuItemsEnum.CraftEquipment,
-      ForgeMenuItemsEnum.LoadEquipment,
-      ForgeMenuItemsEnum.UnloadEquipment,
-      ForgeMenuItemsEnum.ReRollAffixes,
-      ForgeMenuItemsEnum.Exit
-    ];
+    var items = [];
+
+    // Determine if equipment is loaded
+    var equipment = this.town.equipmentBeingForged;
+    var equipmentIsLoaded = equipment != null;
+
+    // If equipment is not loaded, allow crafting equipment
+    if (!equipmentIsLoaded)
+      items.push(ForgeMenuItemsEnum.CraftEquipment);
+
+    // If equipment is not loaded, allow loading equipment
+    if (!equipmentIsLoaded)
+      items.push(ForgeMenuItemsEnum.LoadEquipment);
+
+    // If equipment is loaded, allow unloading equipment
+    if (equipmentIsLoaded)
+      items.push(ForgeMenuItemsEnum.UnloadEquipment);
+
+    // If equipment is loaded, and not normal, allow rerolling affixes
+    if (equipmentIsLoaded && equipment?.rarity !== ItemRarityEnum.Normal)
+      items.push(ForgeMenuItemsEnum.ReRollAffixes);
+
+    // Always allow exiting
+    items.push(ForgeMenuItemsEnum.Exit);
 
     // Set the menu items
     this.screenElements.forgeMenu.setItems(items);
+
+    // Render
+    this.screen.render();
   }
 
   //
@@ -627,6 +646,9 @@ class ForgeScreen implements IScreen {
     // Render the equipment and hide the equipment table
     this.renderEquipmentBeingForged();
     this.hideEquipmentTable();
+
+    // Refresh menu items
+    this.setMenuItems();
   }
 
   //
@@ -645,6 +667,9 @@ class ForgeScreen implements IScreen {
 
     // Render the equipment
     this.renderEquipmentBeingForged();
+
+    // Refresh menu items
+    this.setMenuItems();
   }
 
   //
