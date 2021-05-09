@@ -1,6 +1,6 @@
 // Imports
 import EquipmentAffixSlotEnum from "../Enums/EquipmentAffixSlotEnum";
-import { affixInformations, EquipmentAffixInformation } from './EquipmentAffixInformation';
+import { affixInformations } from './EquipmentAffixInformation';
 import Equipment from './Equipment';
 import ItemTypeEnum from '../Enums/ItemTypeEnum';
 import ItemRarityEnum from '../Enums/ItemRarityEnum';
