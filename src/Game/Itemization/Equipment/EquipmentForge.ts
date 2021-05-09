@@ -58,7 +58,8 @@ class ForgeReagentCost {
 //
 enum ForgeActionsEnum {
   CraftEquipment = 'Craft Equipment',
-  ReRollAffixes = 'Re-roll Affixes'
+  ReRollAffixes = 'Re-roll Affixes',
+  UpgradeRarity = 'Upgrade Rarity'
 }
 
 class EquipmentForge {
@@ -84,6 +85,20 @@ class EquipmentForge {
 
       // Return cost
       return new ForgeCost(100 * equipment.ilvl * rarityModifier, equipmentInformation.baseForgeReagents);
+    }
+
+    // Handle upgrade rarity affixes
+    else if (action == ForgeActionsEnum.UpgradeRarity) {
+
+      // Action is only allowed for normal and magic equipment
+      if (equipment.rarity !== ItemRarityEnum.Normal && equipment.rarity !== ItemRarityEnum.Magic)
+        return null;
+
+      // Set the rarity modifier
+      var rarityModifier = equipment.rarity == ItemRarityEnum.Magic ? 5 : 1;
+
+      // Return cost
+      return new ForgeCost(500 * equipment.ilvl * rarityModifier, equipmentInformation.baseForgeReagents);
     }
 
     return null;
@@ -242,6 +257,20 @@ class EquipmentForge {
     equipment.affixes = [];
     equipment.rarity = ItemRarityEnum.Normal;
     equipment.craftingTags = [];
+  }
+
+  //
+  // Upgrades an equipment's rarity
+  //
+  public static upgradeEquipmentRarity(equipment: Equipment): void {
+
+    // Normal equipments upgrade to magic
+    if (equipment.rarity === ItemRarityEnum.Normal)
+      this.upgradeEquipmentToRarity(equipment, ItemRarityEnum.Magic);
+
+    // Magic equipments upgrade to rare
+    else if (equipment.rarity === ItemRarityEnum.Magic)
+      this.upgradeEquipmentToRarity(equipment, ItemRarityEnum.Rare);
   }
 
   // Upgrades a normal equipment to magic

@@ -22,6 +22,7 @@ enum ForgeMenuItemsEnum {
   LoadEquipment = 'Load Equipment',
   UnloadEquipment = 'Unload Equipment',
   ReRollAffixes = 'Re-roll Affixes',
+  UpgradeRarity = 'Upgrade Rarity',
   Exit = 'Exit'
 }
 
@@ -31,7 +32,8 @@ enum ForgeMenuItemsEnum {
 var menuItemsToForgeActions: Map<ForgeMenuItemsEnum, ForgeActionsEnum>
   = new Map<ForgeMenuItemsEnum, ForgeActionsEnum>([
     [ForgeMenuItemsEnum.CraftEquipment, ForgeActionsEnum.CraftEquipment],
-    [ForgeMenuItemsEnum.ReRollAffixes, ForgeActionsEnum.ReRollAffixes]
+    [ForgeMenuItemsEnum.ReRollAffixes, ForgeActionsEnum.ReRollAffixes],
+    [ForgeMenuItemsEnum.UpgradeRarity, ForgeActionsEnum.UpgradeRarity]
   ]);
 
 //
@@ -263,23 +265,26 @@ class ForgeScreen implements IScreen {
 
     // Determine if equipment is loaded
     var equipment = this.town.equipmentBeingForged;
-    var equipmentIsLoaded = equipment != null;
 
     // If equipment is not loaded, allow crafting equipment
-    if (!equipmentIsLoaded)
+    if (!equipment)
       items.push(ForgeMenuItemsEnum.CraftEquipment);
 
     // If equipment is not loaded, allow loading equipment
-    if (!equipmentIsLoaded)
+    if (!equipment)
       items.push(ForgeMenuItemsEnum.LoadEquipment);
 
     // If equipment is loaded, allow unloading equipment
-    if (equipmentIsLoaded)
+    if (equipment)
       items.push(ForgeMenuItemsEnum.UnloadEquipment);
 
-    // If equipment is loaded, and not normal, allow rerolling affixes
-    if (equipmentIsLoaded && equipment?.rarity !== ItemRarityEnum.Normal)
+    // If equipment is loaded, and re-rolling affixes has a cost defined, allow it
+    if (equipment && EquipmentForge.getActionCost(equipment, ForgeActionsEnum.ReRollAffixes) != null)
       items.push(ForgeMenuItemsEnum.ReRollAffixes);
+
+    // If equipment is loaded, and upgrade rarity has a cost defined, allow it
+    if (equipment && EquipmentForge.getActionCost(equipment, ForgeActionsEnum.UpgradeRarity) != null)
+      items.push(ForgeMenuItemsEnum.UpgradeRarity);
 
     // Always allow exiting
     items.push(ForgeMenuItemsEnum.Exit);
@@ -287,8 +292,8 @@ class ForgeScreen implements IScreen {
     // Set the menu items
     this.screenElements.forgeMenu.setItems(items);
 
-    // Render
-    this.screen.render();
+    // Select the 0th item
+    this.screenElements.forgeMenu.select(0);
   }
 
   //
@@ -317,6 +322,10 @@ class ForgeScreen implements IScreen {
     // Handle re-rolling affixes
     else if (selectedText === ForgeMenuItemsEnum.ReRollAffixes)
       this.rerollAffixes();
+
+    // Handle upgrading rarity
+    else if (selectedText === ForgeMenuItemsEnum.UpgradeRarity)
+      this.upgradeRarity();
 
     // Trigger re-focus to update menu costs
     this.forgeMenuItemFocused(element, index);
@@ -365,6 +374,11 @@ class ForgeScreen implements IScreen {
     // Handle re-rolling affixes
     else if (selectedText === ForgeMenuItemsEnum.ReRollAffixes) {
       menuDetailsBox.setContent(`Re-rolls the loaded equipment's affixes\n\nCost:\n${this.getActionCostString(ForgeMenuItemsEnum.ReRollAffixes)}`)
+    }
+
+    // Handle upgrading rarity
+    else if (selectedText === ForgeMenuItemsEnum.UpgradeRarity) {
+      menuDetailsBox.setContent(`Upgrades the loaded equipment's rarity\n\nCost:\n${this.getActionCostString(ForgeMenuItemsEnum.UpgradeRarity)}`)
     }
 
     this.screen.render();
@@ -692,6 +706,34 @@ class ForgeScreen implements IScreen {
 
     // Re-roll the equipment
     EquipmentForge.reRollEquipmentAffixes(loadedEquipment);
+
+    // Render the forged equipment
+    this.renderEquipmentBeingForged();
+  }
+
+  //
+  // Upgrades rarity on the loaded item
+  //
+  private upgradeRarity() {
+
+    // Grab the loaded equipment
+    var loadedEquipment = this.town.equipmentBeingForged;
+    if (!loadedEquipment)
+      return;
+
+    // Make sure we have enough gold to pay the cost
+    var cost = EquipmentForge.getActionCost(loadedEquipment, ForgeActionsEnum.UpgradeRarity);
+    if (!cost || !EquipmentForge.canAffordForgeCost(cost))
+      return;
+
+    // Spend the cost
+    EquipmentForge.spendForgeCost(cost);
+
+    // Upgrade the rarity
+    EquipmentForge.upgradeEquipmentRarity(loadedEquipment);
+
+    // Refresh menu items
+    this.setMenuItems();
 
     // Render the forged equipment
     this.renderEquipmentBeingForged();
