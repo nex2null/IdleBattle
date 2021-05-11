@@ -1,87 +1,111 @@
 import ItemSuperTypeEnum from './Enums/ItemSuperTypeEnum';
+import ItemTypeEnum from './Enums/ItemTypeEnum';
+import Equipment from './Equipment/Equipment';
 import Item from './Item';
 import { itemInformations } from './ItemInformation';
 
 class Inventory {
 
-    // Properties
-    items: Array<Item> = [];
+  // Properties
+  items: Array<Item> = [];
 
-    // Constructor
-    constructor() { }
+  // Constructor
+  constructor() { }
 
-    //
-    // Add an item to the inventory
-    //
-    public addItem(item: Item): void {
+  //
+  // Add an item to the inventory
+  //
+  public addItem(item: Item): void {
 
-        // TODO: Make this whole thing handle stacking better
+    // Grab the item information for the item being added
+    var itemInformation = itemInformations.find(x => x.itemType == item.type);
+    if (!itemInformation)
+      return;
 
-        // Grab the item information for the item being added
-        var itemInformation = itemInformations.find(x => x.itemType == item.type);
-
-        // Find an item in our list of items that has an amount that can
-        // accomodate the amount of the item we are trying to drop
-        var itemInInventory = this.items.find(x =>
-            itemInformation != null &&
-            x.type == item.type &&
-            x.amount <= itemInformation.stackSize - item.amount);
-
-        // If no matching item was found then add the item to the inventory
-        // Otherwise just increase the amount of the item we found
-        if (itemInInventory)
-            itemInInventory.amount += item.amount;
-        else
-            this.items.push(item);
+    // If the item is an equipment then add it to the inventory
+    if (itemInformation?.itemSuperType === ItemSuperTypeEnum.Equipment) {
+      this.items.push(item);
+      return;
     }
 
-    //
-    // Add a list of items to the inventory
-    //
-    public addItems(items: Array<Item>): void {
-        for (var i = 0; i < items.length; i++) {
-            this.addItem(items[i]);
-        }
+    // Find the item in the inventory
+    var itemInInventory = this.items.find(x => x.type === itemInformation?.itemType);
+
+    // If no existing item was found in the inventory, then add the item
+    if (!itemInInventory) {
+      this.items.push(item);
+      return;
     }
 
-    //
-    // Remove an item from the inventory
-    //
-    public removeItem(item: Item): void {
+    // Add the item's stack size to the existing item
+    itemInInventory.amount += item.amount;
 
-        // Grab the item information for the item being removed
-        var itemInformation = itemInformations.find(x => x.itemType == item.type);
-        if (!itemInformation)
-            return;
+    // If the item's current amount is greater than the allowed stack size
+    // then set the amount to the stack size
+    if (itemInInventory.amount >= itemInformation?.stackSize)
+      itemInInventory.amount = itemInformation.stackSize;
+  }
 
-        // If the item is an equipment, then just remove it
-        if (itemInformation.itemSuperType == ItemSuperTypeEnum.Equipment) {
-            this.spliceItem(item);
-            return;
-        }
-
-        // If the item is a currency item, then find it in the inventory
-        var itemInInventory = this.items.find(x => x.type == item.type);
-        if (!itemInInventory)
-            return;
-
-        // Reduce it's stack size unless the stack size is only 1, then just remove the item entirely
-        if (itemInInventory.amount == 1) {
-            this.spliceItem(item);
-        } else {
-            itemInInventory.amount--;
-        }
+  //
+  // Add a list of items to the inventory
+  //
+  public addItems(items: Array<Item>): void {
+    for (var i = 0; i < items.length; i++) {
+      this.addItem(items[i]);
     }
+  }
 
-    //
-    // Splices an item out of the array
-    //
-    public spliceItem(item: Item): void {
-        var index = this.items.indexOf(item);
-        if (index > -1) {
-            this.items.splice(index, 1);
-        }
+  //
+  // Remove an equipment from the inventory
+  //
+  public removeEquipment(equipment: Equipment): void {
+    this.spliceItem(equipment);
+  }
+
+  //
+  // Remove an item from the inventory
+  //
+  public removeItem(itemType: ItemTypeEnum, amount: number) {
+
+    // Grab the item information for the item being removed
+    var itemInformation = itemInformations.find(x => x.itemType == itemType);
+    if (!itemInformation)
+      return;
+
+    // If the item is an equipment then do nothing
+    if (itemInformation.itemSuperType === ItemSuperTypeEnum.Equipment)
+      return;
+
+    // Grab the item from the inventory
+    var item = this.items.find(x => x.type == itemType);
+    if (!item)
+      return;
+
+    // Reduce the item's amount by the amount to remove
+    item.amount -= amount;
+
+    // If there is no item left, remove it from the inventory entirely
+    if (item.amount <= 0)
+      this.spliceItem(item);
+  }
+
+  //
+  // Gets the count of an item
+  //
+  public getItemCount(itemType: ItemTypeEnum) {
+    var items = this.items.filter(x => x.type === itemType).map(x => x.amount);
+    return !items || items.length === 0 ? 0 : items.reduce((x: number, y: number) => x + y);
+  }
+
+  //
+  // Splices an item out of the array
+  //
+  private spliceItem(item: Item): void {
+    var index = this.items.indexOf(item);
+    if (index > -1) {
+      this.items.splice(index, 1);
     }
+  }
 }
 
 export default Inventory;

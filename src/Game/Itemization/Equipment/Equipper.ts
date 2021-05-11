@@ -11,22 +11,22 @@ class Equipper {
     //
     // Handle equipping an item to a player character
     //
-    public static equipItem(item: Equipment, character: PlayerCharacter) {
+    public static equipItem(equipment: Equipment, character: PlayerCharacter) {
 
         // Check if the character is of the required level
-        if (character.level < item.requiredLevel)
+        if (character.level < equipment.requiredLevel)
             return;
 
         // If there is already an item equipped in the slot, unequip it
-        var equippedItem = character.equipment.get(item.slot);
+        var equippedItem = character.equipment.get(equipment.slot);
         if (equippedItem != null)
-            this.unequipItem(character, item.slot);
+            this.unequipItem(character, equipment.slot);
 
         // Equip the item
-        character.equipment.set(item.slot, item);
+        character.equipment.set(equipment.slot, equipment);
 
-        // Remove the item from the inventory
-        Game.getInstance().town.inventory.removeItem(item);
+        // Remove the equipment from the inventory
+        Game.getInstance().town.inventory.removeEquipment(equipment);
     }
 
     //

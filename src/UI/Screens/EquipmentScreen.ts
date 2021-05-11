@@ -3,12 +3,12 @@
 // Imports
 const blessed = require('blessed');
 import Game from "../../Game/Game";
-import EquipmentAffixSlotEnum from "../../Game/Itemization/Enums/EquipmentAffixSlotEnum";
 import EquipmentSlotEnum from "../../Game/Itemization/Enums/EquipmentSlotEnum";
 import ItemSuperTypeEnum from "../../Game/Itemization/Enums/ItemSuperTypeEnum";
 import Equipment from "../../Game/Itemization/Equipment/Equipment";
 import Equipper from "../../Game/Itemization/Equipment/Equipper";
 import Town from "../../Game/Town";
+import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
@@ -339,7 +339,8 @@ class EquipmentScreen implements IScreen {
 
     // Render the selected equipment
     var equipment = this.displayedEquipment[index];
-    this.renderEquipmentDetailsToBox(equipment, this.screenElements.selectedEquipmentDetailsBox);
+    UIHelpers.renderEquipmentDetailsToBox(equipment, this.screenElements.selectedEquipmentDetailsBox);
+    this.screen.render();
   }
 
   //
@@ -366,9 +367,7 @@ class EquipmentScreen implements IScreen {
   // Clears the selected equipment details box
   //
   private clearSelectedEquipmentDetails() {
-    // Clear all the selected equipment box's children
-    var i = this.screenElements.selectedEquipmentDetailsBox.children.length;
-    while (--i > 0) this.screenElements.selectedEquipmentDetailsBox.children[i].detach();
+    UIHelpers.clearBlessedElement(this.screenElements.selectedEquipmentDetailsBox);
     this.screen.render();
   }
 
@@ -376,9 +375,7 @@ class EquipmentScreen implements IScreen {
   // Clears the current equipment details box
   //
   private clearCurrentEquipmentDetails() {
-    // Clear all the selected equipment box's children
-    var i = this.screenElements.currentEquipmentDetailsBox.children.length;
-    while (--i > 0) this.screenElements.currentEquipmentDetailsBox.children[i].detach();
+    UIHelpers.clearBlessedElement(this.screenElements.currentEquipmentDetailsBox);
     this.screen.render();
   }
 
@@ -395,8 +392,10 @@ class EquipmentScreen implements IScreen {
 
     // Render the equipment
     var equipment = character.equipment.get(slot);
-    if (equipment)
-      this.renderEquipmentDetailsToBox(equipment, this.screenElements.currentEquipmentDetailsBox);
+    if (equipment) {
+      UIHelpers.renderEquipmentDetailsToBox(equipment, this.screenElements.currentEquipmentDetailsBox);
+      this.screen.render();
+    }
 
     // Render the screen
     this.screen.render();
@@ -418,136 +417,6 @@ class EquipmentScreen implements IScreen {
 
     // Refresh the equipped equipment
     this.refreshEquippedEquipment();
-  }
-
-  //
-  // Renders equipment details to a blessed box
-  //
-  private renderEquipmentDetailsToBox(equipment: Equipment, blessedBox: any) {
-
-    // Start at the 0th line
-    var currentLine = 0;
-
-    // Name
-    blessed.box({
-      parent: blessedBox,
-      top: currentLine++,
-      height: 1,
-      width: 38,
-      content: `Name: ${equipment.name}`
-    });
-
-    // Type
-    blessed.box({
-      parent: blessedBox,
-      top: currentLine++,
-      height: 1,
-      width: 38,
-      content: `Type: ${equipment.type}`
-    });
-
-    // Rarity
-    blessed.box({
-      parent: blessedBox,
-      top: currentLine++,
-      height: 1,
-      width: 38,
-      content: `Rarity: ${equipment.rarity}`
-    });
-
-    // Line
-    blessed.line({
-      parent: blessedBox,
-      top: currentLine++,
-      left: 'center',
-      orientation: 'horizontal',
-      width: 38
-    });
-
-    // Implicits label
-    blessed.box({
-      parent: blessedBox,
-      top: currentLine++,
-      height: 1,
-      width: 38,
-      content: `Implicits:`
-    });
-
-    // Implicits
-    equipment.implicits.forEach(implicit => {
-      blessed.box({
-        parent: blessedBox,
-        top: currentLine++,
-        height: 1,
-        width: 38,
-        content: `${implicit.stat} - ${implicit.value}`
-      });
-    });
-
-    // Line
-    blessed.line({
-      parent: blessedBox,
-      top: currentLine++,
-      left: 'center',
-      orientation: 'horizontal',
-      width: 38
-    });
-
-    // Prefixes label
-    blessed.box({
-      parent: blessedBox,
-      top: currentLine++,
-      height: 1,
-      width: 38,
-      content: `Prefixes:`
-    });
-
-    // Prefixes
-    equipment
-      .affixes
-      .filter(x => x.slot === EquipmentAffixSlotEnum.Prefix).forEach(prefix => {
-        blessed.box({
-          parent: blessedBox,
-          top: currentLine++,
-          height: 1,
-          width: 38,
-          content: `${prefix.modifiedStat} - ${prefix.value}`
-        });
-      });
-
-    // Line
-    blessed.line({
-      parent: blessedBox,
-      top: currentLine++,
-      left: 'center',
-      orientation: 'horizontal',
-      width: 38
-    });
-
-    // Suffixes label
-    blessed.box({
-      parent: blessedBox,
-      top: currentLine++,
-      height: 1,
-      width: 38,
-      content: `Suffixes:`
-    });
-
-    // Suffixes
-    equipment
-      .affixes
-      .filter(x => x.slot === EquipmentAffixSlotEnum.Suffix).forEach(suffix => {
-        blessed.box({
-          parent: blessedBox,
-          top: currentLine++,
-          height: 1,
-          width: 38,
-          content: `${suffix.modifiedStat} - ${suffix.value}`
-        });
-      });
-
-    // Render the screen
-    this.screen.render();
   }
 }
 

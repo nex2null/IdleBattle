@@ -1,5 +1,5 @@
 enum ItemSuperTypeEnum {
-    Currency = 'currency',
+    Material = 'material',
     Equipment = 'equipment'
 }
 

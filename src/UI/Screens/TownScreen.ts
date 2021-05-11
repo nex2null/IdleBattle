@@ -7,6 +7,7 @@ import Game from "../../Game/Game";
 import ScreenManager from "../ScreenManager";
 import BattleScreen from "./BattleScreen";
 import EquipmentScreen from "./EquipmentScreen";
+import ForgeScreen from "./ForgeScreen";
 import IScreen from "./IScreen";
 
 class TownScreen implements IScreen {
@@ -79,6 +80,9 @@ class TownScreen implements IScreen {
       if (selectedItem === 'Equipment')
         ScreenManager.getInstance().loadScreen(new EquipmentScreen());
 
+      if (selectedItem === 'Forge')
+        ScreenManager.getInstance().loadScreen(new ForgeScreen());
+
       else if (selectedItem === 'Exit')
         process.exit(0);
     });
@@ -86,8 +90,11 @@ class TownScreen implements IScreen {
     townMenu.setItems([
       'Battle',
       'Equipment',
+      'Forge',
       'Exit'
     ]);
+
+    townMenu.key(['escape'], () => townMenu.select(townMenu.fuzzyFind('Exit')));
 
     this.screen.append(goldBox);
     this.screen.append(townMenu);
