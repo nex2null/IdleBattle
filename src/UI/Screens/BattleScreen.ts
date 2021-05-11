@@ -2,34 +2,30 @@
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
 import Battle from "../../Game/BattleSystem/Battle";
+import BattleSpeedEnum from "../../Game/BattleSystem/Enums/BattleSpeedEnum";
 import BattleStateEnum from "../../Game/BattleSystem/Enums/BattleStateEnum";
 import Game from "../../Game/Game";
+import GameOptions from "../../Game/GameOptions";
 import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
-
-enum BattleSpeedEnum {
-  Slow = 300,
-  Normal = 200,
-  Fast = 100
-}
 
 class BattleScreen implements IScreen {
 
   // Properties
   screen: any;
   battle: Battle;
+  gameOptions: GameOptions;
   screenElements: any;
   messageCount: number = 0;
-  speed: BattleSpeedEnum;
 
   // Constructor
   constructor(battle: Battle) {
     this.screen = null;
     this.battle = battle;
     this.screenElements = {};
-    this.speed = BattleSpeedEnum.Normal;
+    this.gameOptions = Game.getInstance().options;
   }
 
   //
@@ -69,9 +65,20 @@ class BattleScreen implements IScreen {
   // Starts the battle processing loop
   //
   private async startBattleLoop() {
+
+    // Grab the level
+    var currentLevel = this.battle.dungeon.currentLevelNumber;
+
+    // Loop while we're battling
     while (this.battle.currentState === BattleStateEnum.InBattle) {
-      await UIHelpers.delay(this.speed);
+
+      // Process the battle after a small delay
+      await UIHelpers.delay(this.gameOptions.battleSpeed);
       this.processBattle();
+
+      // If the level has changed when we are finished processing then break
+      if (this.battle.dungeon.currentLevelNumber != currentLevel)
+        break;
     }
   }
 
@@ -95,11 +102,18 @@ class BattleScreen implements IScreen {
     }
 
     if (this.battle.currentState === BattleStateEnum.LevelCleared) {
-      this.screenElements.continuePrompt.ask('Level Cleared! Continue?', (err: any, data: any) => {
-        if (err) throw err;
-        if (!data) this.leaveBattle();
-        if (data) this.advanceLevel();
-      });
+
+      // If we are not auto advancing then prompt
+      // otherwise just advance the level
+      if (!this.gameOptions.autoAdvanceBattles) {
+        this.screenElements.continuePrompt.ask('Level Cleared! Continue?', (err: any, data: any) => {
+          if (err) throw err;
+          if (!data) this.leaveBattle();
+          if (data) this.advanceLevel();
+        });
+      } else {
+        this.advanceLevel();
+      }
     }
 
     if (this.battle.isBattleWon() || this.battle.isBattleLost()) {
@@ -174,6 +188,7 @@ class BattleScreen implements IScreen {
     });
 
     this.screenElements.logBox.key(['s'], () => this.toggleSpeed());
+    this.screenElements.logBox.key(['a'], () => this.toggleAutoAdvance());
   }
 
   //
@@ -211,7 +226,10 @@ class BattleScreen implements IScreen {
     var content = "";
 
     // Set battle speed
-    content += `{green-fg}S{/}peed: ${BattleSpeedEnum[this.speed]}`;
+    content += `{green-fg}S{/}peed: ${BattleSpeedEnum[this.gameOptions.battleSpeed]}`;
+
+    // Set auto advance
+    content += `\t{green-fg}A{/}uto advance: ${this.gameOptions.autoAdvanceBattles}`;
 
     // Set content
     this.screenElements.battleOptionsBox.setContent(content);
@@ -428,14 +446,28 @@ class BattleScreen implements IScreen {
   private toggleSpeed() {
 
     // Set the new speed
-    if (this.speed === BattleSpeedEnum.Slow)
-      this.speed = BattleSpeedEnum.Normal;
-    else if (this.speed === BattleSpeedEnum.Normal)
-      this.speed = BattleSpeedEnum.Fast;
-    else if (this.speed === BattleSpeedEnum.Fast)
-      this.speed = BattleSpeedEnum.Slow;
+    if (this.gameOptions.battleSpeed === BattleSpeedEnum.Slow)
+      this.gameOptions.battleSpeed = BattleSpeedEnum.Normal;
+    else if (this.gameOptions.battleSpeed === BattleSpeedEnum.Normal)
+      this.gameOptions.battleSpeed = BattleSpeedEnum.Fast;
+    else if (this.gameOptions.battleSpeed === BattleSpeedEnum.Fast)
+      this.gameOptions.battleSpeed = BattleSpeedEnum.Fastest;
+    else if (this.gameOptions.battleSpeed === BattleSpeedEnum.Fastest)
+      this.gameOptions.battleSpeed = BattleSpeedEnum.Slow;
 
     // Update the battle options
+    this.updateBattleOptions();
+  }
+
+  //
+  // Toggles auto advancing through the dungeon
+  //
+  private toggleAutoAdvance() {
+
+    // Toggle auto advance
+    this.gameOptions.autoAdvanceBattles = !this.gameOptions.autoAdvanceBattles;
+
+    // Update battle options
     this.updateBattleOptions();
   }
 

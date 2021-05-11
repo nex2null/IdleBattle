@@ -26,6 +26,7 @@ export default class BattleCharacter {
     // TODO: Refactor enemy specific things to enemy base class
     maxNumberOfItemsToDrop: number;
     lootGenerationOptions: Array<LootGenerationOption> = [];
+    goldWorth: number;
 
     // Constructor
     constructor(args: any) {
@@ -47,6 +48,7 @@ export default class BattleCharacter {
         // TODO: Refactor enemy specific things to enemy base class
         this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;
         this.lootGenerationOptions = args.lootGenerationOptions || [];
+        this.goldWorth = args.goldWorth || 0;
     }
 
     // Updates the charge level of the character
