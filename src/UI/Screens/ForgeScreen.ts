@@ -9,6 +9,7 @@ import Equipment from "../../Game/Itemization/Equipment/Equipment";
 import { EquipmentForge, ForgeActionsEnum, ForgeCost } from "../../Game/Itemization/Equipment/EquipmentForge";
 import { EquipmentInformation, itemInformations } from "../../Game/Itemization/ItemInformation";
 import Town from "../../Game/Town";
+import GameSaver from "../../IO/GameSaver";
 import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
@@ -526,6 +527,9 @@ class ForgeScreen implements IScreen {
 
     // Render
     this.screen.render();
+
+    // Save the game
+    GameSaver.saveGame();
   }
 
   //
@@ -709,6 +713,9 @@ class ForgeScreen implements IScreen {
 
     // Render the forged equipment
     this.renderEquipmentBeingForged();
+
+    // Save the game
+    GameSaver.saveGame();
   }
 
   //
@@ -737,6 +744,9 @@ class ForgeScreen implements IScreen {
 
     // Render the forged equipment
     this.renderEquipmentBeingForged();
+
+    // Save the game
+    GameSaver.saveGame();
   }
 
   //
@@ -913,6 +923,7 @@ class ForgeScreen implements IScreen {
   // Exits the current screen
   //
   private exitScreen() {
+    GameSaver.saveGame();
     ScreenManager.getInstance().loadScreen(new TownScreen());
   }
 

@@ -10,9 +10,9 @@ class GameOptions {
   autoAdvanceBattles: boolean;
 
   // Constructor
-  constructor() {
-    this.battleSpeed = BattleSpeedEnum.Normal;
-    this.autoAdvanceBattles = false;
+  constructor(savedData: any = {}) {
+    this.battleSpeed = savedData.battleSpeed || BattleSpeedEnum.Normal;
+    this.autoAdvanceBattles = savedData.autoAdvanceBattles || false;
   }
 }
 

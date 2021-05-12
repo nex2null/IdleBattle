@@ -10,7 +10,11 @@ class Inventory {
   items: Array<Item> = [];
 
   // Constructor
-  constructor() { }
+  constructor(savedData: any = null) {
+    if (savedData && savedData.items) {
+      this.items = [...savedData.items];
+    }
+  }
 
   //
   // Add an item to the inventory

@@ -8,6 +8,7 @@ import ItemSuperTypeEnum from "../../Game/Itemization/Enums/ItemSuperTypeEnum";
 import Equipment from "../../Game/Itemization/Equipment/Equipment";
 import Equipper from "../../Game/Itemization/Equipment/Equipper";
 import Town from "../../Game/Town";
+import GameSaver from "../../IO/GameSaver";
 import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
@@ -236,6 +237,7 @@ class EquipmentScreen implements IScreen {
   // Exits the current screen
   //
   private exitScreen() {
+    GameSaver.saveGame();
     ScreenManager.getInstance().loadScreen(new TownScreen());
   }
 
@@ -277,11 +279,11 @@ class EquipmentScreen implements IScreen {
     this.screenElements.characterNameLabel.setContent(`{center}${character.name}{/}`);
 
     // Update the chest piece name
-    var equippedChestPiece = character.equipment.get(EquipmentSlotEnum.ChestPiece);
+    var equippedChestPiece = character.equipment.chest;
     this.screenElements.chestBox.setContent(equippedChestPiece ? equippedChestPiece.name : 'Empty');
 
     // Update the boots name
-    var equippedBoots = character.equipment.get(EquipmentSlotEnum.Boots);
+    var equippedBoots = character.equipment.boots;
     this.screenElements.bootsBox.setContent(equippedBoots ? equippedBoots.name : 'Empty');
 
     // Render the screen
@@ -391,7 +393,7 @@ class EquipmentScreen implements IScreen {
     var character = this.town.playerCharacters[this.currentPlayerIndex];
 
     // Render the equipment
-    var equipment = character.equipment.get(slot);
+    var equipment = character.equipment.getBySlot(slot);
     if (equipment) {
       UIHelpers.renderEquipmentDetailsToBox(equipment, this.screenElements.currentEquipmentDetailsBox);
       this.screen.render();
