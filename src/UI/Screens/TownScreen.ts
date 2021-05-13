@@ -4,6 +4,7 @@
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
 import Game from "../../Game/Game";
+import GameSaver from "../../IO/GameSaver";
 import ScreenManager from "../ScreenManager";
 import BattleScreen from "./BattleScreen";
 import EquipmentScreen from "./EquipmentScreen";
@@ -77,10 +78,10 @@ class TownScreen implements IScreen {
       if (selectedItem === 'Battle')
         this.StartBattle();
 
-      if (selectedItem === 'Equipment')
+      else if (selectedItem === 'Equipment')
         ScreenManager.getInstance().loadScreen(new EquipmentScreen());
 
-      if (selectedItem === 'Forge')
+      else if (selectedItem === 'Forge')
         ScreenManager.getInstance().loadScreen(new ForgeScreen());
 
       else if (selectedItem === 'Exit')
