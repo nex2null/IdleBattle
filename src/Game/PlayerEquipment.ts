@@ -19,6 +19,17 @@ class PlayerEquipment {
   }
 
   //
+  // Load from saved data
+  //
+  static load(savedData: any) {
+    var playerEquipment = new PlayerEquipment();
+    playerEquipment.weapon = savedData.weapon ? Equipment.load(savedData.weapon) : null;
+    playerEquipment.chest = savedData.chest ? Equipment.load(savedData.chest) : null;
+    playerEquipment.boots = savedData.boots ? Equipment.load(savedData.boots) : null;
+    return playerEquipment;
+  }
+
+  //
   // Gets the equipment for a given slot
   //
   getBySlot(slot: EquipmentSlotEnum): Equipment | null {
@@ -35,9 +46,15 @@ class PlayerEquipment {
   //
   set(equipment: Equipment) {
     switch (equipment.slot) {
-      case EquipmentSlotEnum.Boots: this.boots = equipment;
-      case EquipmentSlotEnum.ChestPiece: this.chest = equipment;
-      case EquipmentSlotEnum.Weapon: this.weapon = equipment;
+      case EquipmentSlotEnum.Boots:
+        this.boots = equipment;
+        break;
+      case EquipmentSlotEnum.ChestPiece:
+        this.chest = equipment;
+        break;
+      case EquipmentSlotEnum.Weapon:
+        this.weapon = equipment;
+        break;
     }
   }
 
@@ -46,9 +63,15 @@ class PlayerEquipment {
   //
   unequip(slot: EquipmentSlotEnum) {
     switch (slot) {
-      case EquipmentSlotEnum.Boots: this.boots = null;
-      case EquipmentSlotEnum.ChestPiece: this.chest = null;
-      case EquipmentSlotEnum.Weapon: this.weapon = null;
+      case EquipmentSlotEnum.Boots:
+        this.boots = null;
+        break;
+      case EquipmentSlotEnum.ChestPiece:
+        this.chest = null;
+        break;
+      case EquipmentSlotEnum.Weapon:
+        this.weapon = null;
+        break;
     }
   }
 }

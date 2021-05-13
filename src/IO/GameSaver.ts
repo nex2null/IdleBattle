@@ -19,7 +19,7 @@ class GameSaver {
   static loadGame() {
     try {
       var json = fs.readFileSync('game.json');
-      Game.getInstance().loadSerialized(JSON.parse(json));
+      Game.getInstance().load(JSON.parse(json));
     }
     catch {
       // Nom

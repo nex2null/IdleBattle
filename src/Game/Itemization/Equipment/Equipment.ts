@@ -27,7 +27,8 @@ class Equipment extends Item {
     slot: EquipmentSlotEnum,
     implicits: Array<EquipmentImplicit>,
     affixes: Array<EquipmentAffix>,
-    requiredLevel: number
+    requiredLevel: number,
+    id: string | null = null
   ) {
     super(type, ItemSuperTypeEnum.Equipment, rarity, ilvl, 1);
     this.name = name;
@@ -35,7 +36,22 @@ class Equipment extends Item {
     this.implicits = implicits;
     this.affixes = affixes;
     this.requiredLevel = requiredLevel;
-    this.id = Guid.create().toString();
+    this.id = id || Guid.create().toString();
+  }
+
+  // Load from saved data
+  static load(savedData: any) {
+    return new Equipment(
+      savedData.type,
+      savedData.rarity,
+      savedData.ilvl,
+      savedData.name,
+      savedData.slot,
+      savedData.implicits.map((x: any) => EquipmentImplicit.load(x)),
+      savedData.affixes.map((x: any) => EquipmentAffix.load(x)),
+      savedData.requiredLevel,
+      savedData.id
+    );
   }
 }
 

@@ -17,24 +17,26 @@ class Town {
     // Setup properties
     this.totalExperience = savedData.totalExperience || 0;
     this.totalGold = savedData.totalGold || 0;
-    this.equipmentBeingForged = savedData.equipmentBeingForged || null;
+    this.equipmentBeingForged = savedData.equipmentBeingForged != null ? Equipment.load(savedData.equipmentBeingForged) : null;
 
     // Setup inventory
-    this.inventory = new Inventory(savedData.inventory);
+    this.inventory = savedData.inventory ? Inventory.load(savedData.inventory) : new Inventory();
 
     // Setup characters
-    this.playerCharacters = savedData.playerCharacters || [
-      new PlayerCharacter({
-        name: 'Brian',
-        level: 1,
-        hp: 175,
-        mp: 0,
-        str: 10,
-        def: 15,
-        spd: 8,
-        eva: 5,
-      })
-    ]
+    this.playerCharacters = savedData.playerCharacters
+      ? savedData.playerCharacters.map((x: any) => PlayerCharacter.load(x))
+      : [
+        new PlayerCharacter({
+          name: 'Brian',
+          level: 1,
+          hp: 175,
+          mp: 0,
+          str: 10,
+          def: 15,
+          spd: 8,
+          eva: 5,
+        })
+      ];
   }
 }
 

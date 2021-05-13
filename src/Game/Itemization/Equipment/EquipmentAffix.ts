@@ -17,6 +17,16 @@ class EquipmentAffix {
     this.slot = slot;
     this.value = value;
   }
+
+  // Load from saved data
+  static load(savedData: any) {
+    return new EquipmentAffix(
+      savedData.type,
+      savedData.slot,
+      savedData.modifiedStat,
+      savedData.value
+    );
+  }
 }
 
 export default EquipmentAffix;

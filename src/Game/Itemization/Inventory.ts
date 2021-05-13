@@ -7,13 +7,20 @@ import { itemInformations } from './ItemInformation';
 class Inventory {
 
   // Properties
-  items: Array<Item> = [];
+  items: Array<Item>;
 
   // Constructor
-  constructor(savedData: any = null) {
-    if (savedData && savedData.items) {
-      this.items = [...savedData.items];
-    }
+  constructor(items: Array<Item> = []) {
+    this.items = items;
+  }
+
+  //
+  // Load from saved data
+  //
+  static load(savedData: any) {
+    return new Inventory(
+      savedData.items.map((x: any) => Item.load(x))
+    );
   }
 
   //

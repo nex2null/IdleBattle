@@ -93,12 +93,11 @@ class Game {
   }
 
   //
-  // Loads from a serialized object
+  // Loads from saved data
   //
-  loadSerialized(data: any) {
-
-    this.options = new GameOptions(data.options);
-    this.town = new Town(data.town);
+  load(savedData: any) {
+    this.options = new GameOptions(savedData.options);
+    this.town = new Town(savedData.town);
   }
 }
 

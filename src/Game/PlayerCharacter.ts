@@ -4,6 +4,7 @@ import GambitAction from './BattleSystem/Gambits/GambitAction';
 import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyCondition';
 import GambitTypeEnum from './BattleSystem/Enums/GambitTypeEnum';
 import PlayerEquipment from "./PlayerEquipment";
+import Equipment from "./Itemization/Equipment/Equipment";
 
 class PlayerCharacter {
 
@@ -28,7 +29,21 @@ class PlayerCharacter {
     this.str = args.str;
     this.int = args.int;
     this.spd = args.spd;
-    this.equipment = new PlayerEquipment();
+    this.equipment = args.equipment || new PlayerEquipment();
+  }
+
+  // Load from saved data
+  static load(savedData: any) {
+    return new PlayerCharacter({
+      name: savedData.name,
+      level: savedData.level,
+      hp: savedData.hp,
+      mp: savedData.mp,
+      str: savedData.str,
+      int: savedData.int,
+      spd: savedData.spd,
+      equipment: savedData.equipment ? PlayerEquipment.load(savedData.equipment) : null
+    });
   }
 
   // Create a battle character representation of this player character
