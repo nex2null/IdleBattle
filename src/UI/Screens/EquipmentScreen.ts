@@ -90,10 +90,31 @@ class EquipmentScreen implements IScreen {
       width: 24
     });
 
+    // Equipped weapon box
+    this.screenElements.weaponBox = blessed.box({
+      parent: this.screenElements.characterBox,
+      top: 5,
+      height: 5,
+      width: 26,
+      left: 'center',
+      border: {
+        type: 'line'
+      },
+      style: {
+        focus: {
+          bg: 'white',
+          fg: 'black'
+        }
+      },
+      label: 'Weapon',
+      content: 'Empty',
+      tags: true
+    });
+
     // Equipped chestpiece box
     this.screenElements.chestBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 5,
+      top: 11,
       height: 5,
       width: 26,
       left: 'center',
@@ -114,7 +135,7 @@ class EquipmentScreen implements IScreen {
     // Equipped boots box
     this.screenElements.bootsBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 11,
+      top: 17,
       height: 5,
       width: 26,
       left: 'center',
@@ -198,11 +219,16 @@ class EquipmentScreen implements IScreen {
     });
 
     // Set key bindings
-    this.screenElements.characterNameLabel.key(['down'], () => this.screenElements.chestBox.focus());
+    this.screenElements.characterNameLabel.key(['down'], () => this.screenElements.weaponBox.focus());
     this.screenElements.characterNameLabel.key(['right'], () => this.setCurrentPlayer(this.currentPlayerIndex + 1));
     this.screenElements.characterNameLabel.key(['left'], () => this.setCurrentPlayer(this.currentPlayerIndex - 1));
     this.screenElements.characterNameLabel.key(['escape'], () => this.exitScreen());
-    this.screenElements.chestBox.key(['up'], () => this.screenElements.characterNameLabel.focus());
+    this.screenElements.weaponBox.key(['up'], () => this.screenElements.characterNameLabel.focus());
+    this.screenElements.weaponBox.key(['down'], () => this.screenElements.chestBox.focus());
+    this.screenElements.weaponBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.Weapon));
+    this.screenElements.weaponBox.key(['escape'], () => this.exitScreen());
+    this.screenElements.weaponBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Weapon));
+    this.screenElements.chestBox.key(['up'], () => this.screenElements.weaponBox.focus());
     this.screenElements.chestBox.key(['down'], () => this.screenElements.bootsBox.focus());
     this.screenElements.chestBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.ChestPiece));
     this.screenElements.chestBox.key(['escape'], () => this.exitScreen());
@@ -217,6 +243,7 @@ class EquipmentScreen implements IScreen {
 
     // Handle events
     this.screenElements.characterNameLabel.on('focus', () => this.clearCurrentEquipmentDetails());
+    this.screenElements.weaponBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.Weapon));
     this.screenElements.chestBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.ChestPiece));
     this.screenElements.bootsBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.Boots));
 
@@ -277,6 +304,10 @@ class EquipmentScreen implements IScreen {
 
     // Update the name of the character
     this.screenElements.characterNameLabel.setContent(`{center}${character.name}{/}`);
+
+    // Update the weapon name
+    var equippedWeapon = character.equipment.weapon;
+    this.screenElements.weaponBox.setContent(equippedWeapon ? equippedWeapon.name : 'Empty');
 
     // Update the chest piece name
     var equippedChestPiece = character.equipment.chest;
