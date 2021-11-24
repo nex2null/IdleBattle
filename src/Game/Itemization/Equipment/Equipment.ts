@@ -6,6 +6,7 @@ import EquipmentSlotEnum from '../Enums/EquipmentSlotEnum';
 import EquipmentImplicit from './EquipmentImplicit';
 import { Guid } from "guid-typescript";
 import ItemSuperTypeEnum from "../Enums/ItemSuperTypeEnum";
+import StatEnum from "../../Enums/StatEnum";
 
 class Equipment extends Item {
 
@@ -52,6 +53,20 @@ class Equipment extends Item {
       savedData.requiredLevel,
       savedData.id
     );
+  }
+
+  // Get stat value
+  getStatValue(stat: StatEnum) {
+
+    // Grab implicit amount
+    var implicitValues = this.implicits.filter(x => x.stat === stat).map(x => x.value);
+    var implicitAmount = implicitValues.length ? implicitValues.reduce((a, b) => a + b) : 0;
+
+    // Grab affix amount
+    var affixValues = this.affixes.filter(x => x.modifiedStat === stat).map(x => x.value);
+    var affixAmount = affixValues.length ? affixValues.reduce((a, b) => a + b) : 0;
+
+    return implicitAmount + affixAmount;
   }
 }
 

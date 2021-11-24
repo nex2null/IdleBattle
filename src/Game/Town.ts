@@ -29,11 +29,10 @@ class Town {
         new PlayerCharacter({
           name: 'Brian',
           level: 1,
-          hp: 175,
+          hp: 150,
           mp: 0,
-          str: 10,
+          str: 8,
           def: 15,
-          spd: 8,
           eva: 5,
         })
       ];

@@ -4,7 +4,6 @@ import GambitAction from './BattleSystem/Gambits/GambitAction';
 import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyCondition';
 import GambitTypeEnum from './BattleSystem/Enums/GambitTypeEnum';
 import PlayerEquipment from "./PlayerEquipment";
-import Equipment from "./Itemization/Equipment/Equipment";
 
 class PlayerCharacter {
 
@@ -15,7 +14,6 @@ class PlayerCharacter {
   mp: number;
   str: number;
   int: number;
-  spd: number;
 
   // Equipment
   equipment: PlayerEquipment;
@@ -28,7 +26,6 @@ class PlayerCharacter {
     this.mp = args.mp;
     this.str = args.str;
     this.int = args.int;
-    this.spd = args.spd;
     this.equipment = args.equipment || new PlayerEquipment();
   }
 
@@ -54,7 +51,7 @@ class PlayerCharacter {
       hp: this.hp,
       mp: this.mp,
       str: this.str,
-      spd: this.spd,
+      spd: this.equipment.getWeaponSpeed(),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
       gambits: [
