@@ -409,13 +409,13 @@ class BattleScreen implements IScreen {
 
       // Update gauge values
       playerElements.chargeGauge.setPercent(character.currentCharge);
-      playerElements.hpGauge.setPercent((character.hp / character.maxHp) * 100);
-      playerElements.mpGauge.setPercent((character.mp / character.maxMp) * 100);
+      playerElements.hpGauge.setPercent((character.currentStats.hp / character.baseStats.hp) * 100);
+      playerElements.mpGauge.setPercent((character.currentStats.mp / character.baseStats.mp) * 100);
 
       // Update labels
       playerElements.chargeGauge.setLabel(`Charge: ${character.currentCharge}`);
-      playerElements.hpGauge.setLabel(`HP: ${character.hp}`);
-      playerElements.mpGauge.setLabel(`MP: ${character.mp}`);
+      playerElements.hpGauge.setLabel(`HP: ${character.currentStats.hp}`);
+      playerElements.mpGauge.setLabel(`MP: ${character.currentStats.mp}`);
     });
 
     this.battle.dungeon.currentLevel.enemies.forEach((character) => {
@@ -430,13 +430,13 @@ class BattleScreen implements IScreen {
 
       // Update gauge values
       playerElements.chargeGauge.setPercent(character.currentCharge);
-      playerElements.hpGauge.setPercent((character.hp / character.maxHp) * 100);
-      playerElements.mpGauge.setPercent((character.mp / character.maxMp) * 100);
+      playerElements.hpGauge.setPercent((character.currentStats.hp / character.baseStats.hp) * 100);
+      playerElements.mpGauge.setPercent((character.currentStats.mp / character.baseStats.mp) * 100);
 
       // Update labels
       playerElements.chargeGauge.setLabel(`Charge: ${character.currentCharge}`);
-      playerElements.hpGauge.setLabel(`HP: ${character.hp}`);
-      playerElements.mpGauge.setLabel(`MP: ${character.mp}`);
+      playerElements.hpGauge.setLabel(`HP: ${character.currentStats.hp}`);
+      playerElements.mpGauge.setLabel(`MP: ${character.currentStats.mp}`);
     });
   }
 

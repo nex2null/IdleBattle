@@ -21,15 +21,15 @@ class SlowedEffect extends BaseEffect {
     // Handle when the effect is applied
     onApply() {
         // Remove 50% of the character's speed
-        this.removedSpeed = Math.floor(this.character.spd * .5);
-        this.character.spd -= this.removedSpeed;
+        this.removedSpeed = Math.floor(this.character.currentStats.speed * .5);
+        this.character.currentStats.speed -= this.removedSpeed;
     }
 
     // Handle when the effect is removed
     onRemove() {
         // Give the character its speed back
         if (this.removedSpeed)
-            this.character.spd += this.removedSpeed;
+            this.character.currentStats.speed += this.removedSpeed;
     }
 
     // Handle before an action is performed

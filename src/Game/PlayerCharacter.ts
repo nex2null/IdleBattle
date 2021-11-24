@@ -4,6 +4,7 @@ import GambitAction from './BattleSystem/Gambits/GambitAction';
 import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyCondition';
 import GambitTypeEnum from './BattleSystem/Enums/GambitTypeEnum';
 import PlayerEquipment from "./PlayerEquipment";
+import Stats from "./Stats";
 
 class PlayerCharacter {
 
@@ -45,14 +46,17 @@ class PlayerCharacter {
 
   // Create a battle character representation of this player character
   toBattleCharacter(): BattleCharacter {
+    
     return new BattleCharacter({
       name: this.name,
       level: this.level,
-      hp: this.hp,
-      mp: this.mp,
-      str: this.str,
-      spd: this.equipment.getWeaponSpeed(),
-      weaponDamage: this.equipment.getWeaponDamage(),
+      baseStats: new Stats({
+        hp: this.hp,
+        mp: this.mp,
+        strength: this.str,
+        speed: this.equipment.getWeaponSpeed(),
+        weaponBaseDamage: this.equipment.getWeaponDamage()
+      }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
       gambits: [

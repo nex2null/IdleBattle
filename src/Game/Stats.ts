@@ -1,17 +1,58 @@
 class Stats {
-    hp: number = 0;
-    mp: number = 0;
-    strength: number = 0;
-    intelligence: number = 0;
-    speed: number = 0;
-    dodgeChance: number = 0;
-    accuracy: number = 0;
-    physicalPower: number = 0;
-    coldPower: number = 0;
-    firePower: number = 0;
-    lightningPower: number = 0;
-    physicalResistance: number = 0;
-    coldResistance: number = 0;
-    fireResistance: number = 0;
-    lightningResistance: number = 0;
+
+  hp: number;
+  mp: number;
+  strength: number;
+  intelligence: number;
+  speed: number;
+  dodgeChance: number;
+  accuracy: number;
+  physicalPower: number;
+  coldPower: number;
+  firePower: number;
+  lightningPower: number;
+  physicalResistance: number;
+  coldResistance: number;
+  fireResistance: number;
+  lightningResistance: number;
+  weaponBaseDamage: number;
+
+  // Constructor
+  constructor(args: {
+    hp?: number,
+    mp?: number,
+    strength?: number,
+    intelligence?: number,
+    speed?: number,
+    dodgeChance?: number,
+    accuracy?: number,
+    physicalPower?: number,
+    coldPower?: number,
+    firePower?: number,
+    lightningPower?: number,
+    physicalResistance?: number,
+    coldResistance?: number,
+    fireResistance?: number,
+    lightningResistance?: number,
+    weaponBaseDamage?: number
+  }) {
+    this.hp = args.hp || 0;
+    this.mp = args.mp || 0;
+    this.strength = args.strength || 0;
+    this.intelligence = args.intelligence || 0;
+    this.speed = args.speed || 0;
+    this.dodgeChance = args.dodgeChance || 0;
+    this.accuracy = args.accuracy || 0;
+    this.physicalPower = args.physicalPower || 0;
+    this.coldPower = args.coldPower || 0;
+    this.firePower = args.firePower || 0;
+    this.lightningPower = args.lightningPower || 0;
+    this.physicalResistance = args.physicalResistance || 0;
+    this.coldResistance = args.coldResistance || 0;
+    this.fireResistance = args.fireResistance || 0;
+    this.lightningResistance = args.lightningResistance || 0;
+    this.weaponBaseDamage = args.weaponBaseDamage || 0;
+  }
 }
+
+export default Stats;

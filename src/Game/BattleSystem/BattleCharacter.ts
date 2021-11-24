@@ -5,160 +5,161 @@ import GambitAction from './Gambits/GambitAction';
 import BattleLog from './BattleLog';
 import BattleDamage from './BattleDamage';
 import { LootGenerationOption } from '../Itemization/LootGenerator';
+import Stats from '../Stats';
 
 export default class BattleCharacter {
 
-    // Properties
-    name: string;
-    level: number;
-    hp: number;
-    maxHp: number;
-    mp: number;
-    maxMp: number;
-    str: number;
-    int: number;
-    spd: number;
-    weaponDamage: number;
-    currentCharge: number;
-    characterType: BattleCharacterTypeEnum;
-    hostileToCharacterType: BattleCharacterTypeEnum;
-    effects: Array<BaseEffect>;
-    gambits: Array<GambitAction>;
+  // Properties
+  name: string;
+  level: number;
+  currentCharge: number;
+  baseStats: Stats;
+  currentStats: Stats;
+  characterType: BattleCharacterTypeEnum;
+  hostileToCharacterType: BattleCharacterTypeEnum;
+  effects: Array<BaseEffect>;
+  gambits: Array<GambitAction>;
+  // TODO: Refactor enemy specific things to enemy base class
+  maxNumberOfItemsToDrop: number;
+  lootGenerationOptions: Array<LootGenerationOption> = [];
+  goldWorth: number;
+
+  // Constructor
+  constructor(args: {
+    name: string,
+    level: number,
+    baseStats: Stats,
+    characterType: BattleCharacterTypeEnum,
+    hostileToCharacterType: BattleCharacterTypeEnum,
+    gambits: Array<GambitAction>,
+    effects?: Array<BaseEffect>,
+    maxNumberOfItemsToDrop?: number,
+    lootGenerationOptions?: Array<LootGenerationOption>,
+    goldWorth?: number
+  }) {
+    this.name = args.name;
+    this.level = args.level;
+    this.baseStats = args.baseStats;
+    this.currentStats = { ...args.baseStats };
+    this.characterType = args.characterType;
+    this.hostileToCharacterType = args.hostileToCharacterType;
+    this.currentCharge = 0;
+
+    this.gambits = args.gambits;
+    this.effects = args.effects || [];
+
     // TODO: Refactor enemy specific things to enemy base class
-    maxNumberOfItemsToDrop: number;
-    lootGenerationOptions: Array<LootGenerationOption> = [];
-    goldWorth: number;
+    this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;
+    this.lootGenerationOptions = args.lootGenerationOptions || [];
+    this.goldWorth = args.goldWorth || 0;
+  }
 
-    // Constructor
-    constructor(args: any) {
+  // Updates the charge level of the character
+  updateCharge() {
+    if (!this.isAlive())
+      return;
 
-        this.name = args.name;
-        this.level = args.level;
-        this.hp = this.maxHp = args.hp;
-        this.mp = this.maxMp = args.mp;
-        this.str = args.str;
-        this.int = args.int;
-        this.spd = args.spd;
-        this.weaponDamage = args.weaponDamage;
-        this.characterType = args.characterType;
-        this.hostileToCharacterType = args.hostileToCharacterType;
+    this.currentCharge += this.currentStats.speed;
+  }
 
-        this.effects = args.effects || [];
-        this.currentCharge = args.currentCharge || 0;
-        this.gambits = args.gambits || [];
+  // Determines if the character is ready to act
+  isReadyToAct() {
+    return this.isAlive() && this.currentCharge >= 100;
+  }
 
-        // TODO: Refactor enemy specific things to enemy base class
-        this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;
-        this.lootGenerationOptions = args.lootGenerationOptions || [];
-        this.goldWorth = args.goldWorth || 0;
+  // Determines if the character is alive
+  isAlive() {
+    return this.currentStats.hp > 0;
+  }
+
+  // Has the character perform an action
+  act(characters: Array<BattleCharacter>, battleLog: BattleLog) {
+
+    // Do any pre-action work
+    this.beforeActionPerformed();
+
+    // If I am no longer ready to act after pre-action work then do nothing
+    if (!this.isReadyToAct()) {
+      this.actionPerformed();
+      return;
     }
 
-    // Updates the charge level of the character
-    updateCharge() {
-        if (!this.isAlive())
-            return;
-
-        this.currentCharge += this.spd;
+    // Grab the first valid gambit action
+    var gambitAction;
+    for (var i = 0; i < this.gambits.length; i++) {
+      gambitAction = this.gambits[i].getAction(this, characters);
+      if (gambitAction) break;
     }
 
-    // Determines if the character is ready to act
-    isReadyToAct() {
-        return this.isAlive() && this.currentCharge >= 100;
+    // If there is no gambit action then the user has nothing to do
+    if (!gambitAction) {
+      battleLog.addMessage(`${this.name} wanders around aimlessly`);
+      this.actionPerformed();
+      return;
     }
 
-    // Determines if the character is alive
-    isAlive() {
-        return this.hp > 0;
+    // If this is a skill action then use the skill
+    if (gambitAction.type === GambitTypeEnum.Skill) {
+      gambitAction.action.use(this, gambitAction.targets, battleLog);
     }
 
-    // Has the character perform an action
-    act(characters: Array<BattleCharacter>, battleLog: BattleLog) {
+    // Set that an action was performed
+    this.actionPerformed();
+  }
 
-        // Do any pre-action work
-        this.beforeActionPerformed();
+  applyDamage(damage: BattleDamage) {
 
-        // If I am no longer ready to act after pre-action work then do nothing
-        if (!this.isReadyToAct()) {
-            this.actionPerformed();
-            return;
-        }
+    // Allow effects to modify damage before processing
+    this.effects.forEach(x => x.beforeDamageTaken(damage));
 
-        // Grab the first valid gambit action
-        var gambitAction;
-        for (var i = 0; i < this.gambits.length; i++) {
-            gambitAction = this.gambits[i].getAction(this, characters);
-            if (gambitAction) break;
-        }
+    // Round the damage
+    damage.amount = Math.round(damage.amount);
 
-        // If there is no gambit action then the user has nothing to do
-        if (!gambitAction) {
-            battleLog.addMessage(`${this.name} wanders around aimlessly`);
-            this.actionPerformed();
-            return;
-        }
+    // Take the damage
+    this.currentStats.hp -= damage.amount;
 
-        // If this is a skill action then use the skill
-        if (gambitAction.type === GambitTypeEnum.Skill) {
-            gambitAction.action.use(this, gambitAction.targets, battleLog);
-        }
+    // Don't allow hp to become negative
+    this.currentStats.hp = this.currentStats.hp < 0 ? 0 : this.currentStats.hp;
 
-        // Set that an action was performed
-        this.actionPerformed();
-    }
+    // Allow effects to process damage taken
+    this.effects.forEach(x => x.afterDamageTaken(damage));
 
-    applyDamage(damage: BattleDamage) {
+    // If the character has died, set charge to 0
+    if (!this.isAlive())
+      this.currentCharge = 0;
+  }
 
-        // Allow effects to modify damage before processing
-        this.effects.forEach(x => x.beforeDamageTaken(damage));
+  beforeActionPerformed() {
 
-        // Round the damage
-        damage.amount = Math.round(damage.amount);
+    // Allow effects to trigger before an action has been performed
+    this.effects.forEach(x => x.beforeActionPerformed());
+  }
 
-        // Take the damage
-        this.hp -= damage.amount;
+  actionPerformed() {
 
-        // Don't allow hp to become negative
-        this.hp = this.hp < 0 ? 0 : this.hp;
+    this.currentCharge = 0;
 
-        // Allow effects to process damage taken
-        this.effects.forEach(x => x.afterDamageTaken(damage));
+    // Allow effects to trigger after an action has been performed
+    this.effects.forEach(x => x.afterActionPerformed());
+  }
 
-        // If the character has died, set charge to 0
-        if (!this.isAlive())
-            this.currentCharge = 0;
-    }
+  addEffect(effect: BaseEffect) {
 
-    beforeActionPerformed() {
+    // Make sure we can add the effect
+    if (!effect.canApply())
+      return;
 
-        // Allow effects to trigger before an action has been performed
-        this.effects.forEach(x => x.beforeActionPerformed());
-    }
+    // Apply the effect
+    effect.onApply();
+    this.effects.push(effect);
+  }
 
-    actionPerformed() {
+  removeEffect(effect: BaseEffect) {
+    effect.onRemove();
+    this.effects = this.effects.filter(x => x !== effect);
+  }
 
-        this.currentCharge = 0;
-
-        // Allow effects to trigger after an action has been performed
-        this.effects.forEach(x => x.afterActionPerformed());
-    }
-
-    addEffect(effect: BaseEffect) {
-
-        // Make sure we can add the effect
-        if (!effect.canApply())
-            return;
-
-        // Apply the effect
-        effect.onApply();
-        this.effects.push(effect);
-    }
-
-    removeEffect(effect: BaseEffect) {
-        effect.onRemove();
-        this.effects = this.effects.filter(x => x !== effect);
-    }
-
-    getEffect(name: string) {
-        return this.effects.find(x => x.name === name);
-    }
+  getEffect(name: string) {
+    return this.effects.find(x => x.name === name);
+  }
 }
