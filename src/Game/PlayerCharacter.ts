@@ -52,6 +52,7 @@ class PlayerCharacter {
       mp: this.mp,
       str: this.str,
       spd: this.equipment.getWeaponSpeed(),
+      weaponDamage: this.equipment.getWeaponDamage(),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
       gambits: [

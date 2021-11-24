@@ -13,11 +13,12 @@ class Spider extends BattleCharacter {
     super({
       name: name,
       level: 1,
-      hp: 100,
+      hp: 75,
       mp: 0,
       str: 1,
       def: 5,
       spd: 7,
+      weaponDamage: 8,
       eva: 4,
       characterType: BattleCharacterTypeEnum.EnemyParty,
       hostileToCharacterType: BattleCharacterTypeEnum.PlayerParty,
@@ -29,9 +30,9 @@ class Spider extends BattleCharacter {
       minNumberOfItemsToDrop: 0,
       maxNumberOfItemsToDrop: 1,
       lootGenerationOptions: [
-        new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 50)
+        new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 25)
       ],
-      goldWorth: 50
+      goldWorth: 75
     })
   }
 }

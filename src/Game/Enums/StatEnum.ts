@@ -13,7 +13,8 @@ enum StatEnum {
   PhysicalResistance = 'physical-resistance',
   ColdResistance = 'cold-resistance',
   FireResistance = 'fire-resistance',
-  LightningResistance = 'lightning-resistance'
+  LightningResistance = 'lightning-resistance',
+  WeaponBaseDamage = 'base-damage'
 }
 
 export default StatEnum;

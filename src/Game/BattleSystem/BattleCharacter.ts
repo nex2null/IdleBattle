@@ -18,6 +18,7 @@ export default class BattleCharacter {
     str: number;
     int: number;
     spd: number;
+    weaponDamage: number;
     currentCharge: number;
     characterType: BattleCharacterTypeEnum;
     hostileToCharacterType: BattleCharacterTypeEnum;
@@ -38,6 +39,7 @@ export default class BattleCharacter {
         this.str = args.str;
         this.int = args.int;
         this.spd = args.spd;
+        this.weaponDamage = args.weaponDamage;
         this.characterType = args.characterType;
         this.hostileToCharacterType = args.hostileToCharacterType;
 
