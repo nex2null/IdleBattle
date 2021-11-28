@@ -50,6 +50,27 @@ class Stats {
     this.fireResistance = args.fireResistance || 0;
     this.lightningResistance = args.lightningResistance || 0;
   }
+
+  // Load from saved data
+  static load(savedData: any) {
+    return new Stats({
+      hp: savedData.hp,
+      mp: savedData.mp,
+      strength: savedData.strength,
+      intelligence: savedData.intelligence,
+      speed: savedData.speed,
+      dodgeChance: savedData.dodgeChance,
+      accuracy: savedData.accuracy,
+      physicalPower: savedData.physicalPower,
+      coldPower: savedData.coldPower,
+      firePower: savedData.firePower,
+      lightningPower: savedData.lightningPower,
+      physicalResistance: savedData.physicalResistance,
+      coldResistance: savedData.coldResistance,
+      fireResistance: savedData.fireResistance,
+      lightningResistance: savedData.lightningResistance
+    });
+  }
 }
 
 export default Stats;

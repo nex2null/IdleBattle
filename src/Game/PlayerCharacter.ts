@@ -30,18 +30,13 @@ class PlayerCharacter {
     return new PlayerCharacter({
       name: savedData.name,
       level: savedData.level,
-      hp: savedData.hp,
-      mp: savedData.mp,
-      str: savedData.str,
-      int: savedData.int,
-      spd: savedData.spd,
+      stats: Stats.load(savedData.stats),
       equipment: savedData.equipment ? PlayerEquipment.load(savedData.equipment) : null
     });
   }
 
   // Create a battle character representation of this player character
   toBattleCharacter(): BattleCharacter {
-    
     return new BattleCharacter({
       name: this.name,
       level: this.level,
