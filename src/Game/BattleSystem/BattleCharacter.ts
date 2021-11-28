@@ -7,6 +7,8 @@ import BattleDamage from './BattleDamage';
 import { LootGenerationOption } from '../Itemization/LootGenerator';
 import Stats from '../Stats';
 
+const REQUIRED_CHARGE_TO_ACT = 250;
+
 export default class BattleCharacter {
 
   // Properties
@@ -64,7 +66,7 @@ export default class BattleCharacter {
 
   // Determines if the character is ready to act
   isReadyToAct() {
-    return this.isAlive() && this.currentCharge >= 100;
+    return this.isAlive() && this.currentCharge >= REQUIRED_CHARGE_TO_ACT;
   }
 
   // Determines if the character is alive
@@ -137,7 +139,7 @@ export default class BattleCharacter {
 
   actionPerformed() {
 
-    this.currentCharge = 0;
+    this.currentCharge -= REQUIRED_CHARGE_TO_ACT;
 
     // Allow effects to trigger after an action has been performed
     this.effects.forEach(x => x.afterActionPerformed());

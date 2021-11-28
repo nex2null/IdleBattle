@@ -15,7 +15,6 @@ class Stats {
   coldResistance: number;
   fireResistance: number;
   lightningResistance: number;
-  weaponBaseDamage: number;
 
   // Constructor
   constructor(args: {
@@ -33,8 +32,7 @@ class Stats {
     physicalResistance?: number,
     coldResistance?: number,
     fireResistance?: number,
-    lightningResistance?: number,
-    weaponBaseDamage?: number
+    lightningResistance?: number
   }) {
     this.hp = args.hp || 0;
     this.mp = args.mp || 0;
@@ -51,7 +49,6 @@ class Stats {
     this.coldResistance = args.coldResistance || 0;
     this.fireResistance = args.fireResistance || 0;
     this.lightningResistance = args.lightningResistance || 0;
-    this.weaponBaseDamage = args.weaponBaseDamage || 0;
   }
 }
 

@@ -75,32 +75,6 @@ class PlayerEquipment {
         break;
     }
   }
-
-  //
-  // Get weapon speed
-  //
-  getWeaponSpeed() {
-
-    // Unequipped attack speed is always 10
-    if (!this.weapon)
-      return 10;
-
-    // Get weapon speed
-    return this.weapon.getStatValue(StatEnum.Speed);
-  }
-
-  //
-  // Get weapon damage
-  //
-  getWeaponDamage() {
-
-    // Unequipped weapon damage is always 5
-    if (!this.weapon)
-      return 5;
-
-    // Get weapon damage
-    return this.weapon.getStatValue(StatEnum.WeaponBaseDamage);
-  }
 }
 
 export default PlayerEquipment;

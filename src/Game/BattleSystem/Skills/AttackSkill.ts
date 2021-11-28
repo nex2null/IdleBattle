@@ -21,8 +21,8 @@ class AttackSkill implements ISkill {
     // Calculate the attack damage
     calculateDamage(user: BattleCharacter, target: BattleCharacter) {
 
-        // Base damage is just the weapon damage plus the user's strength
-        var baseDamageAmount = user.currentStats.strength + user.currentStats.weaponBaseDamage;
+        // Base damage is user strength
+        var baseDamageAmount = user.currentStats.strength;
         var baseDamage = new BattleDamage(baseDamageAmount, DamageTypeEnum.Physical);
 
         // Process the base damage

@@ -14,11 +14,10 @@ class Spider extends BattleCharacter {
       name: name,
       level: 1,
       baseStats: new Stats({
-        hp: 75,
+        hp: 25,
         mp: 0,
-        strength: 1,
-        speed: 7,
-        weaponBaseDamage: 8
+        strength: 3,
+        speed: 14,
       }),
       characterType: BattleCharacterTypeEnum.EnemyParty,
       hostileToCharacterType: BattleCharacterTypeEnum.PlayerParty,

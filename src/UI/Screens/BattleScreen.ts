@@ -408,12 +408,12 @@ class BattleScreen implements IScreen {
       }
 
       // Update gauge values
-      playerElements.chargeGauge.setPercent(character.currentCharge);
+      playerElements.chargeGauge.setPercent(character.currentCharge / 250 * 100);
       playerElements.hpGauge.setPercent((character.currentStats.hp / character.baseStats.hp) * 100);
       playerElements.mpGauge.setPercent((character.currentStats.mp / character.baseStats.mp) * 100);
 
       // Update labels
-      playerElements.chargeGauge.setLabel(`Charge: ${character.currentCharge}`);
+      playerElements.chargeGauge.setLabel(`Charge: ${Math.round(character.currentCharge / 250 * 100)}%`);
       playerElements.hpGauge.setLabel(`HP: ${character.currentStats.hp}`);
       playerElements.mpGauge.setLabel(`MP: ${character.currentStats.mp}`);
     });
@@ -429,12 +429,12 @@ class BattleScreen implements IScreen {
       }
 
       // Update gauge values
-      playerElements.chargeGauge.setPercent(character.currentCharge);
+      playerElements.chargeGauge.setPercent(character.currentCharge / 250 * 100);
       playerElements.hpGauge.setPercent((character.currentStats.hp / character.baseStats.hp) * 100);
       playerElements.mpGauge.setPercent((character.currentStats.mp / character.baseStats.mp) * 100);
 
       // Update labels
-      playerElements.chargeGauge.setLabel(`Charge: ${character.currentCharge}`);
+      playerElements.chargeGauge.setLabel(`Charge: ${Math.round(character.currentCharge / 250 * 100)}%`);
       playerElements.hpGauge.setLabel(`HP: ${character.currentStats.hp}`);
       playerElements.mpGauge.setLabel(`MP: ${character.currentStats.mp}`);
     });

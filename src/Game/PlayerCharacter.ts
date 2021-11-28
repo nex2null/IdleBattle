@@ -5,6 +5,7 @@ import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyConditi
 import GambitTypeEnum from './BattleSystem/Enums/GambitTypeEnum';
 import PlayerEquipment from "./PlayerEquipment";
 import Stats from "./Stats";
+import StatEnum from "./Enums/StatEnum";
 
 class PlayerCharacter {
 
@@ -53,9 +54,8 @@ class PlayerCharacter {
       baseStats: new Stats({
         hp: this.hp,
         mp: this.mp,
-        strength: this.str,
-        speed: this.equipment.getWeaponSpeed(),
-        weaponBaseDamage: this.equipment.getWeaponDamage()
+        strength: this.str + (this.equipment.weapon ? this.equipment.weapon?.getStatValue(StatEnum.Strength) : 0),
+        speed: this.equipment.weapon ? this.equipment.weapon.getStatValue(StatEnum.Speed) : 20
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
