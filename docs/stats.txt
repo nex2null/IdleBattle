@@ -1,6 +1,6 @@
 Stats
 {
-  Investable Stats
+  Basic Stats
   {
     Strength
       - Physical output

@@ -12,10 +12,7 @@ class PlayerCharacter {
   // Properties
   name: string;
   level: number;
-  hp: number;
-  mp: number;
-  str: number;
-  int: number;
+  stats: Stats;
 
   // Equipment
   equipment: PlayerEquipment;
@@ -24,10 +21,7 @@ class PlayerCharacter {
   constructor(args: any) {
     this.name = args.name;
     this.level = args.level;
-    this.hp = args.hp;
-    this.mp = args.mp;
-    this.str = args.str;
-    this.int = args.int;
+    this.stats = args.stats;
     this.equipment = args.equipment || new PlayerEquipment();
   }
 
@@ -52,10 +46,11 @@ class PlayerCharacter {
       name: this.name,
       level: this.level,
       baseStats: new Stats({
-        hp: this.hp,
-        mp: this.mp,
-        strength: this.str + (this.equipment.weapon ? this.equipment.weapon?.getStatValue(StatEnum.Strength) : 0),
-        speed: this.equipment.weapon ? this.equipment.weapon.getStatValue(StatEnum.Speed) : 20
+        hp: this.stats.hp,
+        mp: this.stats.mp,
+        strength: this.stats.strength + this.equipment.getStatValue(StatEnum.Strength),
+        intelligence: this.stats.intelligence + this.equipment.getStatValue(StatEnum.Intelligence),
+        speed: this.equipment.weapon ? this.equipment.getStatValue(StatEnum.Speed) : this.equipment.getStatValue(StatEnum.Speed) + 20
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
