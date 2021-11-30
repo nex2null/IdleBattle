@@ -51,7 +51,7 @@ class AttackSkill implements ISkill {
             target.applyDamage(damageToDo);
 
             // Log
-            battleLog.addMessage(`${character.name} attacks ${target.name} for ${damageToDo.amount} damage`);
+            battleLog.addMessage(`${character.name} attacks ${target.name} for ${damageToDo.getTotalAmount()} damage`);
             if (!target.isAlive()) battleLog.addMessage(`${target.name} has died`);
         }
         else {

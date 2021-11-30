@@ -18,6 +18,7 @@ class Spider extends BattleCharacter {
         mp: 0,
         strength: 3,
         speed: 14,
+        physicalResistance: 50
       }),
       characterType: BattleCharacterTypeEnum.EnemyParty,
       hostileToCharacterType: BattleCharacterTypeEnum.PlayerParty,

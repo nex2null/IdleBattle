@@ -21,6 +21,7 @@ export default class BattleCharacter {
   hostileToCharacterType: BattleCharacterTypeEnum;
   effects: Array<BaseEffect>;
   gambits: Array<GambitAction>;
+
   // TODO: Refactor enemy specific things to enemy base class
   maxNumberOfItemsToDrop: number;
   lootGenerationOptions: Array<LootGenerationOption> = [];
@@ -115,10 +116,10 @@ export default class BattleCharacter {
     this.effects.forEach(x => x.beforeDamageTaken(damage));
 
     // Round the damage
-    damage.amount = Math.round(damage.amount);
+    damage.round();
 
     // Take the damage
-    this.currentStats.hp -= damage.amount;
+    this.currentStats.hp -= damage.getTotalAmount();
 
     // Don't allow hp to become negative
     this.currentStats.hp = this.currentStats.hp < 0 ? 0 : this.currentStats.hp;
