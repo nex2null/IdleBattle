@@ -4,16 +4,15 @@ import GambitAction from './BattleSystem/Gambits/GambitAction';
 import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyCondition';
 import GambitTypeEnum from './BattleSystem/Enums/GambitTypeEnum';
 import PlayerEquipment from "./PlayerEquipment";
+import Stats from "./Stats";
+import StatEnum from "./Enums/StatEnum";
 
 class PlayerCharacter {
 
   // Properties
   name: string;
   level: number;
-  hp: number;
-  mp: number;
-  str: number;
-  int: number;
+  stats: Stats;
 
   // Equipment
   equipment: PlayerEquipment;
@@ -22,10 +21,7 @@ class PlayerCharacter {
   constructor(args: any) {
     this.name = args.name;
     this.level = args.level;
-    this.hp = args.hp;
-    this.mp = args.mp;
-    this.str = args.str;
-    this.int = args.int;
+    this.stats = args.stats;
     this.equipment = args.equipment || new PlayerEquipment();
   }
 
@@ -34,11 +30,7 @@ class PlayerCharacter {
     return new PlayerCharacter({
       name: savedData.name,
       level: savedData.level,
-      hp: savedData.hp,
-      mp: savedData.mp,
-      str: savedData.str,
-      int: savedData.int,
-      spd: savedData.spd,
+      stats: Stats.load(savedData.stats),
       equipment: savedData.equipment ? PlayerEquipment.load(savedData.equipment) : null
     });
   }
@@ -48,11 +40,21 @@ class PlayerCharacter {
     return new BattleCharacter({
       name: this.name,
       level: this.level,
-      hp: this.hp,
-      mp: this.mp,
-      str: this.str,
-      spd: this.equipment.getWeaponSpeed(),
-      weaponDamage: this.equipment.getWeaponDamage(),
+      baseStats: new Stats({
+        hp: this.stats.hp + this.equipment.getStatValue(StatEnum.Hp),
+        mp: this.stats.mp + this.equipment.getStatValue(StatEnum.Mp),
+        strength: this.stats.strength + this.equipment.getStatValue(StatEnum.Strength),
+        intelligence: this.stats.intelligence + this.equipment.getStatValue(StatEnum.Intelligence),
+        speed: this.equipment.weapon ? this.equipment.getStatValue(StatEnum.Speed) : this.equipment.getStatValue(StatEnum.Speed) + 20,
+        firePower: this.equipment.getStatValue(StatEnum.FirePower),
+        coldPower: this.equipment.getStatValue(StatEnum.ColdPower),
+        lightningPower: this.equipment.getStatValue(StatEnum.LightningPower),
+        physicalPower: this.equipment.getStatValue(StatEnum.PhysicalPower),
+        fireResistance: this.equipment.getStatValue(StatEnum.FireResistance),
+        coldResistance: this.equipment.getStatValue(StatEnum.ColdResistance),
+        lightningResistance: this.equipment.getStatValue(StatEnum.LightningResistance),
+        physicalResistance: this.equipment.getStatValue(StatEnum.PhysicalResistance)
+      }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
       gambits: [

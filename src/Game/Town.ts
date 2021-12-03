@@ -1,6 +1,7 @@
 import PlayerCharacter from "./PlayerCharacter";
 import Inventory from './Itemization/Inventory';
 import Equipment from "./Itemization/Equipment/Equipment";
+import Stats from "./Stats";
 
 class Town {
 
@@ -29,11 +30,12 @@ class Town {
         new PlayerCharacter({
           name: 'Brian',
           level: 1,
-          hp: 150,
-          mp: 0,
-          str: 8,
-          def: 15,
-          eva: 5,
+          stats: new Stats({
+            hp: 75,
+            mp: 50,
+            strength: 8,
+            intelligence: 6
+          })
         })
       ];
   }

@@ -77,29 +77,14 @@ class PlayerEquipment {
   }
 
   //
-  // Get weapon speed
+  // Gets total value of stat on all equipment
   //
-  getWeaponSpeed() {
-
-    // Unequipped attack speed is always 10
-    if (!this.weapon)
-      return 10;
-
-    // Get weapon speed
-    return this.weapon.getStatValue(StatEnum.Speed);
-  }
-
-  //
-  // Get weapon damage
-  //
-  getWeaponDamage() {
-
-    // Unequipped weapon damage is always 5
-    if (!this.weapon)
-      return 5;
-
-    // Get weapon damage
-    return this.weapon.getStatValue(StatEnum.WeaponBaseDamage);
+  getStatValue(stat: StatEnum) {
+    var amt = 0;
+    if (this.weapon) amt += this.weapon.getStatValue(stat);
+    if (this.chest) amt += this.chest.getStatValue(stat);
+    if (this.boots) amt += this.boots.getStatValue(stat);
+    return amt;
   }
 }
 

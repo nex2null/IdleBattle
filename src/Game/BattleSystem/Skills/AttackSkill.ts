@@ -21,8 +21,8 @@ class AttackSkill implements ISkill {
     // Calculate the attack damage
     calculateDamage(user: BattleCharacter, target: BattleCharacter) {
 
-        // Base damage is just the weapon damage plus the user's strength
-        var baseDamageAmount = user.str + user.weaponDamage;
+        // Base damage is user strength
+        var baseDamageAmount = user.currentStats.strength;
         var baseDamage = new BattleDamage(baseDamageAmount, DamageTypeEnum.Physical);
 
         // Process the base damage
@@ -51,7 +51,7 @@ class AttackSkill implements ISkill {
             target.applyDamage(damageToDo);
 
             // Log
-            battleLog.addMessage(`${character.name} attacks ${target.name} for ${damageToDo.amount} damage`);
+            battleLog.addMessage(`${character.name} attacks ${target.name} for ${damageToDo.getTotalAmount()} damage`);
             if (!target.isAlive()) battleLog.addMessage(`${target.name} has died`);
         }
         else {

@@ -5,21 +5,21 @@ import GambitTypeEnum from '../Enums/GambitTypeEnum';
 import EnemyAnyCondition from '../Gambits/Conditions/EnemyAnyCondition';
 import SelfCondition from '../Gambits/Conditions/SelfCondition';
 import { LootGenerationOption } from '../../Itemization/LootGenerator';
-import ItemSuperTypeEnum from '../../Itemization/Enums/ItemSuperTypeEnum';
 import ItemTypeEnum from '../../Itemization/Enums/ItemTypeEnum';
+import Stats from '../../Stats';
 
 class Spider extends BattleCharacter {
   constructor(name: string) {
     super({
       name: name,
       level: 1,
-      hp: 75,
-      mp: 0,
-      str: 1,
-      def: 5,
-      spd: 7,
-      weaponDamage: 8,
-      eva: 4,
+      baseStats: new Stats({
+        hp: 25,
+        mp: 0,
+        strength: 3,
+        speed: 14,
+        physicalResistance: 50
+      }),
       characterType: BattleCharacterTypeEnum.EnemyParty,
       hostileToCharacterType: BattleCharacterTypeEnum.PlayerParty,
       gambits: [
@@ -27,13 +27,12 @@ class Spider extends BattleCharacter {
         new GambitAction(new EnemyAnyCondition(), null, GambitTypeEnum.Skill, 'Web Shoot', 0.1),
         new GambitAction(new EnemyAnyCondition(), null, GambitTypeEnum.Skill, 'Attack')
       ],
-      minNumberOfItemsToDrop: 0,
       maxNumberOfItemsToDrop: 1,
       lootGenerationOptions: [
         new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 25)
       ],
       goldWorth: 75
-    })
+    });
   }
 }
 
