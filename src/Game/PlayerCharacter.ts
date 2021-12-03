@@ -1,11 +1,11 @@
 import BattleCharacter from "./BattleSystem/BattleCharacter";
 import BattleCharacterTypeEnum from './BattleSystem/Enums/BattleCharacterTypeEnum';
-import GambitAction from './BattleSystem/Gambits/GambitAction';
+import Gambit from './BattleSystem/Gambits/Gambit';
 import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyCondition';
-import GambitTypeEnum from './BattleSystem/Enums/GambitTypeEnum';
 import PlayerEquipment from "./PlayerEquipment";
 import Stats from "./Stats";
 import StatEnum from "./Enums/StatEnum";
+import SkillEnum from "./BattleSystem/Enums/SkillEnum";
 
 class PlayerCharacter {
 
@@ -58,8 +58,8 @@ class PlayerCharacter {
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
       gambits: [
-        new GambitAction(new EnemyAnyCondition(), null, GambitTypeEnum.Skill, 'Power Strike'),
-        new GambitAction(new EnemyAnyCondition(), null, GambitTypeEnum.Skill, 'Attack')
+        new Gambit(new EnemyAnyCondition(), null, SkillEnum.PowerStrike),
+        new Gambit(new EnemyAnyCondition(), null, SkillEnum.Attack)
       ]
     });
   }

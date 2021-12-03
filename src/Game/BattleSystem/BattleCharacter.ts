@@ -1,7 +1,6 @@
-import GambitTypeEnum from './Enums/GambitTypeEnum';
 import BattleCharacterTypeEnum from './Enums/BattleCharacterTypeEnum';
 import BaseEffect from './BattleEffects/BaseEffect';
-import GambitAction from './Gambits/GambitAction';
+import Gambit from './Gambits/Gambit';
 import BattleLog from './BattleLog';
 import BattleDamage from './BattleDamage';
 import { LootGenerationOption } from '../Itemization/LootGenerator';
@@ -20,7 +19,7 @@ export default class BattleCharacter {
   characterType: BattleCharacterTypeEnum;
   hostileToCharacterType: BattleCharacterTypeEnum;
   effects: Array<BaseEffect>;
-  gambits: Array<GambitAction>;
+  gambits: Array<Gambit>;
 
   // TODO: Refactor enemy specific things to enemy base class
   maxNumberOfItemsToDrop: number;
@@ -34,7 +33,7 @@ export default class BattleCharacter {
     baseStats: Stats,
     characterType: BattleCharacterTypeEnum,
     hostileToCharacterType: BattleCharacterTypeEnum,
-    gambits: Array<GambitAction>,
+    gambits: Array<Gambit>,
     effects?: Array<BaseEffect>,
     maxNumberOfItemsToDrop?: number,
     lootGenerationOptions?: Array<LootGenerationOption>,
@@ -107,10 +106,8 @@ export default class BattleCharacter {
       return;
     }
 
-    // If this is a skill action then use the skill
-    if (gambitAction.type === GambitTypeEnum.Skill) {
-      gambitAction.action.use(this, gambitAction.targets, battleLog);
-    }
+    // Use the gambit's skill
+    gambitAction.skill.use(this, gambitAction.targets, battleLog);
 
     // Set that an action was performed
     this.actionPerformed();
