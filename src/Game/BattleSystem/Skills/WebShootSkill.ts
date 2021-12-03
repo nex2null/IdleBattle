@@ -7,43 +7,50 @@ import BattleLog from '../BattleLog';
 
 class WebShootSkill implements ISkill {
 
-    // Properties
-    name: string;
-    targetType: TargetTypeEnum;
+  // Properties
+  name: string;
+  targetType: TargetTypeEnum;
 
-    // Constructor
-    constructor() {
-        this.name = 'Web Shoot';
-        this.targetType = TargetTypeEnum.Single;
+  // Constructor
+  constructor() {
+    this.name = 'Web Shoot';
+    this.targetType = TargetTypeEnum.Single;
+  }
+
+  // Determine if the skill can be used
+  canUse(
+    character: BattleCharacter,
+    targets: Array<BattleCharacter>): boolean {
+      return true;
+  }
+
+  // Use the skill
+  use(
+    character: BattleCharacter,
+    targets: Array<BattleCharacter>,
+    battleLog: BattleLog
+  ) {
+    // Only first target is ever relevant
+    var target = targets[0];
+
+    // Determine if the attack hits
+    var attackHits = calculateHit(character, target);
+
+    // If the attack hits then apply the slow
+    if (attackHits) {
+      var slowedEffect = new SlowedEffect(target, 3);
+      target.addEffect(slowedEffect);
+      battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}, they are slowed!`);
     }
-
-    // Use the skill
-    use(
-        character: BattleCharacter,
-        targets: Array<BattleCharacter>,
-        battleLog: BattleLog
-    ) {
-        // Only first target is ever relevant
-        var target = targets[0];
-
-        // Determine if the attack hits
-        var attackHits = calculateHit(character, target);
-
-        // If the attack hits then apply the slow
-        if (attackHits) {
-            var slowedEffect = new SlowedEffect(target, 3);
-            target.addEffect(slowedEffect);
-            battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}, they are slowed!`);
-        }
-        else {
-            battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}, but misses!`)
-        }
+    else {
+      battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}, but misses!`)
     }
+  }
 
-    // Determine if the skill is benefecial
-    isBeneficialOn(target: BattleCharacter) {
-        return target.getEffect('Slowed') == null;
-    }
+  // Determine if the skill is benefecial
+  isBeneficialOn(target: BattleCharacter) {
+    return target.getEffect('Slowed') == null;
+  }
 }
 
 export default WebShootSkill;

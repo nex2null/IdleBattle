@@ -59,10 +59,16 @@ export default class BattleCharacter {
 
   // Updates the charge level of the character
   updateCharge() {
+
     if (!this.isAlive())
       return;
 
-    this.currentCharge += this.currentStats.speed;
+    // Figure out how much charge to add
+    var chargeToAdd = this.currentStats.speed;
+
+    // Add the charge to current charge and process the 'tick'
+    this.currentCharge += chargeToAdd;
+    this.effects.forEach(x => x.processChargeTick(chargeToAdd));
   }
 
   // Determines if the character is ready to act
@@ -154,7 +160,6 @@ export default class BattleCharacter {
 
     // Apply the effect
     effect.onApply();
-    this.effects.push(effect);
   }
 
   removeEffect(effect: BaseEffect) {
@@ -164,5 +169,16 @@ export default class BattleCharacter {
 
   getEffect(name: string) {
     return this.effects.find(x => x.name === name);
+  }
+
+  // Determine if this character has enough mp to use an ability
+  canSpendMp(mp: number): boolean {
+    return this.currentStats.mp >= mp;
+  }
+
+  // Spend MP
+  spendMp(mp: number) {
+    this.currentStats.mp -= mp;
+    if (this.currentStats.mp < 0) this.currentStats.mp = 0;
   }
 }

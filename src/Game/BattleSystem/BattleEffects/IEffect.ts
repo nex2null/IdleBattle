@@ -29,6 +29,9 @@ interface IEffect {
 
   // Handle after damage is taken
   afterDamageTaken(damage: BattleDamage): void;
+
+  // Process charge being ticked
+  processChargeTick(charge: number): void;
 }
 
 export default IEffect;

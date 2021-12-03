@@ -18,6 +18,11 @@ interface ISkill {
     character: BattleCharacter,
     targets: Array<BattleCharacter>,
     battleLog: BattleLog): void;
+
+  // Determine if the skill can be used
+  canUse(
+    character: BattleCharacter,
+    targets: Array<BattleCharacter>): boolean;
 }
 
 export default ISkill;

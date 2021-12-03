@@ -6,34 +6,41 @@ import BattleLog from '../BattleLog';
 
 class DefendSkill implements ISkill {
 
-    // Properties
-    name: string;
-    targetType: TargetTypeEnum;
+  // Properties
+  name: string;
+  targetType: TargetTypeEnum;
 
-    // Constructor
-    constructor() {
-        this.name = 'Defend';
-        this.targetType = TargetTypeEnum.Self;
-    }
+  // Constructor
+  constructor() {
+    this.name = 'Defend';
+    this.targetType = TargetTypeEnum.Self;
+  }
 
-    // Use the skill
-    use(
-        character: BattleCharacter,
-        targets: Array<BattleCharacter>,
-        battleLog: BattleLog
-    ) {
-        // Add a defense effect to the character
-        var defenseEffect = new DefenseEffect(character);
-        character.addEffect(defenseEffect);
+  // Determine if the skill can be used
+  canUse(
+    character: BattleCharacter,
+    targets: Array<BattleCharacter>): boolean {
+      return true;
+  }
 
-        // Log that the character is defending
-        battleLog.addMessage(`${character.name} defends`);
-    }
+  // Use the skill
+  use(
+    character: BattleCharacter,
+    targets: Array<BattleCharacter>,
+    battleLog: BattleLog
+  ) {
+    // Add a defense effect to the character
+    var defenseEffect = new DefenseEffect(character);
+    character.addEffect(defenseEffect);
 
-    // Determine if the skill is benefecial
-    isBeneficialOn(target: BattleCharacter) {
-        return true;
-    }
+    // Log that the character is defending
+    battleLog.addMessage(`${character.name} defends`);
+  }
+
+  // Determine if the skill is benefecial
+  isBeneficialOn(target: BattleCharacter) {
+    return true;
+  }
 }
 
 export default DefendSkill;
