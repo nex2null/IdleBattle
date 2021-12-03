@@ -41,11 +41,19 @@ class PlayerCharacter {
       name: this.name,
       level: this.level,
       baseStats: new Stats({
-        hp: this.stats.hp,
-        mp: this.stats.mp,
+        hp: this.stats.hp + this.equipment.getStatValue(StatEnum.Hp),
+        mp: this.stats.mp + this.equipment.getStatValue(StatEnum.Mp),
         strength: this.stats.strength + this.equipment.getStatValue(StatEnum.Strength),
         intelligence: this.stats.intelligence + this.equipment.getStatValue(StatEnum.Intelligence),
-        speed: this.equipment.weapon ? this.equipment.getStatValue(StatEnum.Speed) : this.equipment.getStatValue(StatEnum.Speed) + 20
+        speed: this.equipment.weapon ? this.equipment.getStatValue(StatEnum.Speed) : this.equipment.getStatValue(StatEnum.Speed) + 20,
+        firePower: this.equipment.getStatValue(StatEnum.FirePower),
+        coldPower: this.equipment.getStatValue(StatEnum.ColdPower),
+        lightningPower: this.equipment.getStatValue(StatEnum.LightningPower),
+        physicalPower: this.equipment.getStatValue(StatEnum.PhysicalPower),
+        fireResistance: this.equipment.getStatValue(StatEnum.FireResistance),
+        coldResistance: this.equipment.getStatValue(StatEnum.ColdResistance),
+        lightningResistance: this.equipment.getStatValue(StatEnum.LightningResistance),
+        physicalResistance: this.equipment.getStatValue(StatEnum.PhysicalResistance)
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,

@@ -82,7 +82,7 @@ class PlayerEquipment {
   getStatValue(stat: StatEnum) {
     var amt = 0;
     if (this.weapon) amt += this.weapon.getStatValue(stat);
-    if (this.chest) amt + this.chest.getStatValue(stat);
+    if (this.chest) amt += this.chest.getStatValue(stat);
     if (this.boots) amt += this.boots.getStatValue(stat);
     return amt;
   }
