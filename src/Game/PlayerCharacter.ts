@@ -58,6 +58,7 @@ class PlayerCharacter {
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
       gambits: [
+        new GambitAction(new EnemyAnyCondition(), null, GambitTypeEnum.Skill, 'Power Strike'),
         new GambitAction(new EnemyAnyCondition(), null, GambitTypeEnum.Skill, 'Attack')
       ]
     });
