@@ -1,14 +1,11 @@
-
-
 // Imports
 const blessed = require('blessed');
-const contrib = require('blessed-contrib');
 import Game from "../../Game/Game";
-import GameSaver from "../../IO/GameSaver";
 import ScreenManager from "../ScreenManager";
 import BattleScreen from "./BattleScreen";
 import EquipmentScreen from "./EquipmentScreen";
 import ForgeScreen from "./ForgeScreen";
+import GambitScreen from "./GambitScreen";
 import IScreen from "./IScreen";
 
 class TownScreen implements IScreen {
@@ -84,6 +81,9 @@ class TownScreen implements IScreen {
       else if (selectedItem === 'Forge')
         ScreenManager.getInstance().loadScreen(new ForgeScreen());
 
+        else if (selectedItem === 'Gambits')
+        ScreenManager.getInstance().loadScreen(new GambitScreen());
+
       else if (selectedItem === 'Exit')
         process.exit(0);
     });
@@ -92,6 +92,7 @@ class TownScreen implements IScreen {
       'Battle',
       'Equipment',
       'Forge',
+      'Gambits',
       'Exit'
     ]);
 
