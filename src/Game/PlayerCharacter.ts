@@ -1,11 +1,9 @@
 import BattleCharacter from "./BattleSystem/BattleCharacter";
 import BattleCharacterTypeEnum from './BattleSystem/Enums/BattleCharacterTypeEnum';
 import Gambit from './BattleSystem/Gambits/Gambit';
-import EnemyAnyCondition from './BattleSystem/Gambits/Conditions/EnemyAnyCondition';
 import PlayerEquipment from "./PlayerEquipment";
 import Stats from "./Stats";
 import StatEnum from "./Enums/StatEnum";
-import SkillEnum from "./BattleSystem/Enums/SkillEnum";
 
 class PlayerCharacter {
 
@@ -13,6 +11,7 @@ class PlayerCharacter {
   name: string;
   level: number;
   stats: Stats;
+  gambits: Array<Gambit>;
 
   // Equipment
   equipment: PlayerEquipment;
@@ -23,6 +22,7 @@ class PlayerCharacter {
     this.level = args.level;
     this.stats = args.stats;
     this.equipment = args.equipment || new PlayerEquipment();
+    this.gambits = args.gambits;
   }
 
   // Load from saved data
@@ -31,7 +31,8 @@ class PlayerCharacter {
       name: savedData.name,
       level: savedData.level,
       stats: Stats.load(savedData.stats),
-      equipment: savedData.equipment ? PlayerEquipment.load(savedData.equipment) : null
+      equipment: savedData.equipment ? PlayerEquipment.load(savedData.equipment) : null,
+      gambits: savedData.gambits.map((x: any) => Gambit.load(x))
     });
   }
 
@@ -57,10 +58,7 @@ class PlayerCharacter {
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
-      gambits: [
-        new Gambit(new EnemyAnyCondition(), null, SkillEnum.PowerStrike),
-        new Gambit(new EnemyAnyCondition(), null, SkillEnum.Attack)
-      ]
+      gambits: this.gambits
     });
   }
 }
