@@ -5,6 +5,7 @@ import ScreenManager from "../ScreenManager";
 import GameSaver from "../../IO/GameSaver";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
+import Town from "../../Game/Town";
 
 class GambitScreen implements IScreen {
 
@@ -45,22 +46,17 @@ class GambitScreen implements IScreen {
       keys: true
     });
 
-    gambitMenu.on('select', (el: any, selected: any) => {
+    // Set menu items
+    var items = Game.getInstance().town.playerCharacters.map(x => x.name);
+    items.push('Exit');
+    gambitMenu.setItems(items);
 
-      var selectedItem = el.getText();
-
-      if (selectedItem === 'Exit')
-        this.exitScreen();
-    });
-
-    gambitMenu.setItems([
-      'Exit'
-    ]);
-
+    // Handle escape keybind on menu
     gambitMenu.key(['escape'], () => gambitMenu.select(gambitMenu.fuzzyFind('Exit')));
+    gambitMenu.on('select', (el: any) => this.onMenuSelect(el));
 
+    // Add menu to screen
     this.screen.append(gambitMenu);
-
     gambitMenu.focus();
   }
 
@@ -76,6 +72,26 @@ class GambitScreen implements IScreen {
   // Uninitializes the screen
   //
   public uninitializeScreen() {
+  }
+
+  //
+  // Handle the main menu item being selected
+  //
+  private onMenuSelect(el: any) {
+
+    // Grab selected item text
+    var selectedItem = el.getText();
+
+    // Handle exiting the screen
+    if (selectedItem === 'Exit')
+      this.exitScreen();
+
+    // Handle selecting the character
+    var playerCharacter = Game.getInstance().town.playerCharacters.find(x => x.name === selectedItem);
+    if (!playerCharacter)
+      return;
+
+    // TODO: Load gambits
   }
 }
 
