@@ -1,8 +1,9 @@
 import IGambitCondition from './IGambitCondition';
 import BattleCharacter from '../../BattleCharacter';
+import GambitConditionEnum from '../../Enums/GambitConditionEnum';
 
 class EnemyAnyCondition implements IGambitCondition {
-    name: string = 'Enemy: any';
+    conditionEnum: GambitConditionEnum = GambitConditionEnum.EnemyAny;
     requiresInput: boolean = false;
     getTargets(user: BattleCharacter, characters: Array<BattleCharacter>): Array<BattleCharacter> {
         return characters.filter(x =>
