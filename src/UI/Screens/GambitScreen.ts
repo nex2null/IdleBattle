@@ -21,6 +21,7 @@ class GambitScreen implements IScreen {
   currentGambit?: Gambit;
   town: Town;
   gambitConditions: Array<string> = new Array<string>();
+  skills: Array<string> = new Array<string>();
 
   // const color: Color = Color[colorString as keyof typeof Color];
   // BLAH this.gambitConditions.push(enumMember as keyof typeof GambitConditionEnum);
@@ -69,7 +70,7 @@ class GambitScreen implements IScreen {
     this.screenElements.gambitTable = contrib.table({
       top: 0,
       left: 21,
-      width: 68,
+      width: 80,
       height: 50,
       keys: true,
       fg: 'white',
@@ -93,7 +94,7 @@ class GambitScreen implements IScreen {
     this.screenElements.editGambitBox = blessed.box({
       top: 0,
       left: 21,
-      width: 68,
+      width: 80,
       height: 50,
       hidden: true,
       border: {
@@ -112,7 +113,7 @@ class GambitScreen implements IScreen {
       parent: this.screenElements.editGambitBox,
       top: 0,
       left: 0,
-      width: 20,
+      width: 25,
       height: 40,
       border: {
         type: 'line'
@@ -135,11 +136,128 @@ class GambitScreen implements IScreen {
       keys: true
     });
 
+    // Gambit condition input
+    this.screenElements.gambitConditionInputList = blessed.list({
+      parent: this.screenElements.editGambitBox,
+      top: 0,
+      left: 26,
+      width: 25,
+      height: 40,
+      border: {
+        type: 'line'
+      },
+      label: 'Input',
+      style: {
+        selected: {
+          bg: 'white',
+          fg: 'black'
+        },
+        border: {
+          fg: 'white'
+        },
+        focus: {
+          border: {
+            fg: 'blue'
+          }
+        }
+      },
+      keys: true
+    });
+
+    // Gambit skills
+    this.screenElements.gambitSkillList = blessed.list({
+      parent: this.screenElements.editGambitBox,
+      top: 0,
+      left: 52,
+      width: 25,
+      height: 40,
+      border: {
+        type: 'line'
+      },
+      label: 'Skill',
+      style: {
+        selected: {
+          bg: 'white',
+          fg: 'black'
+        },
+        border: {
+          fg: 'white'
+        },
+        focus: {
+          border: {
+            fg: 'blue'
+          }
+        }
+      },
+      keys: true
+    });
+
+    // Ok button
+    this.screenElements.okButton = blessed.button({
+      parent: this.screenElements.editGambitBox,
+      tags: true,
+      content: '{center}Ok{/center}',
+      top: 42,
+      left: 15,
+      width: 20,
+      height: 3,
+      padding: {
+        top: 1
+      },
+      style: {
+        bold: true,
+        fg: 'white',
+        bg: 'green',
+        focus: {
+          inverse: true
+        }
+      }
+    });
+
+    // Cancel button
+    this.screenElements.cancelButton = blessed.button({
+      parent: this.screenElements.editGambitBox,
+      tags: true,
+      content: '{center}Cancel{/center}',
+      top: 42,
+      left: 45,
+      width: 20,
+      height: 3,
+      padding: {
+        top: 1
+      },
+      style: {
+        bold: true,
+        fg: 'white',
+        bg: 'red',
+        focus: {
+          inverse: true
+        }
+      }
+    });
+
     // Set key bindings
     this.screenElements.menu.key(['escape'], () => this.screenElements.menu.select(this.screenElements.menu.fuzzyFind('Exit')));
     this.screenElements.menu.on('select', (el: any) => this.onMenuSelect(el));
     this.screenElements.gambitTable.rows.key(['escape'], () => this.unloadCharacterGambits());
-    this.screenElements.gambitTable.rows.key(['e'], () => this.editSelectedGambit());
+    this.screenElements.gambitTable.rows.key(['enter'], () => this.editSelectedGambit());
+    this.screenElements.gambitConditionList.key(['right'], () => this.screenElements.gambitConditionInputList.focus());
+    this.screenElements.gambitConditionList.key(['escape'], () => this.hideGambitEdit());
+    this.screenElements.gambitConditionList.key(['enter'], () => this.screenElements.okButton.focus());
+    this.screenElements.gambitConditionInputList.key(['left'], () => this.screenElements.gambitConditionList.focus());
+    this.screenElements.gambitConditionInputList.key(['right'], () => this.screenElements.gambitSkillList.focus());
+    this.screenElements.gambitConditionInputList.key(['escape'], () => this.hideGambitEdit());
+    this.screenElements.gambitConditionInputList.key(['enter'], () => this.screenElements.okButton.focus());
+    this.screenElements.gambitSkillList.key(['left'], () => this.screenElements.gambitConditionInputList.focus());
+    this.screenElements.gambitSkillList.key(['right'], () => this.screenElements.okButton.focus());
+    this.screenElements.gambitSkillList.key(['escape'], () => this.hideGambitEdit());
+    this.screenElements.gambitSkillList.key(['enter'], () => this.screenElements.okButton.focus());
+    this.screenElements.okButton.key(['left'], () => this.screenElements.gambitSkillList.focus());
+    this.screenElements.okButton.key(['right'], () => this.screenElements.cancelButton.focus());
+    this.screenElements.okButton.key(['escape'], () => this.hideGambitEdit());
+    this.screenElements.okButton.key(['enter', 'space'], () => this.saveGambit());
+    this.screenElements.cancelButton.key(['left'], () => this.screenElements.okButton.focus());
+    this.screenElements.cancelButton.key(['enter', 'space', 'escape'], () => this.hideGambitEdit());
 
     // Append items to screen
     this.screen.append(this.screenElements.menu);
@@ -192,6 +310,12 @@ class GambitScreen implements IScreen {
 
     // Keep track of current character
     this.currentCharacter = playerCharacter;
+
+    // Update player skills
+    this.skills = [];
+    for (var enumMember in SkillEnum) {
+      this.skills.push(SkillEnum[enumMember as keyof typeof SkillEnum]);
+    }
 
     // Load character gambits
     this.loadCharacterGambits(this.currentCharacter);
@@ -265,6 +389,75 @@ class GambitScreen implements IScreen {
 
     // Set the condition items
     this.screenElements.gambitConditionList.setItems(this.gambitConditions);
+    var index = this.screenElements.gambitConditionList.fuzzyFind(gambit.conditionEnum || '');
+    this.screenElements.gambitConditionList.select(index);
+
+    // Set the condition inputs
+    // TODO
+    this.screenElements.gambitConditionInputList.setItems([]);
+    index = this.screenElements.gambitConditionInputList.fuzzyFind(gambit.conditionInput || '');
+    this.screenElements.gambitConditionInputList.select(index);
+
+    // Set the skills
+    this.screenElements.gambitSkillList.setItems(this.skills);
+    index = this.screenElements.gambitSkillList.fuzzyFind(gambit.skillEnum || '');
+    this.screenElements.gambitSkillList.select(index);
+  }
+
+  //
+  // Hide gambit editing
+  //
+  private hideGambitEdit() {
+
+    // Hide the edit form and show the gambit table
+    this.screenElements.editGambitBox.hide();
+    this.screenElements.gambitTable.show();
+
+    // Focus on the gambit table
+    this.screenElements.gambitTable.focus();
+    this.screen.render();
+  }
+
+  //
+  // Saves gambit
+  //
+  private saveGambit() {
+
+    // Sanity check current character
+    if (!this.currentCharacter) return;
+
+    // Grab the condition
+    var conditionIndex = this.screenElements.gambitConditionList.selected;
+    var condition = this.screenElements.gambitConditionList.getItem(conditionIndex).getText();
+    var conditionEnum = condition as GambitConditionEnum;
+
+    // Grab the input
+    var conditionInputIndex = this.screenElements.gambitConditionInputList.selected;
+    var conditionInputItem = this.screenElements.gambitConditionInputList.getItem(conditionInputIndex);
+    var conditionInput = conditionInputItem ? conditionInputItem.getText() : '';
+
+    // Grab the skill
+    var skillIndex = this.screenElements.gambitSkillList.selected;
+    var skill = this.screenElements.gambitSkillList.getItem(skillIndex).getText();
+    var skillEnum = skill as SkillEnum;
+
+    // If there is no gambit, create a new one and add it
+    // Otherwise update the existing gambit
+    if (!this.currentGambit) {
+      this.currentCharacter.gambits.push(new Gambit(conditionEnum, conditionInput, skillEnum));
+    } else {
+      this.currentGambit.conditionEnum = conditionEnum;
+      this.currentGambit.conditionInput = conditionInput;
+      this.currentGambit.skillEnum = skillEnum;
+    }
+
+    // Reload character gambits
+    var currentGambitIndex = this.screenElements.gambitTable.rows.selected;
+    this.loadCharacterGambits(this.currentCharacter);
+    this.screenElements.gambitTable.rows.select(currentGambitIndex);
+
+    // Hide the gambit editing
+    this.hideGambitEdit();
   }
 }
 
