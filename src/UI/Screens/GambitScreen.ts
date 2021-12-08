@@ -23,9 +23,6 @@ class GambitScreen implements IScreen {
   gambitConditions: Array<string> = new Array<string>();
   skills: Array<string> = new Array<string>();
 
-  // const color: Color = Color[colorString as keyof typeof Color];
-  // BLAH this.gambitConditions.push(enumMember as keyof typeof GambitConditionEnum);
-
   // Constructor
   constructor() {
     this.screen = null;
@@ -241,6 +238,8 @@ class GambitScreen implements IScreen {
     this.screenElements.menu.on('select', (el: any) => this.onMenuSelect(el));
     this.screenElements.gambitTable.rows.key(['escape'], () => this.unloadCharacterGambits());
     this.screenElements.gambitTable.rows.key(['enter'], () => this.editSelectedGambit());
+    this.screenElements.gambitTable.rows.key(['insert'], () => this.addNewGambit());
+    this.screenElements.gambitTable.rows.key(['delete'], () => this.deleteSelectedGambit());
     this.screenElements.gambitConditionList.key(['right'], () => this.screenElements.gambitConditionInputList.focus());
     this.screenElements.gambitConditionList.key(['escape'], () => this.hideGambitEdit());
     this.screenElements.gambitConditionList.key(['enter'], () => this.screenElements.okButton.focus());
@@ -355,6 +354,46 @@ class GambitScreen implements IScreen {
   }
 
   //
+  // Add a new gambit
+  //
+  private addNewGambit() {
+
+    // There is no current gambit being edited
+    this.currentGambit = undefined;
+
+    // Show gambit edit details
+    this.showGambitEditDetails();
+  }
+
+  //
+  // Delete the selected gambit
+  //
+  private deleteSelectedGambit() {
+    
+    // Sanity check current character
+    if (!this.currentCharacter) return;
+
+    // Splice the gambit
+    var gambitIndex = this.screenElements.gambitTable.rows.selected;
+    this.currentCharacter.gambits.splice(gambitIndex, 1);
+
+    // Reload character gambits
+    this.loadCharacterGambits(this.currentCharacter);
+
+    // If the gambit index is now greater than the number of items
+    // set it to the max item
+    if (gambitIndex > this.currentCharacter.gambits.length - 1)
+      gambitIndex = this.currentCharacter.gambits.length - 1;
+
+    // Re-select the index
+    if (gambitIndex > 0)
+      this.screenElements.gambitTable.rows.select(gambitIndex);
+
+    // Render
+    this.screen.render();
+  }
+
+  //
   // Edit the selected gambit
   //
   private editSelectedGambit() {
@@ -367,22 +406,14 @@ class GambitScreen implements IScreen {
     var gambit = this.currentCharacter.gambits[gambitIndex];
     this.currentGambit = gambit;
 
-    // Render gambit edit details
-    this.renderGambitEditDetails(gambit);
-
-    // Hide the gambit table and show the edit form
-    this.screenElements.gambitTable.hide();
-    this.screenElements.editGambitBox.show();
-
-    // Focus on the condition list
-    this.screenElements.gambitConditionList.focus();
-    this.screen.render();
+    // Show gambit edit details
+    this.showGambitEditDetails(gambit);
   }
 
   //
   // Render the edit gambit details box
   //
-  private renderGambitEditDetails(gambit?: Gambit) {
+  private showGambitEditDetails(gambit?: Gambit) {
 
     // If we don't have an existing gambit, just start with a default one
     gambit = gambit || new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack);
@@ -402,6 +433,14 @@ class GambitScreen implements IScreen {
     this.screenElements.gambitSkillList.setItems(this.skills);
     index = this.screenElements.gambitSkillList.fuzzyFind(gambit.skillEnum || '');
     this.screenElements.gambitSkillList.select(index);
+
+    // Hide the gambit table and show the edit form
+    this.screenElements.gambitTable.hide();
+    this.screenElements.editGambitBox.show();
+
+    // Focus on the condition list
+    this.screenElements.gambitConditionList.focus();
+    this.screen.render();
   }
 
   //
