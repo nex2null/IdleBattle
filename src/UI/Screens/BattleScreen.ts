@@ -3,6 +3,7 @@ const blessed = require('blessed');
 const contrib = require('blessed-contrib');
 import Battle from "../../Game/BattleSystem/Battle";
 import BattleCharacter from "../../Game/BattleSystem/BattleCharacter";
+import DamageTracker from "../../Game/BattleSystem/DamageTracker";
 import BattleSpeedEnum from "../../Game/BattleSystem/Enums/BattleSpeedEnum";
 import BattleStateEnum from "../../Game/BattleSystem/Enums/BattleStateEnum";
 import Game from "../../Game/Game";
@@ -75,7 +76,7 @@ class BattleScreen implements IScreen {
 
       // Process the battle after a small delay
       await UIHelpers.delay(this.gameOptions.battleSpeed);
-      this.processBattle();
+      await this.processBattle();
 
       // If the level has changed when we are finished processing then break
       if (this.battle.dungeon.currentLevelNumber != currentLevel)
@@ -92,14 +93,15 @@ class BattleScreen implements IScreen {
   //
   // Processes the battle
   //
-  private processBattle() {
+  private async processBattle() {
 
     if (this.battle.isBattleWon() || this.battle.isBattleLost())
       return;
 
     if (this.battle.currentState === BattleStateEnum.InBattle) {
-      this.battle.processBattle();
+      var damageTracker = this.battle.processBattle();
       this.updateBattleCharacters();
+      await this.processDamageAnimation(damageTracker);
     }
 
     if (this.battle.currentState === BattleStateEnum.LevelCleared) {
@@ -124,6 +126,38 @@ class BattleScreen implements IScreen {
       });
     }
 
+    this.screen.render();
+  }
+
+  //
+  // Processes damage animation
+  //
+  async processDamageAnimation(damageTracker?: DamageTracker) {
+
+    // Sanity check damage tracker
+    if (!damageTracker || !damageTracker.hasDamage()) return;
+
+    var hpGauges: Array<any> = [];
+
+    // Process each character that was dealt damage
+    Object.keys(damageTracker.damageTaken).forEach(uid => {
+
+      // Grab the element for the uid
+      var characterElements = this.screenElements.playerCharacters[uid] ||
+        this.screenElements.enemyCharacters[uid];
+
+      // Sanity check character elements
+      if (!characterElements) return;
+
+      // Set the name box background to red
+      hpGauges.push(characterElements.hpGauge);
+    })
+
+    // Set name boxes to red, sleep, then return to normal
+    hpGauges.forEach(x => x.style.border.fg = 'red');
+    this.screen.render();
+    await UIHelpers.delay(250);
+    hpGauges.forEach(x => x.style.border.fg = 'cyan');
     this.screen.render();
   }
 
@@ -268,7 +302,7 @@ class BattleScreen implements IScreen {
     this.screenElements.playerCharacters = {};
     this.battle.playerCharacters.forEach((character, index) => {
       var characterElements: any = {};
-      this.screenElements.playerCharacters[character.name] = characterElements;
+      this.screenElements.playerCharacters[character.uid] = characterElements;
       this.renderCharacterElements(characterElements, this.screenElements.playersBox, index * 5);
       this.screen.append(this.screenElements.playersBox);
     });
@@ -293,7 +327,7 @@ class BattleScreen implements IScreen {
     this.screenElements.enemyCharacters = {};
     this.battle.dungeon.currentLevel.enemies.forEach((character, index) => {
       var characterElements: any = {};
-      this.screenElements.enemyCharacters[character.name] = characterElements;
+      this.screenElements.enemyCharacters[character.uid] = characterElements;
       this.renderCharacterElements(characterElements, this.screenElements.enemiesBox, index * 5);
       this.screen.append(this.screenElements.enemiesBox);
     });
@@ -359,13 +393,13 @@ class BattleScreen implements IScreen {
 
     // Update player characters
     this.battle.playerCharacters.forEach((character) => {
-      var characterElements = this.screenElements.playerCharacters[character.name];
+      var characterElements = this.screenElements.playerCharacters[character.uid];
       this.updateCharacterElements(characterElements, character);
     });
 
     // Update enemy characters
     this.battle.dungeon.currentLevel.enemies.forEach((character) => {
-      var characterElements: any = this.screenElements.enemyCharacters[character.name];
+      var characterElements: any = this.screenElements.enemyCharacters[character.uid];
       this.updateCharacterElements(characterElements, character);
     });
   }

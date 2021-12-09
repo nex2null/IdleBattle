@@ -5,6 +5,8 @@ import BattleLog from './BattleLog';
 import BattleDamage from './BattleDamage';
 import { LootGenerationOption } from '../Itemization/LootGenerator';
 import Stats from '../Stats';
+import { Guid } from "guid-typescript";
+import DamageTracker from './DamageTracker';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 
@@ -20,6 +22,7 @@ export default class BattleCharacter {
   hostileToCharacterType: BattleCharacterTypeEnum;
   effects: Array<BaseEffect>;
   gambits: Array<Gambit>;
+  uid: string;
 
   // TODO: Refactor enemy specific things to enemy base class
   maxNumberOfItemsToDrop: number;
@@ -46,6 +49,7 @@ export default class BattleCharacter {
     this.characterType = args.characterType;
     this.hostileToCharacterType = args.hostileToCharacterType;
     this.currentCharge = 0;
+    this.uid = Guid.create().toString();
 
     this.gambits = args.gambits;
     this.effects = args.effects || [];
@@ -81,7 +85,7 @@ export default class BattleCharacter {
   }
 
   // Has the character perform an action
-  act(characters: Array<BattleCharacter>, battleLog: BattleLog) {
+  act(characters: Array<BattleCharacter>, battleLog: BattleLog, damageTracker: DamageTracker) {
 
     // Do any pre-action work
     this.beforeActionPerformed();
@@ -107,13 +111,13 @@ export default class BattleCharacter {
     }
 
     // Use the gambit's skill
-    gambitAction.skill.use(this, gambitAction.targets, battleLog);
+    gambitAction.skill.use(this, gambitAction.targets, battleLog, damageTracker);
 
     // Set that an action was performed
     this.actionPerformed();
   }
 
-  applyDamage(damage: BattleDamage) {
+  applyDamage(damage: BattleDamage, damageTracker: DamageTracker) {
 
     // Allow effects to modify damage before processing
     this.effects.forEach(x => x.beforeDamageTaken(damage));
@@ -122,7 +126,9 @@ export default class BattleCharacter {
     damage.round();
 
     // Take the damage
-    this.currentStats.hp -= damage.getTotalAmount();
+    var totalDamage = damage.getTotalAmount();
+    this.currentStats.hp -= totalDamage;
+    damageTracker.setDamageTaken(this, totalDamage);
 
     // Don't allow hp to become negative
     this.currentStats.hp = this.currentStats.hp < 0 ? 0 : this.currentStats.hp;
