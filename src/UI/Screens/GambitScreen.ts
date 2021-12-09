@@ -240,6 +240,8 @@ class GambitScreen implements IScreen {
     this.screenElements.gambitTable.rows.key(['enter'], () => this.editSelectedGambit());
     this.screenElements.gambitTable.rows.key(['insert'], () => this.addNewGambit());
     this.screenElements.gambitTable.rows.key(['delete'], () => this.deleteSelectedGambit());
+    this.screenElements.gambitTable.rows.key(['left'], () => this.moveSelectedGambitUp());
+    this.screenElements.gambitTable.rows.key(['right'], () => this.moveSelectedGambitDown());
     this.screenElements.gambitConditionList.key(['right'], () => this.screenElements.gambitConditionInputList.focus());
     this.screenElements.gambitConditionList.key(['escape'], () => this.hideGambitEdit());
     this.screenElements.gambitConditionList.key(['enter'], () => this.screenElements.okButton.focus());
@@ -388,6 +390,68 @@ class GambitScreen implements IScreen {
     // Re-select the index
     if (gambitIndex > 0)
       this.screenElements.gambitTable.rows.select(gambitIndex);
+
+    // Render
+    this.screen.render();
+  }
+
+  //
+  // Moves the selected gambit up one in the list
+  //
+  private moveSelectedGambitUp() {
+
+    // Sanity check current character
+    if (!this.currentCharacter) return;
+
+    // Verify we are not at the top of the list
+    var gambitIndex = this.screenElements.gambitTable.rows.selected;
+    if (gambitIndex == 0) return;
+
+    // Grab the gambit
+    var gambit = this.currentCharacter.gambits[gambitIndex];
+
+    // Remove it from the array
+    this.currentCharacter.gambits.splice(gambitIndex, 1);
+
+    // Splice the element back into the array
+    this.currentCharacter.gambits.splice(gambitIndex - 1, 0, gambit);
+
+    // Reload character gambits
+    this.loadCharacterGambits(this.currentCharacter);
+
+    // Select the new index
+    this.screenElements.gambitTable.rows.select(gambitIndex - 1);
+
+    // Render
+    this.screen.render();
+  }
+
+  //
+  // Moves the selected gambit down one in the list
+  //
+  private moveSelectedGambitDown() {
+
+    // Sanity check current character
+    if (!this.currentCharacter) return;
+
+    // Verify we are not at the bottom of the list
+    var gambitIndex = this.screenElements.gambitTable.rows.selected;
+    if (gambitIndex >= this.currentCharacter.gambits.length) return;
+
+    // Grab the gambit
+    var gambit = this.currentCharacter.gambits[gambitIndex];
+
+    // Remove it from the array
+    this.currentCharacter.gambits.splice(gambitIndex, 1);
+
+    // Splice the element back into the array
+    this.currentCharacter.gambits.splice(gambitIndex + 1, 0, gambit);
+
+    // Reload character gambits
+    this.loadCharacterGambits(this.currentCharacter);
+
+    // Select the new index
+    this.screenElements.gambitTable.rows.select(gambitIndex + 1);
 
     // Render
     this.screen.render();
