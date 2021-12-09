@@ -2,6 +2,9 @@ import PlayerCharacter from "./PlayerCharacter";
 import Inventory from './Itemization/Inventory';
 import Equipment from "./Itemization/Equipment/Equipment";
 import Stats from "./Stats";
+import Gambit from "./BattleSystem/Gambits/Gambit";
+import SkillEnum from "./BattleSystem/Enums/SkillEnum";
+import GambitConditionEnum from "./BattleSystem/Enums/GambitConditionEnum";
 
 class Town {
 
@@ -35,7 +38,11 @@ class Town {
             mp: 50,
             strength: 8,
             intelligence: 6
-          })
+          }),
+          gambits: [
+            new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.PowerStrike),
+            new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack)
+          ]
         })
       ];
   }
