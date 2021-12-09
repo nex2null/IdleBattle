@@ -101,7 +101,7 @@ class BattleScreen implements IScreen {
     if (this.battle.currentState === BattleStateEnum.InBattle) {
       var damageTracker = this.battle.processBattle();
       this.updateBattleCharacters();
-      await this.processDamageAnimation(damageTracker);
+      await this.processDamageTextAnimation(damageTracker);
     }
 
     if (this.battle.currentState === BattleStateEnum.LevelCleared) {
@@ -130,9 +130,9 @@ class BattleScreen implements IScreen {
   }
 
   //
-  // Processes damage animation
+  // Processes damage flash animation
   //
-  async processDamageAnimation(damageTracker?: DamageTracker) {
+  async processDamageFlashAnimation(damageTracker?: DamageTracker) {
 
     // Sanity check damage tracker
     if (!damageTracker || !damageTracker.hasDamage()) return;
@@ -156,8 +156,49 @@ class BattleScreen implements IScreen {
     // Set name boxes to red, sleep, then return to normal
     hpGauges.forEach(x => x.style.border.fg = 'red');
     this.screen.render();
-    await UIHelpers.delay(250);
+    await UIHelpers.delay(350);
     hpGauges.forEach(x => x.style.border.fg = 'cyan');
+    this.screen.render();
+  }
+
+  //
+  // Processes damage text animation
+  //
+  async processDamageTextAnimation(damageTracker?: DamageTracker) {
+
+    // Sanity check damage tracker
+    if (!damageTracker || !damageTracker.hasDamage()) return;
+
+    var damageTexts: Array<any> = [];
+
+    // Process each character that was dealt damage
+    Object.keys(damageTracker.damageTaken).forEach(uid => {
+
+      // Grab the element for the uid
+      var characterElements = this.screenElements.playerCharacters[uid] ||
+        this.screenElements.enemyCharacters[uid];
+
+      // Sanity check character elements
+      if (!characterElements) return;
+
+      // Add damage text to hp gauage
+      var text = blessed.text({
+        parent: characterElements.hpGauge,
+        top: 0,
+        left: 'center',
+        height: 1,
+        content: ` {bold}${damageTracker.damageTaken[uid]}{/bold} `,
+        tags: true
+      });
+
+      // Keep track of damage text added
+      damageTexts.push(text);
+    });
+
+    // Wait a bit and destroy the damage texts
+    this.screen.render();
+    await UIHelpers.delay(1000);
+    damageTexts.forEach(x => x.destroy());
     this.screen.render();
   }
 
