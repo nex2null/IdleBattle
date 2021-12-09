@@ -9,7 +9,7 @@ class SlowedEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter, turnsToSlow: number) {
-    super(character, 'Slowed');
+    super(character, 'Slowed', '{white-bg}{blue-fg}SLW{/blue-fg}{/white-bg}');
     this.turnsLeft = turnsToSlow;
   }
 

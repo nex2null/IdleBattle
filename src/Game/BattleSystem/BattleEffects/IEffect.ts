@@ -9,6 +9,9 @@ interface IEffect {
   // The name of the effect
   name: string;
 
+  // The ui code of the effect (3 characters, tags allowed)
+  uiCode: string;
+
   // Whether the effect can be applied
   canApply(): boolean;
 

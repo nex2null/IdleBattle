@@ -7,11 +7,13 @@ class BaseEffect implements IEffect {
   // Properties
   character: BattleCharacter;
   name: string;
+  uiCode: string;
 
   // Constructor
-  constructor(character: BattleCharacter, name: string) {
+  constructor(character: BattleCharacter, name: string, uiCode: string) {
     this.character = character;
     this.name = name;
+    this.uiCode = uiCode;
   }
 
   // Whether the effect can be applied

@@ -8,7 +8,7 @@ class StunEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter, stunLength: number) {
-    super(character, 'Stunned');
+    super(character, 'Stunned', '{white-bg}{black-fg}STN{/black-fg}{/white-bg}');
     this.stunLength = stunLength;
   }
 

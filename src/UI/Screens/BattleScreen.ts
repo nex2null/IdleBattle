@@ -2,6 +2,7 @@
 const blessed = require('blessed');
 const contrib = require('blessed-contrib');
 import Battle from "../../Game/BattleSystem/Battle";
+import BattleCharacter from "../../Game/BattleSystem/BattleCharacter";
 import BattleSpeedEnum from "../../Game/BattleSystem/Enums/BattleSpeedEnum";
 import BattleStateEnum from "../../Game/BattleSystem/Enums/BattleStateEnum";
 import Game from "../../Game/Game";
@@ -247,6 +248,7 @@ class BattleScreen implements IScreen {
     if (this.screenElements.enemiesBox)
       this.screen.remove(this.screenElements.enemiesBox);
 
+    // Create the box for the players
     this.screenElements.playersBox = blessed.box({
       top: 1,
       left: 0,
@@ -262,62 +264,16 @@ class BattleScreen implements IScreen {
       }
     });
 
+    // Render the player character ui elements
     this.screenElements.playerCharacters = {};
-
     this.battle.playerCharacters.forEach((character, index) => {
-
-      var playerElements: any = {};
-      this.screenElements.playerCharacters[character.name] = playerElements;
-
-      var topBase = index * 5;
-
-      playerElements.playerNameBox = blessed.text({
-        parent: this.screenElements.playersBox,
-        top: topBase,
-        left: 0,
-        content: `${character.name}`,
-        tags: true
-      });
-
-      playerElements.chargeGauge = contrib.gauge({
-        parent: this.screenElements.playersBox,
-        top: topBase + 1,
-        left: 0,
-        width: 15,
-        height: 3,
-        label: 'Charge',
-        showLabel: false,
-        stroke: 'green',
-        border: { type: 'line', fg: 'cyan' }
-      });
-
-      playerElements.hpGauge = contrib.gauge({
-        parent: this.screenElements.playersBox,
-        top: topBase + 1,
-        left: 16,
-        width: 15,
-        height: 3,
-        label: 'HP',
-        showLabel: false,
-        stroke: 'red',
-        border: { type: 'line', fg: 'cyan' }
-      });
-
-      playerElements.mpGauge = contrib.gauge({
-        parent: this.screenElements.playersBox,
-        top: topBase + 1,
-        left: 32,
-        width: 15,
-        height: 3,
-        label: 'MP',
-        showLabel: false,
-        stroke: 'blue',
-        border: { type: 'line', fg: 'cyan' }
-      });
-
+      var characterElements: any = {};
+      this.screenElements.playerCharacters[character.name] = characterElements;
+      this.renderCharacterElements(characterElements, this.screenElements.playersBox, index * 5);
       this.screen.append(this.screenElements.playersBox);
     });
 
+    // Create the box for the enemies
     this.screenElements.enemiesBox = blessed.box({
       top: 1,
       left: 50,
@@ -333,63 +289,67 @@ class BattleScreen implements IScreen {
       }
     });
 
+    // Render the enemy character ui elements
     this.screenElements.enemyCharacters = {};
-
     this.battle.dungeon.currentLevel.enemies.forEach((character, index) => {
-
-      var playerElements: any = {};
-      this.screenElements.enemyCharacters[character.name] = playerElements;
-
-      var topBase = index * 5;
-
-      playerElements.playerNameBox = blessed.text({
-        parent: this.screenElements.enemiesBox,
-        top: topBase,
-        left: 0,
-        content: `${character.name}`,
-        tags: true
-      });
-
-      playerElements.chargeGauge = contrib.gauge({
-        parent: this.screenElements.enemiesBox,
-        top: topBase + 1,
-        left: 0,
-        width: 15,
-        height: 3,
-        label: 'Charge',
-        showLabel: false,
-        stroke: 'green',
-        border: { type: 'line', fg: 'cyan' }
-      });
-
-      playerElements.hpGauge = contrib.gauge({
-        parent: this.screenElements.enemiesBox,
-        top: topBase + 1,
-        left: 16,
-        width: 15,
-        height: 3,
-        label: 'HP',
-        showLabel: false,
-        stroke: 'red',
-        border: { type: 'line', fg: 'cyan' }
-      });
-
-      playerElements.mpGauge = contrib.gauge({
-        parent: this.screenElements.enemiesBox,
-        top: topBase + 1,
-        left: 32,
-        width: 15,
-        height: 3,
-        label: 'MP',
-        showLabel: false,
-        stroke: 'blue',
-        border: { type: 'line', fg: 'cyan' }
-      });
-
+      var characterElements: any = {};
+      this.screenElements.enemyCharacters[character.name] = characterElements;
+      this.renderCharacterElements(characterElements, this.screenElements.enemiesBox, index * 5);
       this.screen.append(this.screenElements.enemiesBox);
     });
 
+    // Update the UI
     this.updateBattleCharacters();
+  }
+
+  //
+  // Renders the UI elements for a given character
+  //
+  private renderCharacterElements(characterElements: any, parent: any, topBase: number) {
+
+    characterElements.playerNameBox = blessed.text({
+      parent: parent,
+      top: topBase,
+      left: 0,
+      content: '',
+      tags: true
+    });
+
+    characterElements.chargeGauge = contrib.gauge({
+      parent: parent,
+      top: topBase + 1,
+      left: 0,
+      width: 15,
+      height: 3,
+      label: 'Charge',
+      showLabel: false,
+      stroke: 'green',
+      border: { type: 'line', fg: 'cyan' }
+    });
+
+    characterElements.hpGauge = contrib.gauge({
+      parent: parent,
+      top: topBase + 1,
+      left: 16,
+      width: 15,
+      height: 3,
+      label: 'HP',
+      showLabel: false,
+      stroke: 'red',
+      border: { type: 'line', fg: 'cyan' }
+    });
+
+    characterElements.mpGauge = contrib.gauge({
+      parent: parent,
+      top: topBase + 1,
+      left: 32,
+      width: 15,
+      height: 3,
+      label: 'MP',
+      showLabel: false,
+      stroke: 'blue',
+      border: { type: 'line', fg: 'cyan' }
+    });
   }
 
   //
@@ -397,47 +357,43 @@ class BattleScreen implements IScreen {
   //
   private updateBattleCharacters() {
 
+    // Update player characters
     this.battle.playerCharacters.forEach((character) => {
-
-      // Grab the elements for this player
-      var playerElements = this.screenElements.playerCharacters[character.name];
-
-      // Update name if character has died
-      if (!character.isAlive()) {
-        playerElements.playerNameBox.setContent(`{gray-fg}${character.name}{/gray-fg}`);
-      }
-
-      // Update gauge values
-      playerElements.chargeGauge.setPercent(character.currentCharge / 250 * 100);
-      playerElements.hpGauge.setPercent((character.currentStats.hp / character.baseStats.hp) * 100);
-      playerElements.mpGauge.setPercent((character.currentStats.mp / character.baseStats.mp) * 100);
-
-      // Update labels
-      playerElements.chargeGauge.setLabel(`Charge: ${Math.round(character.currentCharge / 250 * 100)}%`);
-      playerElements.hpGauge.setLabel(`HP: ${character.currentStats.hp}`);
-      playerElements.mpGauge.setLabel(`MP: ${character.currentStats.mp}`);
+      var characterElements = this.screenElements.playerCharacters[character.name];
+      this.updateCharacterElements(characterElements, character);
     });
 
+    // Update enemy characters
     this.battle.dungeon.currentLevel.enemies.forEach((character) => {
-
-      // Grab the elements for this player
-      var playerElements: any = this.screenElements.enemyCharacters[character.name];
-
-      // Update name if character has died
-      if (!character.isAlive()) {
-        playerElements.playerNameBox.setContent(`{gray-fg}${character.name}{/gray-fg}`);
-      }
-
-      // Update gauge values
-      playerElements.chargeGauge.setPercent(character.currentCharge / 250 * 100);
-      playerElements.hpGauge.setPercent((character.currentStats.hp / character.baseStats.hp) * 100);
-      playerElements.mpGauge.setPercent((character.currentStats.mp / character.baseStats.mp) * 100);
-
-      // Update labels
-      playerElements.chargeGauge.setLabel(`Charge: ${Math.round(character.currentCharge / 250 * 100)}%`);
-      playerElements.hpGauge.setLabel(`HP: ${character.currentStats.hp}`);
-      playerElements.mpGauge.setLabel(`MP: ${character.currentStats.mp}`);
+      var characterElements: any = this.screenElements.enemyCharacters[character.name];
+      this.updateCharacterElements(characterElements, character);
     });
+  }
+
+  //
+  // Updates the character elements
+  //
+  private updateCharacterElements(characterElements: any, character: BattleCharacter) {
+
+    // If character has died, the name is gray
+    var name = character.isAlive() ? character.name : `{gray-fg}${character.name}{/gray-fg}`;
+
+    // Build up the list of effects
+    var allEffects = character.effects.map(x => x.uiCode);
+    var effectsString = allEffects.join(' ');
+
+    // Update name
+    characterElements.playerNameBox.setContent(`${name} ${effectsString}`);
+
+    // Update gauge values
+    characterElements.chargeGauge.setPercent(character.currentCharge / 250 * 100);
+    characterElements.hpGauge.setPercent((character.currentStats.hp / character.baseStats.hp) * 100);
+    characterElements.mpGauge.setPercent((character.currentStats.mp / character.baseStats.mp) * 100);
+
+    // Update labels
+    characterElements.chargeGauge.setLabel(`Charge: ${Math.round(character.currentCharge / 250 * 100)}%`);
+    characterElements.hpGauge.setLabel(`HP: ${character.currentStats.hp}`);
+    characterElements.mpGauge.setLabel(`MP: ${character.currentStats.mp}`);
   }
 
   //
