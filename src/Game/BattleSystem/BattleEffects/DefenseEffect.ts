@@ -7,7 +7,7 @@ class DefenseEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter) {
-    super(character, 'Defended');
+    super(character, 'Defended', '{white-bg}{black-fg}DFN{/black-fg}{/white-bg}');
   }
 
   // Handle before an action is performed

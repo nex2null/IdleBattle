@@ -402,10 +402,15 @@ class BattleScreen implements IScreen {
       // Grab the elements for this player
       var playerElements = this.screenElements.playerCharacters[character.name];
 
-      // Update name if character has died
-      if (!character.isAlive()) {
-        playerElements.playerNameBox.setContent(`{gray-fg}${character.name}{/gray-fg}`);
-      }
+      // If character has died, the name is gray
+      var name = character.isAlive() ? character.name : `{gray-fg}${character.name}{/gray-fg}`;
+
+      // Build up the list of effects
+      var allEffects = character.effects.map(x => x.uiCode);
+      var effectsString = allEffects.join(' ');
+
+      // Update name
+      playerElements.playerNameBox.setContent(`${name} ${effectsString}`);
 
       // Update gauge values
       playerElements.chargeGauge.setPercent(character.currentCharge / 250 * 100);
@@ -423,10 +428,15 @@ class BattleScreen implements IScreen {
       // Grab the elements for this player
       var playerElements: any = this.screenElements.enemyCharacters[character.name];
 
-      // Update name if character has died
-      if (!character.isAlive()) {
-        playerElements.playerNameBox.setContent(`{gray-fg}${character.name}{/gray-fg}`);
-      }
+      // If character has died, the name is gray
+      var name = character.isAlive() ? character.name : `{gray-fg}${character.name}{/gray-fg}`;
+
+      // Build up the list of effects
+      var allEffects = character.effects.map(x => x.uiCode);
+      var effectsString = allEffects.join(' ');
+
+      // Update name
+      playerElements.playerNameBox.setContent(`${name} ${effectsString}`);
 
       // Update gauge values
       playerElements.chargeGauge.setPercent(character.currentCharge / 250 * 100);
