@@ -12,6 +12,7 @@ import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
+import { getAsciiString } from "../Helpers/AsciiHelper";
 
 class BattleScreen implements IScreen {
 
@@ -175,29 +176,41 @@ class BattleScreen implements IScreen {
     Object.keys(damageTracker.damageTaken).forEach(uid => {
 
       // Grab the element for the uid
-      var characterElements = this.screenElements.playerCharacters[uid] ||
-        this.screenElements.enemyCharacters[uid];
+      var isPlayer = true;
+      var characterElements = this.screenElements.playerCharacters[uid];
+      if (!characterElements) {
+        characterElements = this.screenElements.enemyCharacters[uid];
+        isPlayer = false;
+      }
 
       // Sanity check character elements
       if (!characterElements) return;
 
       // Add damage text to hp gauage
+      var damageTaken = damageTracker.damageTaken[uid];
       var text = blessed.text({
-        parent: characterElements.hpGauge,
-        top: 0,
+        parent: isPlayer ? this.screenElements.playersBox : this.screenElements.enemiesBox,
+        top: characterElements.hpGauge.atop - 2,
         left: 'center',
-        height: 1,
-        content: ` {bold}${damageTracker.damageTaken[uid]}{/bold} `,
-        tags: true
+        width: damageTaken.toString().length * 4 + 5,
+        height: 3,
+        content: `${getAsciiString(damageTaken, 3)}`,
+        tags: true,
+        style: { bold: true, fg: 'red' }
       });
 
       // Keep track of damage text added
       damageTexts.push(text);
     });
 
-    // Wait a bit and destroy the damage texts
-    this.screen.render();
-    await UIHelpers.delay(1000);
+    // Flicker magic
+    for (var i = 0; i < 6; i++) {
+      damageTexts.forEach(x => x.style.fg = x.style.fg == 'red' ? 'white' : 'red');
+      this.screen.render();
+      await UIHelpers.delay(150);
+    }
+
+    // Destroy the texts
     damageTexts.forEach(x => x.destroy());
     this.screen.render();
   }
