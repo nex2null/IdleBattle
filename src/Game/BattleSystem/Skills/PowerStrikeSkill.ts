@@ -7,6 +7,7 @@ import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import ISkill from './ISkill';
 import RandomHelpers from '../../Utilities/RandomHelpers';
 import StunEffect from '../BattleEffects/StunEffect';
+import DamageTracker from '../DamageTracker';
 
 class PowerStrikeSkill implements ISkill {
 
@@ -45,7 +46,8 @@ class PowerStrikeSkill implements ISkill {
   use(
     character: BattleCharacter,
     targets: Array<BattleCharacter>,
-    battleLog: BattleLog
+    battleLog: BattleLog,
+    damageTracker: DamageTracker
   ) {
     // Only first target is ever relevant
     var target = targets[0];
@@ -63,7 +65,7 @@ class PowerStrikeSkill implements ISkill {
       var damageToDo = this.calculateDamage(character, target);
 
       // Apply the damage
-      target.applyDamage(damageToDo);
+      target.applyDamage(damageToDo, damageTracker);
 
       // If the target is alive determine if they are stunned
       var applyStun = target.isAlive() && RandomHelpers.getRandomInt(1, 100) <= 50;

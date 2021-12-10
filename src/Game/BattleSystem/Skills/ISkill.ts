@@ -1,6 +1,7 @@
 import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import BattleCharacter from '../BattleCharacter';
 import BattleLog from '../BattleLog';
+import DamageTracker from '../DamageTracker';
 
 interface ISkill {
 
@@ -17,7 +18,8 @@ interface ISkill {
   use(
     character: BattleCharacter,
     targets: Array<BattleCharacter>,
-    battleLog: BattleLog): void;
+    battleLog: BattleLog,
+    damageTracker: DamageTracker): void;
 
   // Determine if the skill can be used
   canUse(

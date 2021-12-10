@@ -3,6 +3,7 @@ const blessed = require('blessed');
 const contrib = require('blessed-contrib');
 import Battle from "../../Game/BattleSystem/Battle";
 import BattleCharacter from "../../Game/BattleSystem/BattleCharacter";
+import DamageTracker from "../../Game/BattleSystem/DamageTracker";
 import BattleSpeedEnum from "../../Game/BattleSystem/Enums/BattleSpeedEnum";
 import BattleStateEnum from "../../Game/BattleSystem/Enums/BattleStateEnum";
 import Game from "../../Game/Game";
@@ -11,6 +12,8 @@ import UIHelpers from "../Helpers/UIHelpers";
 import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
+import { getAsciiString } from "../Helpers/AsciiHelper";
+import BattleDamageFeedbackEnum from "../../Game/BattleSystem/Enums/BattleDamageFeedbackEnum";
 
 class BattleScreen implements IScreen {
 
@@ -75,7 +78,7 @@ class BattleScreen implements IScreen {
 
       // Process the battle after a small delay
       await UIHelpers.delay(this.gameOptions.battleSpeed);
-      this.processBattle();
+      await this.processBattle();
 
       // If the level has changed when we are finished processing then break
       if (this.battle.dungeon.currentLevelNumber != currentLevel)
@@ -92,14 +95,22 @@ class BattleScreen implements IScreen {
   //
   // Processes the battle
   //
-  private processBattle() {
+  private async processBattle() {
 
     if (this.battle.isBattleWon() || this.battle.isBattleLost())
       return;
 
     if (this.battle.currentState === BattleStateEnum.InBattle) {
-      this.battle.processBattle();
+
+      // Process battle and update characters
+      var damageTracker = this.battle.processBattle();
       this.updateBattleCharacters();
+
+      // Show animations
+      if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.Damage)
+        await this.processDamageTextAnimation(damageTracker);
+      else if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.Flash)
+        await this.processDamageFlashAnimation(damageTracker);
     }
 
     if (this.battle.currentState === BattleStateEnum.LevelCleared) {
@@ -124,6 +135,91 @@ class BattleScreen implements IScreen {
       });
     }
 
+    this.screen.render();
+  }
+
+  //
+  // Processes damage flash animation
+  //
+  async processDamageFlashAnimation(damageTracker?: DamageTracker) {
+
+    // Sanity check damage tracker
+    if (!damageTracker || !damageTracker.hasDamage()) return;
+
+    var hpGauges: Array<any> = [];
+
+    // Process each character that was dealt damage
+    Object.keys(damageTracker.damageTaken).forEach(uid => {
+
+      // Grab the element for the uid
+      var characterElements = this.screenElements.playerCharacters[uid] ||
+        this.screenElements.enemyCharacters[uid];
+
+      // Sanity check character elements
+      if (!characterElements) return;
+
+      // Set the name box background to red
+      hpGauges.push(characterElements.hpGauge);
+    })
+
+    // Set name boxes to red, sleep, then return to normal
+    hpGauges.forEach(x => x.style.border.fg = 'red');
+    this.screen.render();
+    await UIHelpers.delay(350);
+    hpGauges.forEach(x => x.style.border.fg = 'cyan');
+    this.screen.render();
+  }
+
+  //
+  // Processes damage text animation
+  //
+  async processDamageTextAnimation(damageTracker?: DamageTracker) {
+
+    // Sanity check damage tracker
+    if (!damageTracker || !damageTracker.hasDamage()) return;
+
+    var damageTexts: Array<any> = [];
+
+    // Process each character that was dealt damage
+    Object.keys(damageTracker.damageTaken).forEach(uid => {
+
+      // Grab the element for the uid
+      var isPlayer = true;
+      var characterElements = this.screenElements.playerCharacters[uid];
+      if (!characterElements) {
+        characterElements = this.screenElements.enemyCharacters[uid];
+        isPlayer = false;
+      }
+
+      // Sanity check character elements
+      if (!characterElements) return;
+
+      // Add damage text to hp gauage
+      var damageTaken = damageTracker.damageTaken[uid];
+      var text = blessed.text({
+        parent: isPlayer ? this.screenElements.playersBox : this.screenElements.enemiesBox,
+        top: characterElements.hpGauge.atop - 2,
+        left: 'center',
+        width: damageTaken.toString().length * 4 + 5,
+        height: 3,
+        content: `${getAsciiString(damageTaken, 3)}`,
+        tags: true,
+        style: { bold: true, fg: 'red' }
+      });
+
+      // Keep track of damage text added
+      damageTexts.push(text);
+    });
+
+    // Flicker magic
+    for (var i = 0; i < 6; i++) {
+      damageTexts.forEach(x => x.style.fg = x.style.fg == 'red' ? 'white' : 'red');
+      this.screen.render();
+      await UIHelpers.delay(150);
+    }
+
+    // Destroy the texts
+    damageTexts.forEach(x => x.destroy());
     this.screen.render();
   }
 
@@ -190,6 +286,7 @@ class BattleScreen implements IScreen {
 
     this.screenElements.logBox.key(['s'], () => this.toggleSpeed());
     this.screenElements.logBox.key(['a'], () => this.toggleAutoAdvance());
+    this.screenElements.logBox.key(['d'], () => this.toggleDamageFeedback());
   }
 
   //
@@ -232,6 +329,9 @@ class BattleScreen implements IScreen {
     // Set auto advance
     content += `\t{green-fg}A{/}uto advance: ${this.gameOptions.autoAdvanceBattles}`;
 
+    // Set feedback
+    content += `\t{green-fg}D{/}mg feedback: ${this.gameOptions.battleDamageFeedback}`;
+
     // Set content
     this.screenElements.battleOptionsBox.setContent(content);
     this.screen.render();
@@ -268,7 +368,7 @@ class BattleScreen implements IScreen {
     this.screenElements.playerCharacters = {};
     this.battle.playerCharacters.forEach((character, index) => {
       var characterElements: any = {};
-      this.screenElements.playerCharacters[character.name] = characterElements;
+      this.screenElements.playerCharacters[character.uid] = characterElements;
       this.renderCharacterElements(characterElements, this.screenElements.playersBox, index * 5);
       this.screen.append(this.screenElements.playersBox);
     });
@@ -293,7 +393,7 @@ class BattleScreen implements IScreen {
     this.screenElements.enemyCharacters = {};
     this.battle.dungeon.currentLevel.enemies.forEach((character, index) => {
       var characterElements: any = {};
-      this.screenElements.enemyCharacters[character.name] = characterElements;
+      this.screenElements.enemyCharacters[character.uid] = characterElements;
       this.renderCharacterElements(characterElements, this.screenElements.enemiesBox, index * 5);
       this.screen.append(this.screenElements.enemiesBox);
     });
@@ -359,13 +459,13 @@ class BattleScreen implements IScreen {
 
     // Update player characters
     this.battle.playerCharacters.forEach((character) => {
-      var characterElements = this.screenElements.playerCharacters[character.name];
+      var characterElements = this.screenElements.playerCharacters[character.uid];
       this.updateCharacterElements(characterElements, character);
     });
 
     // Update enemy characters
     this.battle.dungeon.currentLevel.enemies.forEach((character) => {
-      var characterElements: any = this.screenElements.enemyCharacters[character.name];
+      var characterElements: any = this.screenElements.enemyCharacters[character.uid];
       this.updateCharacterElements(characterElements, character);
     });
   }
@@ -424,6 +524,23 @@ class BattleScreen implements IScreen {
     this.gameOptions.autoAdvanceBattles = !this.gameOptions.autoAdvanceBattles;
 
     // Update battle options
+    this.updateBattleOptions();
+  }
+
+  //
+  // Toggles the damage feedback
+  //
+  private toggleDamageFeedback() {
+
+    // Set the new option
+    if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.None)
+      this.gameOptions.battleDamageFeedback = BattleDamageFeedbackEnum.Flash;
+    else if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.Flash)
+      this.gameOptions.battleDamageFeedback = BattleDamageFeedbackEnum.Damage
+    else if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.Damage)
+      this.gameOptions.battleDamageFeedback = BattleDamageFeedbackEnum.None;
+
+    // Update the battle options
     this.updateBattleOptions();
   }
 

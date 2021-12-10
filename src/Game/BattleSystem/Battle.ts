@@ -2,6 +2,7 @@ import BattleStateEnum from './Enums/BattleStateEnum';
 import BattleCharacter from './BattleCharacter';
 import BattleLog from './BattleLog';
 import Dungeon from './Dungeon/Dungeon';
+import DamageTracker from './DamageTracker';
 
 class Battle {
 
@@ -26,7 +27,7 @@ class Battle {
   }
 
   // Process the battle
-  public processBattle() {
+  public processBattle(): DamageTracker | undefined {
 
     // Make sure we are in the battle state
     if (this.currentState !== BattleStateEnum.InBattle)
@@ -40,11 +41,15 @@ class Battle {
     }
 
     // Grab the character with the most charge and let them act
+    var damageTracker = new DamageTracker();
     var readyCharacter = readyCharacters.sort((a, b) => b.currentCharge - a.currentCharge)[0];
-    readyCharacter.act(this.allCharactersInCurrentLevel, this.battleLog);
+    readyCharacter.act(this.allCharactersInCurrentLevel, this.battleLog, damageTracker);
 
     // Determine the next battle state post-action
     this.currentState = this.determineStateAfterAction();
+
+    // Return the damage tracker
+    return damageTracker;
   }
 
   // Gets all the characters in the current dungeon level

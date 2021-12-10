@@ -5,6 +5,7 @@ import BattleCharacter from '../BattleCharacter';
 import BattleDamage from '../BattleDamage';
 import BattleLog from '../BattleLog';
 import TargetTypeEnum from '../Enums/TargetTypeEnum';
+import DamageTracker from '../DamageTracker';
 
 class AttackSkill implements ISkill {
 
@@ -40,7 +41,8 @@ class AttackSkill implements ISkill {
   use(
     character: BattleCharacter,
     targets: Array<BattleCharacter>,
-    battleLog: BattleLog
+    battleLog: BattleLog,
+    damageTracker: DamageTracker
   ) {
     // Only first target is ever relevant
     var target = targets[0];
@@ -55,7 +57,7 @@ class AttackSkill implements ISkill {
       var damageToDo = this.calculateDamage(character, target);
 
       // Apply the damage
-      target.applyDamage(damageToDo);
+      target.applyDamage(damageToDo, damageTracker);
 
       // Log
       battleLog.addMessage(`${character.name} attacks ${target.name} for ${damageToDo.getTotalAmount()} damage`);
