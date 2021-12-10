@@ -13,6 +13,7 @@ import ScreenManager from "../ScreenManager";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
 import { getAsciiString } from "../Helpers/AsciiHelper";
+import BattleDamageFeedbackEnum from "../../Game/BattleSystem/Enums/BattleDamageFeedbackEnum";
 
 class BattleScreen implements IScreen {
 
@@ -100,9 +101,16 @@ class BattleScreen implements IScreen {
       return;
 
     if (this.battle.currentState === BattleStateEnum.InBattle) {
+
+      // Process battle and update characters
       var damageTracker = this.battle.processBattle();
       this.updateBattleCharacters();
-      await this.processDamageTextAnimation(damageTracker);
+
+      // Show animations
+      if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.Damage)
+        await this.processDamageTextAnimation(damageTracker);
+      else if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.Flash)
+        await this.processDamageFlashAnimation(damageTracker);
     }
 
     if (this.battle.currentState === BattleStateEnum.LevelCleared) {
@@ -278,6 +286,7 @@ class BattleScreen implements IScreen {
 
     this.screenElements.logBox.key(['s'], () => this.toggleSpeed());
     this.screenElements.logBox.key(['a'], () => this.toggleAutoAdvance());
+    this.screenElements.logBox.key(['d'], () => this.toggleDamageFeedback());
   }
 
   //
@@ -319,6 +328,9 @@ class BattleScreen implements IScreen {
 
     // Set auto advance
     content += `\t{green-fg}A{/}uto advance: ${this.gameOptions.autoAdvanceBattles}`;
+
+    // Set feedback
+    content += `\t{green-fg}D{/}mg feedback: ${this.gameOptions.battleDamageFeedback}`;
 
     // Set content
     this.screenElements.battleOptionsBox.setContent(content);
@@ -512,6 +524,23 @@ class BattleScreen implements IScreen {
     this.gameOptions.autoAdvanceBattles = !this.gameOptions.autoAdvanceBattles;
 
     // Update battle options
+    this.updateBattleOptions();
+  }
+
+  //
+  // Toggles the damage feedback
+  //
+  private toggleDamageFeedback() {
+
+    // Set the new option
+    if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.None)
+      this.gameOptions.battleDamageFeedback = BattleDamageFeedbackEnum.Flash;
+    else if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.Flash)
+      this.gameOptions.battleDamageFeedback = BattleDamageFeedbackEnum.Damage
+    else if (this.gameOptions.battleDamageFeedback == BattleDamageFeedbackEnum.Damage)
+      this.gameOptions.battleDamageFeedback = BattleDamageFeedbackEnum.None;
+
+    // Update the battle options
     this.updateBattleOptions();
   }
 
