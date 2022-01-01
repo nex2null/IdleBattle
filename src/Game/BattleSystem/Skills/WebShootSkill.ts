@@ -4,6 +4,7 @@ import ISkill from './ISkill';
 import { calculateHit } from '../BattleFormulas';
 import BattleCharacter from '../BattleCharacter';
 import BattleLog from '../BattleLog';
+import BattleEffectEnum from '../Enums/BattleEffectEnum';
 
 class WebShootSkill implements ISkill {
 
@@ -21,7 +22,7 @@ class WebShootSkill implements ISkill {
   canUse(
     character: BattleCharacter,
     targets: Array<BattleCharacter>): boolean {
-      return true;
+    return true;
   }
 
   // Use the skill
@@ -49,7 +50,7 @@ class WebShootSkill implements ISkill {
 
   // Determine if the skill is benefecial
   isBeneficialOn(target: BattleCharacter) {
-    return target.getEffect('Slowed') == null;
+    return target.getEffect(BattleEffectEnum.Slowed) == null;
   }
 }
 

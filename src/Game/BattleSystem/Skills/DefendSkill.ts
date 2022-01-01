@@ -1,4 +1,4 @@
-import DefenseEffect from '../BattleEffects/DefenseEffect';
+import DefendedEffect from '../BattleEffects/DefendedEffect';
 import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import ISkill from './ISkill';
 import BattleCharacter from '../BattleCharacter';
@@ -20,7 +20,7 @@ class DefendSkill implements ISkill {
   canUse(
     character: BattleCharacter,
     targets: Array<BattleCharacter>): boolean {
-      return true;
+    return true;
   }
 
   // Use the skill
@@ -30,7 +30,7 @@ class DefendSkill implements ISkill {
     battleLog: BattleLog
   ) {
     // Add a defense effect to the character
-    var defenseEffect = new DefenseEffect(character);
+    var defenseEffect = new DefendedEffect(character);
     character.addEffect(defenseEffect);
 
     // Log that the character is defending

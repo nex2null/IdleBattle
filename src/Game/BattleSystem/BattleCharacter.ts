@@ -7,6 +7,7 @@ import { LootGenerationOption } from '../Itemization/LootGenerator';
 import Stats from '../Stats';
 import { Guid } from "guid-typescript";
 import DamageTracker from './DamageTracker';
+import BattleEffectEnum from './Enums/BattleEffectEnum';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 
@@ -170,8 +171,8 @@ export default class BattleCharacter {
     this.effects = this.effects.filter(x => x !== effect);
   }
 
-  getEffect(name: string) {
-    return this.effects.find(x => x.name === name);
+  getEffect(type: BattleEffectEnum) {
+    return this.effects.find(x => x.type === type);
   }
 
   // Determine if this character has enough mp to use an ability
