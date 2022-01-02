@@ -54,6 +54,9 @@ class ChilledEffect extends BaseEffect {
     // Remove speed based on current stacks - 5% off base speed per stack
     this.removedSpeed = Math.floor(this.character.baseStats.speed * .05 * this.stacks);
     this.character.currentStats.speed -= this.removedSpeed;
+
+    // Update ui code based on stacks
+    this.uiCode = `{blue-bg}{white-fg}CHL${this.stacks}{/white-fg}{/blue-bg}`;
   }
 
   // Return speed to character
@@ -71,8 +74,11 @@ class ChilledEffect extends BaseEffect {
     this.decayTurns--;
 
     // If the turns are up, decay the stack by 1
-    if (this.decayTurns <= 0)
+    if (this.decayTurns <= 0) {
       this.stacks--;
+      this.decayTurns = 3;
+      this.handleSpeedReduction();
+    }
 
     // If there are no more stacks, remove the effect
     if (this.stacks <= 0)
