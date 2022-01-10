@@ -10,6 +10,17 @@ class BattleDamage {
     this.amounts.set(type, amount);
   }
 
+  // Gets damage by type
+  getDamageByType(type: DamageTypeEnum): number {
+    return this.amounts.get(type) || 0;
+  }
+
+  // Adds damage
+  addDamage(amount: number, type: DamageTypeEnum): void {
+    var oldValue = this.getDamageByType(type);
+    this.amounts.set(type, oldValue + amount);
+  }
+
   // Rounds all damage
   round() {
     this.amounts.forEach((amount, type) => {

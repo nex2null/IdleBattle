@@ -61,7 +61,7 @@ class AttackSkill implements ISkill {
       var damageToDo = this.calculateDamage(character, target);
 
       // Deal the damage
-      target.dealDamage(damageToDo, target, battleLog, damageTracker);
+      character.dealDamage(damageToDo, target, battleLog, damageTracker);
     }
     else {
       battleLog.addMessage(`${character.name} misses!`)

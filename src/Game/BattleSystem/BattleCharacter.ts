@@ -128,8 +128,14 @@ export default class BattleCharacter {
 
     // TODO: Stat-based damage things (non-effects)
 
+    // Handle effects for before damage is dealt
+    this.effects.forEach(x => x.beforeDamageDealt(damage, target));
+
     // The target takes the damage
     target.takeDamage(damage, battleLog, damageTracker);
+
+    // Handle effects for after damage is dealt
+    this.effects.forEach(x => x.afterDamageDealt(damage, target, battleLog));
   }
 
   // Inflict an effect on a target
