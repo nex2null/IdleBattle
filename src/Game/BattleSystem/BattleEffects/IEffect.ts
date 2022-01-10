@@ -1,5 +1,6 @@
 import BattleCharacter from '../BattleCharacter';
 import BattleDamage from '../BattleDamage';
+import BattleLog from '../BattleLog';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
 
 interface IEffect {
@@ -30,6 +31,12 @@ interface IEffect {
 
   // Handle after an action is performed
   afterActionPerformed(): void;
+
+  // Handle before damage is dealt
+  beforeDamageDealt(damage: BattleDamage, target: BattleCharacter): void;
+
+  // Handle after damage is dealt
+  afterDamageDealt(damage: BattleDamage, target: BattleCharacter, battleLog: BattleLog): void;
 
   // Handle before damage is taken
   beforeDamageTaken(damage: BattleDamage): void;

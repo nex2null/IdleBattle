@@ -11,13 +11,11 @@ import ChilledEffect from '../BattleEffects/ChilledEffect';
 
 class IceBoltSkill implements ISkill {
 
-  // TODO: Figure MP Cost
-  readonly mpCost: number;
-
   // Properties
   slvl: number;
   isMastered: boolean;
   name: string;
+  readonly mpCost: number;
   targetType: TargetTypeEnum;
 
   // Constructor
