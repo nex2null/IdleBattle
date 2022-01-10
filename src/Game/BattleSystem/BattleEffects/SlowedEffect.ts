@@ -14,6 +14,11 @@ class SlowedEffect extends BaseEffect {
     this.turnsLeft = turnsToSlow;
   }
 
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string {
+    return `${characterName} is slowed`;
+  }
+
   // Whether the effect can be applied
   canApply() {
     return this.character.getEffect(this.type) == null;

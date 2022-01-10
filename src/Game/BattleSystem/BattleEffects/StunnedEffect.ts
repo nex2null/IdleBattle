@@ -13,6 +13,11 @@ class StunnedEffect extends BaseEffect {
     this.stunLength = stunLength;
   }
 
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string {
+    return `${characterName} is stunned`;
+  }
+
   // Whether the effect can be applied
   canApply() {
 

@@ -11,6 +11,11 @@ class DefendedEffect extends BaseEffect {
     super(character, BattleEffectEnum.Defended, '{white-bg}{black-fg}DFN{/black-fg}{/white-bg}');
   }
 
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string {
+    return `${characterName} defends`;
+  }
+
   // Handle before an action is performed
   beforeActionPerformed() {
     this.character.removeEffect(this);

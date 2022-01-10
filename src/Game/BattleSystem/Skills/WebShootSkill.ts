@@ -34,17 +34,19 @@ class WebShootSkill implements ISkill {
     // Only first target is ever relevant
     var target = targets[0];
 
+    // Log
+    battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}.`);
+
     // Determine if the attack hits
     var attackHits = calculateHit(character, target);
 
     // If the attack hits then apply the slow
     if (attackHits) {
       var slowedEffect = new SlowedEffect(target, 3);
-      target.addEffect(slowedEffect);
-      battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}, they are slowed!`);
+      character.inflictEffect(slowedEffect, target, battleLog);
     }
     else {
-      battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}, but misses!`)
+      battleLog.addMessage(`${character.name} misses!`)
     }
   }
 

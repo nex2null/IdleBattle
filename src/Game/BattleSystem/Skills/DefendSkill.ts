@@ -31,10 +31,7 @@ class DefendSkill implements ISkill {
   ) {
     // Add a defense effect to the character
     var defenseEffect = new DefendedEffect(character);
-    character.addEffect(defenseEffect);
-
-    // Log that the character is defending
-    battleLog.addMessage(`${character.name} defends`);
+    character.applyEffect(defenseEffect, battleLog);
   }
 
   // Determine if the skill is benefecial

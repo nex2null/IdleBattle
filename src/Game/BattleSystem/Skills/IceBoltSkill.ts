@@ -57,6 +57,9 @@ class IceBoltSkill implements ISkill {
     // Only first target is ever relevant
     var target = targets[0];
 
+    // Log
+    battleLog.addMessage(`${character.name} shoots an ice bolt at ${target.name}`);
+
     // Spend MP
     character.spendMp(this.mpCost);
 
@@ -69,24 +72,19 @@ class IceBoltSkill implements ISkill {
       // Calculate the damage on the target
       var damageToDo = this.calculateDamage(character, target);
 
-      // Apply the damage
-      target.applyDamage(damageToDo, damageTracker);
+      // Deal the damage
+      character.dealDamage(damageToDo, target, battleLog, damageTracker);
 
       // If the target is alive determine if they are chilled
       var chillRollSuccess = this.isMastered || RandomHelpers.getRandomInt(1, 100) <= 50;
       var applyChill = target.isAlive() && chillRollSuccess;
       if (applyChill) {
         var chillEffect = new ChilledEffect(target);
-        target.addEffect(chillEffect);
+        character.inflictEffect(chillEffect, target, battleLog);
       }
-
-      // Log
-      battleLog.addMessage(`${character.name} shoots an ice bolt at ${target.name} for ${damageToDo.getTotalAmount()} damage`);
-      if (applyChill) battleLog.addMessage(`${target.name} is chilled!`)
-      if (!target.isAlive()) battleLog.addMessage(`${target.name} has died`);
     }
     else {
-      battleLog.addMessage(`${character.name} shoots an ice bolt at ${target.name}, but misses!`)
+      battleLog.addMessage(`${character.name} misses!`)
     }
   }
 

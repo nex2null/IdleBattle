@@ -52,6 +52,9 @@ class PowerStrikeSkill implements ISkill {
     // Only first target is ever relevant
     var target = targets[0];
 
+    // Log
+    battleLog.addMessage(`${character.name} power strike's ${target.name}`);
+
     // Spend MP
     character.spendMp(this.mpCost);
 
@@ -64,24 +67,19 @@ class PowerStrikeSkill implements ISkill {
       // Calculate the damage on the target
       var damageToDo = this.calculateDamage(character, target);
 
-      // Apply the damage
-      target.applyDamage(damageToDo, damageTracker);
+      // Deal damage
+      character.dealDamage(damageToDo, target, battleLog, damageTracker);
 
       // If the target is alive determine if they are stunned
       var applyStun = target.isAlive() && RandomHelpers.getRandomInt(1, 100) <= 50;
       if (applyStun) {
         // TODO: Determine stun length
         var stunEffect = new StunnedEffect(target, 10);
-        target.addEffect(stunEffect);
+        character.inflictEffect(stunEffect, target, battleLog);
       }
-
-      // Log
-      battleLog.addMessage(`${character.name} power strike's ${target.name} for ${damageToDo.getTotalAmount()} damage`);
-      if (applyStun) battleLog.addMessage(`${target.name} is stunned!`)
-      if (!target.isAlive()) battleLog.addMessage(`${target.name} has died`);
     }
     else {
-      battleLog.addMessage(`${character.name} power strike's ${target.name}, but misses!`)
+      battleLog.addMessage(`${character.name} misses!`)
     }
   }
 

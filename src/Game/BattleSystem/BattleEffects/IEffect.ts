@@ -13,6 +13,9 @@ interface IEffect {
   // The ui code of the effect (3 characters, tags allowed)
   uiCode: string;
 
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string;
+
   // Whether the effect can be applied
   canApply(): boolean;
 

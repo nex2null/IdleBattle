@@ -17,6 +17,11 @@ class BaseEffect implements IEffect {
     this.uiCode = uiCode;
   }
 
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string {
+    return `TODO: IMPLEMENT INFLICT EFFECT MESSAGE FOR ${this.type}`;
+  }
+
   // Whether the effect can be applied
   canApply(): boolean {
     return true;

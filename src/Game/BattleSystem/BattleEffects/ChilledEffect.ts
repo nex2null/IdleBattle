@@ -17,6 +17,11 @@ class ChilledEffect extends BaseEffect {
     this.removedSpeed = 0;
   }
 
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string {
+    return `${characterName} is chilled`;
+  }
+
   onApply(): void {
 
     // If no existing chill effect was found, then add this one

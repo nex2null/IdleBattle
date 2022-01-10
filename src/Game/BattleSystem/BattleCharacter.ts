@@ -8,6 +8,7 @@ import Stats from '../Stats';
 import { Guid } from "guid-typescript";
 import DamageTracker from './DamageTracker';
 import BattleEffectEnum from './Enums/BattleEffectEnum';
+import IEffect from './BattleEffects/IEffect';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 
@@ -118,7 +119,33 @@ export default class BattleCharacter {
     this.actionPerformed();
   }
 
-  applyDamage(damage: BattleDamage, damageTracker: DamageTracker) {
+  // Deals damage to a target
+  dealDamage(
+    damage: BattleDamage,
+    target: BattleCharacter,
+    battleLog: BattleLog,
+    damageTracker: DamageTracker) {
+
+    // TODO: Stat-based damage things (non-effects)
+
+    // The target takes the damage
+    target.takeDamage(damage, battleLog, damageTracker);
+  }
+
+  // Inflict an effect on a target
+  inflictEffect(
+    effect: IEffect,
+    target: BattleCharacter,
+    battleLog: BattleLog) {
+
+    // TODO: Anything that happens when an effect is inflicted
+
+    // Apply the effect to the target
+    target.applyEffect(effect, battleLog);
+  }
+
+  // Takes damage
+  takeDamage(damage: BattleDamage, battleLog: BattleLog, damageTracker: DamageTracker) {
 
     // Allow effects to modify damage before processing
     this.effects.forEach(x => x.beforeDamageTaken(damage));
@@ -131,23 +158,30 @@ export default class BattleCharacter {
     this.currentStats.hp -= totalDamage;
     damageTracker.setDamageTaken(this, totalDamage);
 
+    // Log that we took the damage
+    battleLog.addMessage(`${this.name} takes {red-fg}${totalDamage}{/red-fg} damage`);
+
     // Don't allow hp to become negative
     this.currentStats.hp = this.currentStats.hp < 0 ? 0 : this.currentStats.hp;
 
     // Allow effects to process damage taken
     this.effects.forEach(x => x.afterDamageTaken(damage));
 
-    // If the character has died, set charge to 0
-    if (!this.isAlive())
+    // If the character has died, set charge to 0 and log
+    if (!this.isAlive()) {
       this.currentCharge = 0;
+      battleLog.addMessage(`{red-bg}${this.name} has died{/red-bg}`);
+    }
   }
 
+  // Handle before an action is performed
   beforeActionPerformed() {
 
     // Allow effects to trigger before an action has been performed
     this.effects.forEach(x => x.beforeActionPerformed());
   }
 
+  // Mark that a character performed an action
   actionPerformed() {
 
     this.currentCharge -= REQUIRED_CHARGE_TO_ACT;
@@ -156,7 +190,8 @@ export default class BattleCharacter {
     this.effects.forEach(x => x.afterActionPerformed());
   }
 
-  addEffect(effect: BaseEffect) {
+  // Applies an effect to the character
+  applyEffect(effect: IEffect, battleLog: BattleLog) {
 
     // Make sure we can add the effect
     if (!effect.canApply())
@@ -164,13 +199,20 @@ export default class BattleCharacter {
 
     // Apply the effect
     effect.onApply();
+
+    // Log that the effect was applied
+    var inflictedMessage = effect.getInflictedMessage(this.name);
+    if (inflictedMessage)
+      battleLog.addMessage(inflictedMessage);
   }
 
-  removeEffect(effect: BaseEffect) {
+  // Removes an effect from the character
+  removeEffect(effect: IEffect) {
     effect.onRemove();
     this.effects = this.effects.filter(x => x !== effect);
   }
 
+  // Gets an effect on the character by type
   getEffect(type: BattleEffectEnum) {
     return this.effects.find(x => x.type === type);
   }
