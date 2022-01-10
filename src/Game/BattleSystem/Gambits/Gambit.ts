@@ -40,7 +40,8 @@ class Gambit {
   getAction(user: BattleCharacter, characters: Array<BattleCharacter>): GambitAction | null {
 
     // Grab the skill and condition
-    var skill = SkillFactory.getSkill(this.skillEnum);
+    // TODO: Handle level and mastery
+    var skill = SkillFactory.getSkill(this.skillEnum, 1, false);
     var condition = GambitConditionFactory.getGambitCondition(this.conditionEnum);
 
     // Determine if we can activate

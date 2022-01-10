@@ -1,19 +1,25 @@
 import BattleDamage from '../BattleDamage';
 import BattleCharacter from '../BattleCharacter';
 import IEffect from './IEffect';
+import BattleEffectEnum from '../Enums/BattleEffectEnum';
 
 class BaseEffect implements IEffect {
 
   // Properties
   character: BattleCharacter;
-  name: string;
+  type: BattleEffectEnum;
   uiCode: string;
 
   // Constructor
-  constructor(character: BattleCharacter, name: string, uiCode: string) {
+  constructor(character: BattleCharacter, type: BattleEffectEnum, uiCode: string) {
     this.character = character;
-    this.name = name;
+    this.type = type;
     this.uiCode = uiCode;
+  }
+
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string {
+    return `TODO: IMPLEMENT INFLICT EFFECT MESSAGE FOR ${this.type}`;
   }
 
   // Whether the effect can be applied

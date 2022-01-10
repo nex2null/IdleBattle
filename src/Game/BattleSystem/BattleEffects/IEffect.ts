@@ -1,16 +1,20 @@
 import BattleCharacter from '../BattleCharacter';
 import BattleDamage from '../BattleDamage';
+import BattleEffectEnum from '../Enums/BattleEffectEnum';
 
 interface IEffect {
 
   // The character the effect is applied to
   character: BattleCharacter;
 
-  // The name of the effect
-  name: string;
+  // The type of effect
+  type: BattleEffectEnum;
 
   // The ui code of the effect (3 characters, tags allowed)
   uiCode: string;
+
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string;
 
   // Whether the effect can be applied
   canApply(): boolean;

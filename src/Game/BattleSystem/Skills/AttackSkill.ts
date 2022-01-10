@@ -44,8 +44,12 @@ class AttackSkill implements ISkill {
     battleLog: BattleLog,
     damageTracker: DamageTracker
   ) {
+
     // Only first target is ever relevant
     var target = targets[0];
+
+    // Log
+    battleLog.addMessage(`${character.name} attacks ${target.name}`);
 
     // Determine if the attack hits
     var attackHits = calculateHit(character, target);
@@ -56,15 +60,11 @@ class AttackSkill implements ISkill {
       // Calculate the damage on the target
       var damageToDo = this.calculateDamage(character, target);
 
-      // Apply the damage
-      target.applyDamage(damageToDo, damageTracker);
-
-      // Log
-      battleLog.addMessage(`${character.name} attacks ${target.name} for ${damageToDo.getTotalAmount()} damage`);
-      if (!target.isAlive()) battleLog.addMessage(`${target.name} has died`);
+      // Deal the damage
+      target.dealDamage(damageToDo, target, battleLog, damageTracker);
     }
     else {
-      battleLog.addMessage(`${character.name} attacks ${target.name}, but misses!`)
+      battleLog.addMessage(`${character.name} misses!`)
     }
   }
 

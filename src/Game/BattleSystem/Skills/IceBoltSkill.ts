@@ -6,21 +6,26 @@ import BattleLog from '../BattleLog';
 import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import ISkill from './ISkill';
 import RandomHelpers from '../../Utilities/RandomHelpers';
-import StunnedEffect from '../BattleEffects/StunnedEffect';
 import DamageTracker from '../DamageTracker';
+import ChilledEffect from '../BattleEffects/ChilledEffect';
 
-class PowerStrikeSkill implements ISkill {
+class IceBoltSkill implements ISkill {
 
   // TODO: Figure MP Cost
-  readonly mpCost: number = 10;
+  readonly mpCost: number;
 
   // Properties
+  slvl: number;
+  isMastered: boolean;
   name: string;
   targetType: TargetTypeEnum;
 
   // Constructor
-  constructor() {
-    this.name = 'Power Strike';
+  constructor(slvl: number, isMastered: boolean) {
+    this.slvl = slvl;
+    this.isMastered = isMastered;
+    this.mpCost = 5 + ((this.slvl - 1) * 2);
+    this.name = 'Ice Bolt';
     this.targetType = TargetTypeEnum.Single;
   }
 
@@ -34,9 +39,9 @@ class PowerStrikeSkill implements ISkill {
   // Calculate the attack damage
   calculateDamage(user: BattleCharacter, target: BattleCharacter) {
 
-    // Base damage is 1.5x strength
-    var baseDamageAmount = user.currentStats.strength * 1.5;
-    var baseDamage = new BattleDamage(baseDamageAmount, DamageTypeEnum.Physical);
+    var multiplier = 1.5 + this.slvl * .2;
+    var baseDamageAmount = user.currentStats.intelligence * multiplier;
+    var baseDamage = new BattleDamage(baseDamageAmount, DamageTypeEnum.Cold);
 
     // Process the base damage
     return processDamage(user, target, baseDamage);
@@ -53,7 +58,7 @@ class PowerStrikeSkill implements ISkill {
     var target = targets[0];
 
     // Log
-    battleLog.addMessage(`${character.name} power strike's ${target.name}`);
+    battleLog.addMessage(`${character.name} shoots an ice bolt at ${target.name}`);
 
     // Spend MP
     character.spendMp(this.mpCost);
@@ -67,15 +72,15 @@ class PowerStrikeSkill implements ISkill {
       // Calculate the damage on the target
       var damageToDo = this.calculateDamage(character, target);
 
-      // Deal damage
+      // Deal the damage
       character.dealDamage(damageToDo, target, battleLog, damageTracker);
 
-      // If the target is alive determine if they are stunned
-      var applyStun = target.isAlive() && RandomHelpers.getRandomInt(1, 100) <= 50;
-      if (applyStun) {
-        // TODO: Determine stun length
-        var stunEffect = new StunnedEffect(target, 10);
-        character.inflictEffect(stunEffect, target, battleLog);
+      // If the target is alive determine if they are chilled
+      var chillRollSuccess = this.isMastered || RandomHelpers.getRandomInt(1, 100) <= 50;
+      var applyChill = target.isAlive() && chillRollSuccess;
+      if (applyChill) {
+        var chillEffect = new ChilledEffect(target);
+        character.inflictEffect(chillEffect, target, battleLog);
       }
     }
     else {
@@ -89,4 +94,4 @@ class PowerStrikeSkill implements ISkill {
   }
 }
 
-export default PowerStrikeSkill;
+export default IceBoltSkill;

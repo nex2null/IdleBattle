@@ -1,22 +1,28 @@
 import BaseEffect from './BaseEffect';
 import BattleCharacter from '../BattleCharacter';
+import BattleEffectEnum from '../Enums/BattleEffectEnum';
 
-class StunEffect extends BaseEffect {
+class StunnedEffect extends BaseEffect {
 
   // Properties
   stunLength: number;
 
   // Constructor
   constructor(character: BattleCharacter, stunLength: number) {
-    super(character, 'Stunned', '{white-bg}{black-fg}STN{/black-fg}{/white-bg}');
+    super(character, BattleEffectEnum.Stunned, '{white-bg}{black-fg}STN{/black-fg}{/white-bg}');
     this.stunLength = stunLength;
+  }
+
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string {
+    return `${characterName} is stunned`;
   }
 
   // Whether the effect can be applied
   canApply() {
 
     // TODO: Refresh stun
-    return this.character.getEffect(this.name) == null;
+    return this.character.getEffect(this.type) == null;
   }
 
   // Process charge being ticked
@@ -32,4 +38,4 @@ class StunEffect extends BaseEffect {
   }
 }
 
-export default StunEffect;
+export default StunnedEffect;

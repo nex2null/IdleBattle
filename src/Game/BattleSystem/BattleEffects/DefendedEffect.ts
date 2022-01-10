@@ -2,12 +2,18 @@ import DamageTypeEnum from '../Enums/DamageTypeEnum';
 import BaseEffect from './BaseEffect';
 import BattleCharacter from '../BattleCharacter';
 import BattleDamage from '../BattleDamage';
+import BattleEffectEnum from '../Enums/BattleEffectEnum';
 
-class DefenseEffect extends BaseEffect {
+class DefendedEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter) {
-    super(character, 'Defended', '{white-bg}{black-fg}DFN{/black-fg}{/white-bg}');
+    super(character, BattleEffectEnum.Defended, '{white-bg}{black-fg}DFN{/black-fg}{/white-bg}');
+  }
+
+  // Get the message to display when a character is inflicted with this effect
+  getInflictedMessage(characterName: string): string {
+    return `${characterName} defends`;
   }
 
   // Handle before an action is performed
@@ -24,4 +30,4 @@ class DefenseEffect extends BaseEffect {
   }
 }
 
-export default DefenseEffect;
+export default DefendedEffect;
