@@ -52,7 +52,9 @@ class FrozenBladesSkill implements ISkill {
     character.spendMp(this.mpCost);
 
     // Inflict frozen blades on the target
-    var frozenBladesEffect = new FrozenBladesEffect(character, this.frozenBladesTurns, this.addedCold)
+    // NOTE: Need to do turns + 1 because it will lose a turn immediately after we apply it at
+    // the end of the character's turn
+    var frozenBladesEffect = new FrozenBladesEffect(character, this.frozenBladesTurns + 1, this.addedCold)
     character.inflictEffect(frozenBladesEffect, target, battleLog);
   }
 
