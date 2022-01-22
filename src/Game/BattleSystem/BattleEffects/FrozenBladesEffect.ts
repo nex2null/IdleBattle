@@ -6,18 +6,21 @@ import DamageTypeEnum from '../Enums/DamageTypeEnum';
 import RandomHelpers from '../../Utilities/RandomHelpers';
 import ChilledEffect from './ChilledEffect';
 import BattleLog from '../BattleLog';
+import FrozenEffect from './FrozenEffect';
 
 class FrozenBladesEffect extends BaseEffect {
 
   // Properties
   turnsLeft: number;
   addedColdDamage: number;
+  canFreeze: boolean;
 
   // Constructor
-  constructor(character: BattleCharacter, turns: number, addedColdDamage: number) {
+  constructor(character: BattleCharacter, turns: number, addedColdDamage: number, canFreeze: boolean) {
     super(character, BattleEffectEnum.FrozenBlades, '{blue-bg}{white-fg}FZB{/white-fg}{/blue-bg}');
     this.turnsLeft = turns;
     this.addedColdDamage = addedColdDamage;
+    this.canFreeze = canFreeze;
   }
 
   // Get the message to display when a character is inflicted with this effect
@@ -46,8 +49,15 @@ class FrozenBladesEffect extends BaseEffect {
     if (!damage.getDamageByType(DamageTypeEnum.Physical))
       return;
 
+    // Check for frozen
+    var applyFrozen = target.isAlive() && this.canFreeze && RandomHelpers.getRandomInt(1, 100) <= 5;
+    if (applyFrozen) {
+      var frozenEffect = new FrozenEffect(target);
+      this.character.inflictEffect(frozenEffect, target, battleLog);
+    }
+
     // Check for chill
-    var applyChill = target.isAlive() && RandomHelpers.getRandomInt(1, 100) <= 25;
+    var applyChill = target.isAlive() && !applyFrozen && RandomHelpers.getRandomInt(1, 100) <= 25;
     if (applyChill) {
       var chillEffect = new ChilledEffect(target);
       this.character.inflictEffect(chillEffect, target, battleLog);
