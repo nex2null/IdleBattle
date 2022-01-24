@@ -5,6 +5,8 @@ import Stats from "./Stats";
 import Gambit from "./BattleSystem/Gambits/Gambit";
 import SkillEnum from "./BattleSystem/Enums/SkillEnum";
 import GambitConditionEnum from "./BattleSystem/Enums/GambitConditionEnum";
+import ClassEnum from "./Enums/ClassEnum";
+import PlayerSkill from "./PlayerSkill";
 
 class Town {
 
@@ -42,6 +44,11 @@ class Town {
           gambits: [
             new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.PowerStrike),
             new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack)
+          ],
+          primaryClass: ClassEnum.Cryomancer,
+          skills: [
+            new PlayerSkill(SkillEnum.Attack, 1, false),
+            new PlayerSkill(SkillEnum.Defend, 1, false)
           ]
         })
       ];
