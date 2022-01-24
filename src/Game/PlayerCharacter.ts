@@ -4,7 +4,7 @@ import Gambit from './BattleSystem/Gambits/Gambit';
 import PlayerEquipment from "./PlayerEquipment";
 import Stats from "./Stats";
 import StatEnum from "./Enums/StatEnum";
-import ClassEnum from "./Enums/ClassEnum";
+import CharacterClassEnum from "./Enums/CharacterClassEnum";
 import PlayerSkill from "./PlayerSkill";
 
 class PlayerCharacter {
@@ -14,7 +14,7 @@ class PlayerCharacter {
   level: number;
   stats: Stats;
   gambits: Array<Gambit>;
-  primaryClass: ClassEnum;
+  primaryClass: CharacterClassEnum;
   skills: Array<PlayerSkill>;
 
   // Equipment
