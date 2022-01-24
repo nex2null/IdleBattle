@@ -27,9 +27,7 @@ class Town {
     // Setup characters
     this.playerCharacters = savedData.playerCharacters
       ? savedData.playerCharacters.map((x: any) => PlayerCharacter.load(x))
-      : [
-          PlayerCharacterCreator.createPlayerCharacter(CharacterClassEnum.Cryomancer, 'Brian')
-        ];
+      : [];
   }
 }
 
