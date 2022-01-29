@@ -5,6 +5,11 @@ import ICharacterClass from "./ICharacterClass";
 
 class CryomancerClass implements ICharacterClass {
 
+  // Gets the name of the class
+  getName(): string {
+    return 'Cryomancer'
+  }
+
   // Gets skills the class starts with
   getStartingSkills(): PlayerSkill[] {
     return [

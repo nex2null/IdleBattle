@@ -12,6 +12,7 @@ class Town {
   inventory: Inventory;
   playerCharacters: Array<PlayerCharacter>;
   equipmentBeingForged: Equipment | null;
+  unlockedClasses: Array<CharacterClassEnum>;
 
   // Constructor
   constructor(savedData: any = {}) {
@@ -20,6 +21,7 @@ class Town {
     this.totalExperience = savedData.totalExperience || 0;
     this.totalGold = savedData.totalGold || 0;
     this.equipmentBeingForged = savedData.equipmentBeingForged != null ? Equipment.load(savedData.equipmentBeingForged) : null;
+    this.unlockedClasses = savedData.unlockedClasses || [CharacterClassEnum.Cryomancer];
 
     // Setup inventory
     this.inventory = savedData.inventory ? Inventory.load(savedData.inventory) : new Inventory();
