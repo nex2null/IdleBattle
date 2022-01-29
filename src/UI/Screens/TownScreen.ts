@@ -1,6 +1,7 @@
 // Imports
 const blessed = require('blessed');
 import Game from "../../Game/Game";
+import Town from "../../Game/Town";
 import ScreenManager from "../ScreenManager";
 import BattleScreen from "./BattleScreen";
 import EquipmentScreen from "./EquipmentScreen";
@@ -12,10 +13,13 @@ class TownScreen implements IScreen {
 
   // Properties
   screen: any;
+  screenElements: any = {};
+  town: Town;
 
   // Constructor
   constructor() {
     this.screen = null;
+    this.town = Game.getInstance().town;
   }
 
   //
@@ -25,15 +29,16 @@ class TownScreen implements IScreen {
 
     this.screen = screen;
 
-    var goldBox = blessed.box({
+    // Build the town gold box
+    this.screenElements.goldBox = blessed.box({
       top: 0,
       left: '40',
       width: '25%',
       height: 7,
       label: 'Town',
       content: `
-  Experience: {green-fg}${Game.getInstance().town.totalExperience}{/green-fg}\n
-  Gold: {yellow-fg}${Game.getInstance().town.totalGold}{/yellow-fg}`,
+  Experience: {green-fg}${this.town.totalExperience}{/green-fg}\n
+  Gold: {yellow-fg}${this.town.totalGold}{/yellow-fg}`,
       tags: true,
       border: {
         type: 'line'
@@ -46,7 +51,8 @@ class TownScreen implements IScreen {
       }
     });
 
-    var townMenu = blessed.list({
+    // Build the town menu
+    this.screenElements.townMenu = blessed.list({
       top: 8,
       left: '40',
       width: '25%',
@@ -68,7 +74,8 @@ class TownScreen implements IScreen {
       keys: true
     });
 
-    townMenu.on('select', (el: any, selected: any) => {
+    // Handle a town menu item being selected
+    this.screenElements.townMenu.on('select', (el: any, selected: any) => {
 
       var selectedItem = el.getText();
 
@@ -88,20 +95,39 @@ class TownScreen implements IScreen {
         process.exit(0);
     });
 
-    townMenu.setItems([
-      'Battle',
-      'Equipment',
-      'Forge',
-      'Gambits',
-      'Exit'
-    ]);
+    // Set menu items
+    this.setMenuItems();
 
-    townMenu.key(['escape'], () => townMenu.select(townMenu.fuzzyFind('Exit')));
+    // Handle escape key on town menu
+    this.screenElements.townMenu.key(['escape'], () =>
+      this.screenElements.townMenu.select(this.screenElements.townMenu.fuzzyFind('Exit')));
 
-    this.screen.append(goldBox);
-    this.screen.append(townMenu);
+    // Append screen elements to screen
+    this.screen.append(this.screenElements.goldBox);
+    this.screen.append(this.screenElements.townMenu);
 
-    townMenu.focus();
+    // Focus on town menu
+    this.screenElements.townMenu.focus();
+  }
+
+  // Set menu items
+  setMenuItems() {
+
+    var items = [];
+
+    // Handle menu items only available if characters exist
+    if (this.town.playerCharacters.length > 0) {
+      items.push('Battle');
+      items.push('Equipment');
+      items.push('Gambits');
+    }
+
+    // Handle items always available
+    items.push('Forge');
+    items.push('Exit');
+
+    // Set menu items
+    this.screenElements.townMenu.setItems(items);
   }
 
   //

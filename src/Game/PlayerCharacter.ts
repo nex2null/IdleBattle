@@ -4,6 +4,8 @@ import Gambit from './BattleSystem/Gambits/Gambit';
 import PlayerEquipment from "./PlayerEquipment";
 import Stats from "./Stats";
 import StatEnum from "./Enums/StatEnum";
+import CharacterClassEnum from "./Enums/CharacterClassEnum";
+import PlayerSkill from "./PlayerSkill";
 
 class PlayerCharacter {
 
@@ -12,6 +14,8 @@ class PlayerCharacter {
   level: number;
   stats: Stats;
   gambits: Array<Gambit>;
+  primaryClass: CharacterClassEnum;
+  skills: Array<PlayerSkill>;
 
   // Equipment
   equipment: PlayerEquipment;
@@ -23,6 +27,8 @@ class PlayerCharacter {
     this.stats = args.stats;
     this.equipment = args.equipment || new PlayerEquipment();
     this.gambits = args.gambits;
+    this.primaryClass = args.primaryClass;
+    this.skills = args.skills;
   }
 
   // Load from saved data
@@ -32,7 +38,9 @@ class PlayerCharacter {
       level: savedData.level,
       stats: Stats.load(savedData.stats),
       equipment: savedData.equipment ? PlayerEquipment.load(savedData.equipment) : null,
-      gambits: savedData.gambits.map((x: any) => Gambit.load(x))
+      gambits: savedData.gambits.map((x: any) => Gambit.load(x)),
+      primaryClass: savedData.primaryClass,
+      skills: savedData.skills.map((x: any) => PlayerSkill.load(x))
     });
   }
 
