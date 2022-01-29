@@ -3,6 +3,7 @@ const blessed = require('blessed');
 import Game from "../../Game/Game";
 import Town from "../../Game/Town";
 import ScreenManager from "../ScreenManager";
+import BarracksScreen from "./BarracksScreen";
 import BattleScreen from "./BattleScreen";
 import EquipmentScreen from "./EquipmentScreen";
 import ForgeScreen from "./ForgeScreen";
@@ -74,33 +75,15 @@ class TownScreen implements IScreen {
       keys: true
     });
 
-    // Handle a town menu item being selected
-    this.screenElements.townMenu.on('select', (el: any, selected: any) => {
-
-      var selectedItem = el.getText();
-
-      if (selectedItem === 'Battle')
-        this.StartBattle();
-
-      else if (selectedItem === 'Equipment')
-        ScreenManager.getInstance().loadScreen(new EquipmentScreen());
-
-      else if (selectedItem === 'Forge')
-        ScreenManager.getInstance().loadScreen(new ForgeScreen());
-
-        else if (selectedItem === 'Gambits')
-        ScreenManager.getInstance().loadScreen(new GambitScreen());
-
-      else if (selectedItem === 'Exit')
-        process.exit(0);
-    });
-
-    // Set menu items
-    this.setMenuItems();
-
     // Handle escape key on town menu
     this.screenElements.townMenu.key(['escape'], () =>
       this.screenElements.townMenu.select(this.screenElements.townMenu.fuzzyFind('Exit')));
+
+    // Handle a town menu item being selected
+    this.screenElements.townMenu.on('select', (el: any) => this.onMenuSelect(el));
+
+    // Set menu items
+    this.setMenuItems();
 
     // Append screen elements to screen
     this.screen.append(this.screenElements.goldBox);
@@ -124,6 +107,7 @@ class TownScreen implements IScreen {
 
     // Handle items always available
     items.push('Forge');
+    items.push('Barracks');
     items.push('Exit');
 
     // Set menu items
@@ -134,6 +118,39 @@ class TownScreen implements IScreen {
   // Uninitializes the screen
   //
   public uninitializeScreen() {
+  }
+
+  //
+  // Handle the main menu item being selected
+  //
+  private onMenuSelect(el: any) {
+
+    // Grab selected item text
+    var selectedItem = el.getText();
+
+    // Handle battle
+    if (selectedItem === 'Battle')
+      this.StartBattle();
+
+    // Handle equipment
+    else if (selectedItem === 'Equipment')
+      ScreenManager.getInstance().loadScreen(new EquipmentScreen());
+
+    // Handle Forge
+    else if (selectedItem === 'Forge')
+      ScreenManager.getInstance().loadScreen(new ForgeScreen());
+
+    // Handle Barracks
+    else if (selectedItem === 'Barracks')
+      ScreenManager.getInstance().loadScreen(new BarracksScreen());
+
+    // Handle Gambits
+    else if (selectedItem === 'Gambits')
+    ScreenManager.getInstance().loadScreen(new GambitScreen());
+
+    // Handle Exit
+    else if (selectedItem === 'Exit')
+      process.exit(0);
   }
 
   //
