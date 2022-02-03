@@ -1,9 +1,15 @@
 import SkillEnum from "../BattleSystem/Enums/SkillEnum";
+import CharacterClassEnum from "../Enums/CharacterClassEnum";
 import PlayerSkill from "../PlayerSkill";
 import Stats from "../Stats";
 import ICharacterClass from "./ICharacterClass";
 
 class CryomancerClass implements ICharacterClass {
+
+  // Gets the CharacterClassEnum for the class
+  getEnum(): CharacterClassEnum {
+    return CharacterClassEnum.Cryomancer;
+  }
 
   // Gets the name of the class
   getName(): string {

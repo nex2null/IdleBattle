@@ -9,6 +9,8 @@ import TownScreen from "./TownScreen";
 import Town from "../../Game/Town";
 import ICharacterClass from "../../Game/CharacterClasses/ICharacterClass";
 import CharacterClassFactory from "../../Game/CharacterClasses/CharacterClassFactory";
+import { stringCompareIgnoreCase } from "../Helpers/StringHelper";
+import PlayerCharacterCreator from "../../Game/PlayerCharacterCreator";
 
 //
 // Barracks Screen
@@ -39,6 +41,22 @@ class BarracksScreen implements IScreen {
   public initializeScreen(screen: any) {
 
     this.screen = screen;
+
+    // Message dialog
+    this.screenElements.messageDialog = blessed.message({
+      parent: this.screen,
+      border: 'line',
+      height: 'shrink',
+      width: 'shrink',
+      top: 'center',
+      left: 'center',
+      hidden: true,
+      style: {
+        border: {
+          fg: 'red'
+        }
+      }
+    });
 
     // Main menu
     this.screenElements.mainMenu = blessed.list({
@@ -317,7 +335,32 @@ class BarracksScreen implements IScreen {
   //
   private recruitNewCharacter() {
 
-    // TODO
+    // Grab the character name
+    var characterName = this.screenElements.recruitNameBox.getValue() || '';
+    characterName = characterName.trim();
+
+    // Ensure a character name was provided
+    if (!characterName) {
+      this.screenElements.messageDialog.setFront();
+      this.screenElements.messageDialog.display('Character Name is required', 0);
+      this.screenElements.messageDialog.focus();
+      return;
+    }
+
+    // Verify the name doesn't already exist
+    if (this.town.playerCharacters.find(x => stringCompareIgnoreCase(x.name, characterName))) {
+      this.screenElements.messageDialog.setFront();
+      this.screenElements.messageDialog.display('A character with that name already exists', 0);
+      this.screenElements.messageDialog.focus();
+      return;
+    }
+
+    // Create the character
+    var classToRecruit = this.recruitClasses[this.currentRecruitClassIndex];
+    this.town.playerCharacters.push(PlayerCharacterCreator.createPlayerCharacter(classToRecruit.getEnum(), characterName));
+
+    // Done recruiting
+    this.hideRecruitBox();
   }
 }
 
