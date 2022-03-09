@@ -348,7 +348,7 @@ class BarracksScreen implements IScreen {
     }
 
     // Verify the name doesn't already exist
-    if (this.town.playerCharacters.find(x => stringCompareIgnoreCase(x.name, characterName))) {
+    if (this.town.roster.find(x => stringCompareIgnoreCase(x.name, characterName))) {
       this.screenElements.messageDialog.setFront();
       this.screenElements.messageDialog.display('A character with that name already exists', 0);
       this.screenElements.messageDialog.focus();
@@ -357,7 +357,7 @@ class BarracksScreen implements IScreen {
 
     // Create the character
     var classToRecruit = this.recruitClasses[this.currentRecruitClassIndex];
-    this.town.playerCharacters.push(PlayerCharacterCreator.createPlayerCharacter(classToRecruit.getEnum(), characterName));
+    this.town.roster.push(PlayerCharacterCreator.createPlayerCharacter(classToRecruit.getEnum(), characterName));
 
     // Done recruiting
     this.hideRecruitBox();

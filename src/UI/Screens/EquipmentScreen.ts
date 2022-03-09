@@ -283,11 +283,11 @@ class EquipmentScreen implements IScreen {
 
     // If index is less than 0, set index to the last character
     if (this.currentPlayerIndex < 0)
-      this.currentPlayerIndex = this.town.playerCharacters.length - 1;
+      this.currentPlayerIndex = this.town.roster.length - 1;
 
     // If index is equal to or greater than the player characters length
     // then set it to the first character
-    else if (this.currentPlayerIndex >= this.town.playerCharacters.length)
+    else if (this.currentPlayerIndex >= this.town.roster.length)
       this.currentPlayerIndex = 0;
 
     // Refresh the equipped equipment
@@ -300,7 +300,7 @@ class EquipmentScreen implements IScreen {
   private refreshEquippedEquipment() {
 
     // Grab the current character
-    var character = this.town.playerCharacters[this.currentPlayerIndex];
+    var character = this.town.roster[this.currentPlayerIndex];
 
     // Update the name of the character
     this.screenElements.characterNameLabel.setContent(`{center}${character.name}{/}`);
@@ -387,7 +387,7 @@ class EquipmentScreen implements IScreen {
       return;
 
     // Grab the current character
-    var character = this.town.playerCharacters[this.currentPlayerIndex];
+    var character = this.town.roster[this.currentPlayerIndex];
 
     // Equip the item to the character
     Equipper.equipItem(equipment, character);
@@ -421,7 +421,7 @@ class EquipmentScreen implements IScreen {
     this.clearCurrentEquipmentDetails();
 
     // Grab the current character
-    var character = this.town.playerCharacters[this.currentPlayerIndex];
+    var character = this.town.roster[this.currentPlayerIndex];
 
     // Render the equipment
     var equipment = character.equipment.getBySlot(slot);
@@ -440,7 +440,7 @@ class EquipmentScreen implements IScreen {
   private unequipEquipment(slot: EquipmentSlotEnum) {
 
     // Grab the current character
-    var character = this.town.playerCharacters[this.currentPlayerIndex];
+    var character = this.town.roster[this.currentPlayerIndex];
 
     // Unequip the slot
     Equipper.unequipItem(character, slot);
