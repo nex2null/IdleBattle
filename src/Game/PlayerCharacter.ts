@@ -6,10 +6,12 @@ import Stats from "./Stats";
 import StatEnum from "./Enums/StatEnum";
 import CharacterClassEnum from "./Enums/CharacterClassEnum";
 import PlayerSkill from "./PlayerSkill";
+import { Guid } from "guid-typescript";
 
 class PlayerCharacter {
 
   // Properties
+  uid: string;
   name: string;
   level: number;
   stats: Stats;
@@ -22,6 +24,7 @@ class PlayerCharacter {
 
   // Constructor
   constructor(args: any) {
+    this.uid = args.uid || Guid.create().toString();
     this.name = args.name;
     this.level = args.level;
     this.stats = args.stats;
@@ -34,6 +37,7 @@ class PlayerCharacter {
   // Load from saved data
   static load(savedData: any) {
     return new PlayerCharacter({
+      uid: savedData.uid,
       name: savedData.name,
       level: savedData.level,
       stats: Stats.load(savedData.stats),

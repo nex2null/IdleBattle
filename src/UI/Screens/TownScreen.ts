@@ -98,9 +98,13 @@ class TownScreen implements IScreen {
 
     var items = [];
 
-    // Handle menu items only available if characters exist
-    if (this.town.playerCharacters.length > 0) {
+    // Handle menu items only available if you have a party
+    if (this.town.currentParty.length > 0) {
       items.push('Battle');
+    }
+
+    // Handle menu items only available if characters exist
+    if (this.town.roster.length > 0) {
       items.push('Equipment');
       items.push('Gambits');
     }

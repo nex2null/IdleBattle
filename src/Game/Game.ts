@@ -42,7 +42,7 @@ class Game {
 
     // Create the battle
     var battleLog = new BattleLog();
-    var playerBattleCharacters = this.town.playerCharacters.map(x => x.toBattleCharacter());
+    var playerBattleCharacters = this.town.getCharactersInParty().map(x => x.toBattleCharacter());
     this.currentBattle = new Battle(playerBattleCharacters, dungeon, battleLog);
     return this.currentBattle;
   }

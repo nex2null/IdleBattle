@@ -287,7 +287,7 @@ class GambitScreen implements IScreen {
   }
 
   private loadMenu() {
-    var items = this.town.playerCharacters.map(x => x.name);
+    var items = this.town.roster.map(x => x.name);
     items.push('Exit');
     this.screenElements.menu.setItems(items);
   }
@@ -305,7 +305,7 @@ class GambitScreen implements IScreen {
       this.exitScreen();
 
     // Handle selecting the character
-    var playerCharacter = Game.getInstance().town.playerCharacters.find(x => x.name === selectedItem);
+    var playerCharacter = Game.getInstance().town.roster.find(x => x.name === selectedItem);
     if (!playerCharacter)
       return;
 
