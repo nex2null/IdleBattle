@@ -36,6 +36,11 @@ class Town {
     this.unlockedClasses = savedData.unlockedClasses || [CharacterClassEnum.Cryomancer];
   }
 
+  // Get characters not in party
+  getCharactersNotInParty(): Array<PlayerCharacter> {
+    return this.roster.filter(x => !this.currentParty.includes(x.uid));
+  }
+
   // Get player characters in party
   getCharactersInParty(): Array<PlayerCharacter> {
     return this.roster.filter(x => this.currentParty.includes(x.uid));

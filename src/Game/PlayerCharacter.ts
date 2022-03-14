@@ -24,7 +24,7 @@ class PlayerCharacter {
 
   // Constructor
   constructor(args: any) {
-    this.uid = Guid.create().toString();
+    this.uid = args.uid || Guid.create().toString();
     this.name = args.name;
     this.level = args.level;
     this.stats = args.stats;
@@ -37,6 +37,7 @@ class PlayerCharacter {
   // Load from saved data
   static load(savedData: any) {
     return new PlayerCharacter({
+      uid: savedData.uid,
       name: savedData.name,
       level: savedData.level,
       stats: Stats.load(savedData.stats),
