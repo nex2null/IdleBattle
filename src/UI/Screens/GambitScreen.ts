@@ -238,8 +238,8 @@ class GambitScreen implements IScreen {
     this.screenElements.menu.on('select', (el: any) => this.onMenuSelect(el));
     this.screenElements.gambitTable.rows.key(['escape'], () => this.unloadCharacterGambits());
     this.screenElements.gambitTable.rows.key(['enter'], () => this.editSelectedGambit());
-    this.screenElements.gambitTable.rows.key(['insert'], () => this.addNewGambit());
-    this.screenElements.gambitTable.rows.key(['delete'], () => this.deleteSelectedGambit());
+    this.screenElements.gambitTable.rows.key(['a'], () => this.addNewGambit());
+    this.screenElements.gambitTable.rows.key(['d'], () => this.deleteSelectedGambit());
     this.screenElements.gambitTable.rows.key(['left'], () => this.moveSelectedGambitUp());
     this.screenElements.gambitTable.rows.key(['right'], () => this.moveSelectedGambitDown());
     this.screenElements.gambitConditionList.key(['right'], () => this.screenElements.gambitConditionInputList.focus());
