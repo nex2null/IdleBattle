@@ -313,10 +313,7 @@ class GambitScreen implements IScreen {
     this.currentCharacter = playerCharacter;
 
     // Update player skills
-    this.skills = [];
-    for (var enumMember in SkillEnum) {
-      this.skills.push(SkillEnum[enumMember as keyof typeof SkillEnum]);
-    }
+    this.skills = playerCharacter.skills.map(x => x.skill);
 
     // Load character gambits
     this.loadCharacterGambits(this.currentCharacter);

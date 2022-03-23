@@ -42,6 +42,14 @@ class CryomancerClass implements ICharacterClass {
     });
   }
 
+  // Get new skills on level up
+  getLevelUpSkills(newLevel: number): Array<SkillEnum> {
+    switch (newLevel) {
+      case 6: return [SkillEnum.FrozenBlades];
+      default: return [];
+    }
+  }
+
   // Get the required amount of XP to level up
   getRequiredXpToLevel(newLevel: number): number {
     return newLevel * 100;

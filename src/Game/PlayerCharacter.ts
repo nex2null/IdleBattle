@@ -7,6 +7,7 @@ import StatEnum from "./Enums/StatEnum";
 import CharacterClassEnum from "./Enums/CharacterClassEnum";
 import PlayerSkill from "./PlayerSkill";
 import { Guid } from "guid-typescript";
+import SkillEnum from "./BattleSystem/Enums/SkillEnum";
 
 class PlayerCharacter {
 
@@ -72,6 +73,17 @@ class PlayerCharacter {
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
       gambits: this.gambits
     });
+  }
+
+  // Learn a new skill
+  learnSkill(skillEnum: SkillEnum) {
+
+    // If we already know this skill, do nothing
+    if (this.skills.find(x => x.skill === skillEnum))
+      return;
+    
+    // Add the skill as a level 1 skill
+    this.skills.push(new PlayerSkill(skillEnum, 1, false));
   }
 }
 

@@ -233,9 +233,13 @@ class LevelUpScreen implements IScreen {
     // Grab the stats
     var levelUpStats = currentClass.getLevelUpStatIncreases(nextLevel);
 
+    // Grab the skills
+    var levelUpSkills = currentClass.getLevelUpSkills(nextLevel);
+
     // Level up the character
     this.currentCharacter.level++;
     this.currentCharacter.stats.adjust(levelUpStats);
+    levelUpSkills.forEach(x => this.currentCharacter?.learnSkill(x));
 
     // Remove the required XP from the town xp
     this.town.totalExperience -= requiredXp;
