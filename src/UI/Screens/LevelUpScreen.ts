@@ -8,6 +8,7 @@ import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
 import Town from "../../Game/Town";
 import PlayerCharacter from "../../Game/PlayerCharacter";
+import CharacterClassFactory from "../../Game/CharacterClasses/CharacterClassFactory";
 
 class LevelUpScreen implements IScreen {
 
@@ -66,6 +67,58 @@ class LevelUpScreen implements IScreen {
         fg: 'white',
         border: {
           fg: 'white'
+        }
+      }
+    });
+
+    // Town XP label
+    this.screenElements.townXpLabel = blessed.box({
+      parent: this.screenElements.characterBox,
+      top: 1,
+      height: 1,
+      width: 22,
+      left: 16,
+      tags: true
+    });
+
+    // Required XP label
+    this.screenElements.requiredXpLabel = blessed.box({
+      parent: this.screenElements.characterBox,
+      top: 2,
+      height: 1,
+      width: 22,
+      left: 16,
+      tags: true
+    });
+
+    // Remaining XP label
+    this.screenElements.remainingXpLabel = blessed.box({
+      parent: this.screenElements.characterBox,
+      top: 3,
+      height: 1,
+      width: 22,
+      left: 16,
+      tags: true
+    });
+
+    // Level up button
+    this.screenElements.levelUpButton = blessed.button({
+      parent: this.screenElements.characterBox,
+      tags: true,
+      content: '{center}LEVEL UP{/center}',
+      top: 1,
+      left: 40,
+      width: 20,
+      height: 3,
+      padding: {
+        top: 1
+      },
+      style: {
+        bold: true,
+        fg: 'white',
+        bg: 'green',
+        focus: {
+          inverse: true
         }
       }
     });
@@ -137,8 +190,20 @@ class LevelUpScreen implements IScreen {
     if (!this.currentCharacter)
       return;
 
-    // TODO: Everything
-    this.screenElements.characterBox.setContent(this.currentCharacter.name);
+    // Figure out the level we want to go to
+    var nextLevel = this.currentCharacter.level + 1;
+
+    // Get details about the character's class
+    var currentClass = CharacterClassFactory.getCharacterClass(this.currentCharacter.primaryClass);
+    var requiredXp = currentClass.getRequiredXpToLevel(nextLevel);
+    var statIncreases = currentClass.getLevelUpStatIncreases(nextLevel);
+
+    // Update labels
+    this.screenElements.townXpLabel.setContent(`Available XP: ${this.town.totalExperience}`);
+    this.screenElements.requiredXpLabel.setContent(` Required XP: ${requiredXp}`);
+    this.screenElements.remainingXpLabel.setContent(`Remaining XP: ${this.town.totalExperience - requiredXp}`);
+
+    // TODO: Everything else
     this.screenElements.characterBox.show();
     this.screenElements.characterBox.focus();
 
