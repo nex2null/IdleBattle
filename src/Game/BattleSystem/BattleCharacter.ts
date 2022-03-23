@@ -47,7 +47,7 @@ export default class BattleCharacter {
     this.name = args.name;
     this.level = args.level;
     this.baseStats = args.baseStats;
-    this.currentStats = { ...args.baseStats };
+    this.currentStats = args.baseStats.clone();
     this.characterType = args.characterType;
     this.hostileToCharacterType = args.hostileToCharacterType;
     this.currentCharge = 0;

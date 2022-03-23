@@ -126,7 +126,8 @@ class LevelUpScreen implements IScreen {
     // Set key bindings
     this.screenElements.menu.key(['escape'], () => this.screenElements.menu.select(this.screenElements.menu.fuzzyFind('Exit')));
     this.screenElements.menu.on('select', (el: any) => this.onMenuSelect(el));
-    this.screenElements.characterBox.key(['escape'], () => this.hideCharacterBox());
+    this.screenElements.levelUpButton.key(['escape'], () => this.hideCharacterBox());
+    this.screenElements.levelUpButton.key(['enter', 'space'], () => this.levelUp());
 
     // Append items to screen
     this.screen.append(this.screenElements.menu);
@@ -196,7 +197,6 @@ class LevelUpScreen implements IScreen {
     // Get details about the character's class
     var currentClass = CharacterClassFactory.getCharacterClass(this.currentCharacter.primaryClass);
     var requiredXp = currentClass.getRequiredXpToLevel(nextLevel);
-    var statIncreases = currentClass.getLevelUpStatIncreases(nextLevel);
 
     // Update labels
     this.screenElements.townXpLabel.setContent(`Available XP: ${this.town.totalExperience}`);
@@ -205,10 +205,43 @@ class LevelUpScreen implements IScreen {
 
     // TODO: Everything else
     this.screenElements.characterBox.show();
-    this.screenElements.characterBox.focus();
+    this.screenElements.levelUpButton.focus();
 
     // Render the screen
     this.screen.render();
+  }
+
+  private levelUp() {
+
+    // Sanity check
+    if (!this.currentCharacter)
+      return;
+
+    // Figure out the level we want to go to
+    var nextLevel = this.currentCharacter.level + 1;
+
+    // Grab required XP
+    var currentClass = CharacterClassFactory.getCharacterClass(this.currentCharacter.primaryClass);
+    var requiredXp = currentClass.getRequiredXpToLevel(nextLevel);
+
+    // Verify we have required XP
+    if (requiredXp > this.town.totalExperience) {
+      // TODO SHOW ERROR MESSAGE
+      return;
+    }
+
+    // Grab the stats
+    var levelUpStats = currentClass.getLevelUpStatIncreases(nextLevel);
+
+    // Level up the character
+    this.currentCharacter.level++;
+    this.currentCharacter.stats.adjust(levelUpStats);
+
+    // Remove the required XP from the town xp
+    this.town.totalExperience -= requiredXp;
+
+    // Re-draw the character box
+    this.showCharacterBox();
   }
 
   // Hide character box
