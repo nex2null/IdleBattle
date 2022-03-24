@@ -6,6 +6,7 @@ import ItemTypeEnum from '../../Itemization/Enums/ItemTypeEnum';
 import Stats from '../../Stats';
 import SkillEnum from '../Enums/SkillEnum';
 import GambitConditionEnum from '../Enums/GambitConditionEnum';
+import PlayerSkill from '../../PlayerSkill';
 
 class Spider extends BattleCharacter {
   constructor(name: string) {
@@ -25,6 +26,11 @@ class Spider extends BattleCharacter {
         new Gambit(GambitConditionEnum.Self, null, SkillEnum.Defend, 0.1),
         new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.WebShoot, 0.1),
         new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack)
+      ],
+      skills: [
+        new PlayerSkill(SkillEnum.Attack, 1, false),
+        new PlayerSkill(SkillEnum.Defend, 1, false),
+        new PlayerSkill(SkillEnum.WebShoot, 1, false)
       ],
       maxNumberOfItemsToDrop: 1,
       lootGenerationOptions: [

@@ -75,7 +75,8 @@ class PlayerCharacter {
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
-      gambits: this.gambits
+      gambits: this.gambits,
+      skills: this.skills
     });
   }
 
