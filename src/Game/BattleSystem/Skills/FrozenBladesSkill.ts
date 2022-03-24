@@ -11,8 +11,10 @@ class FrozenBladesSkill implements ISkill {
   readonly frozenBladesTurns: number = 4;
 
   // Properties
-  slvl: number;
+  level: number;
+  maxLevel: number = 10;
   isMastered: boolean;
+  isGeneric: boolean = false;
   name: string;
   targetType: TargetTypeEnum;
   readonly mpCost: number;
@@ -20,12 +22,17 @@ class FrozenBladesSkill implements ISkill {
 
   // Constructor
   constructor(slvl: number, isMastered: boolean) {
-    this.slvl = slvl;
+    this.level = slvl;
     this.isMastered = isMastered;
-    this.mpCost = 10 + ((this.slvl - 1) * 2);
+    this.mpCost = 10 + ((this.level - 1) * 2);
     this.addedCold = .2 + .05 * slvl;
     this.name = 'Frozen Blades';
     this.targetType = TargetTypeEnum.Single;
+  }
+
+  // Get the skill description
+  getDescription(): string {
+    return `Enchants a target's weapon with frost, dealing additional cold damage with a chance to chill for all physical attacks.`;
   }
 
   // Determine if the skill can be used

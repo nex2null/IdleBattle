@@ -10,12 +10,21 @@ class WebShootSkill implements ISkill {
 
   // Properties
   name: string;
+  level: number = 1;
+  maxLevel: number = 1;
+  isMastered: boolean = false;
+  isGeneric: boolean = false;
   targetType: TargetTypeEnum;
 
   // Constructor
   constructor() {
     this.name = 'Web Shoot';
     this.targetType = TargetTypeEnum.Single;
+  }
+
+  // Get the skill description
+  getDescription(): string {
+    return `TODO: WEB SHOOT`;
   }
 
   // Determine if the skill can be used

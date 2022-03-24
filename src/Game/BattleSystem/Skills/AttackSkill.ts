@@ -11,12 +11,21 @@ class AttackSkill implements ISkill {
 
   // Properties
   name: string;
+  level: number = 1;
+  maxLevel: number = 1;
+  isMastered: boolean = false;
+  isGeneric: boolean = true;
   targetType: TargetTypeEnum;
 
   // Constructor
   constructor() {
     this.name = 'Attack';
     this.targetType = TargetTypeEnum.Single;
+  }
+
+  // Get the skill description
+  getDescription(): string {
+    return `Attack a single target dealing base damage equal to the attacker's strength`;
   }
 
   // Calculate the attack damage

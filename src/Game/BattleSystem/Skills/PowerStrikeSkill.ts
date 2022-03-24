@@ -16,12 +16,23 @@ class PowerStrikeSkill implements ISkill {
 
   // Properties
   name: string;
+  level: number;
+  maxLevel: number = 10;
+  isMastered: boolean;
+  isGeneric: boolean = false;
   targetType: TargetTypeEnum;
 
   // Constructor
-  constructor() {
+  constructor(slvl: number, isMastered: boolean) {
     this.name = 'Power Strike';
+    this.level = slvl;
+    this.isMastered = isMastered;
     this.targetType = TargetTypeEnum.Single;
+  }
+
+  // Get the skill description
+  getDescription(): string {
+    return `POWER STRIKE!`;
   }
 
   // Determine if the skill can be used

@@ -12,19 +12,26 @@ import ChilledEffect from '../BattleEffects/ChilledEffect';
 class IceBoltSkill implements ISkill {
 
   // Properties
-  slvl: number;
+  level: number;
+  maxLevel: number = 10;
   isMastered: boolean;
+  isGeneric: boolean = false;
   name: string;
   readonly mpCost: number;
   targetType: TargetTypeEnum;
 
   // Constructor
   constructor(slvl: number, isMastered: boolean) {
-    this.slvl = slvl;
+    this.level = slvl;
     this.isMastered = isMastered;
-    this.mpCost = 5 + ((this.slvl - 1) * 2);
+    this.mpCost = 5 + ((this.level - 1) * 2);
     this.name = 'Ice Bolt';
     this.targetType = TargetTypeEnum.Single;
+  }
+
+  // Get the skill description
+  getDescription(): string {
+    return `Shoot a bolt of ice, dealing cold damage to a single target.\n\nBase Damage Formula: Intelligence * (1.5 + (slvl * .2))`;
   }
 
   // Determine if the skill can be used
@@ -37,7 +44,7 @@ class IceBoltSkill implements ISkill {
   // Calculate the attack damage
   calculateDamage(user: BattleCharacter, target: BattleCharacter) {
 
-    var multiplier = 1.5 + this.slvl * .2;
+    var multiplier = 1.5 + this.level * .2;
     var baseDamageAmount = user.currentStats.intelligence * multiplier;
     var baseDamage = new BattleDamage(baseDamageAmount, DamageTypeEnum.Cold);
 

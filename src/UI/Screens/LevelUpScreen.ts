@@ -1,6 +1,5 @@
 // Imports
 const blessed = require('blessed');
-const contrib = require('blessed-contrib');
 import Game from "../../Game/Game";
 import ScreenManager from "../ScreenManager";
 import GameSaver from "../../IO/GameSaver";
@@ -9,6 +8,8 @@ import TownScreen from "./TownScreen";
 import Town from "../../Game/Town";
 import PlayerCharacter from "../../Game/PlayerCharacter";
 import CharacterClassFactory from "../../Game/CharacterClasses/CharacterClassFactory";
+import ISkill from "../../Game/BattleSystem/Skills/ISkill";
+import SkillFactory from "../../Game/BattleSystem/Skills/SkillFactory";
 
 class LevelUpScreen implements IScreen {
 
@@ -16,6 +17,8 @@ class LevelUpScreen implements IScreen {
   screen: any;
   screenElements: any = {};
   currentCharacter?: PlayerCharacter;
+  currentSkillIndex: number = 0;
+  currentSkill?: ISkill;
   town: Town;
 
   // Constructor
@@ -123,11 +126,116 @@ class LevelUpScreen implements IScreen {
       }
     });
 
+    // Skills box
+    this.screenElements.skillsBox = blessed.box({
+      parent: this.screenElements.characterBox,
+      label: 'Skills',
+      top: 7,
+      left: 2,
+      width: 74,
+      height: 30,
+      border: {
+        type: 'line'
+      },
+      style: {
+        fg: 'white',
+        border: {
+          fg: 'white'
+        }
+      }
+    });
+
+    // Switch labels for the current skill
+    this.screenElements.skillSwitchLabels = blessed.box({
+      parent: this.screenElements.skillsBox,
+      top: 1,
+      height: 1,
+      width: 44,
+      left: 'center',
+      content: '<<{|}>>',
+      tags: true
+    });
+
+    // Skill name
+    this.screenElements.skillNameLabel = blessed.box({
+      parent: this.screenElements.skillsBox,
+      top: 1,
+      height: 1,
+      width: 38,
+      left: 'center',
+      content: '',
+      tags: true,
+      style: {
+        focus: {
+          bg: 'white',
+          fg: 'black'
+        }
+      }
+    });
+
+    // Line under the skill name
+    this.screenElements.skillNameLine = blessed.line({
+      parent: this.screenElements.skillsBox,
+      top: 2,
+      left: 'center',
+      orientation: 'horizontal',
+      width: 44
+    });
+
+    // Current skill level label
+    this.screenElements.skillLevelLabel = blessed.box({
+      parent: this.screenElements.skillsBox,
+      top: 4,
+      height: 1,
+      width: 38,
+      left: 5,
+      content: '',
+      tags: true
+    });
+
+    // Current skill level label
+    this.screenElements.maxSkillLevelLabel = blessed.box({
+      parent: this.screenElements.skillsBox,
+      top: 5,
+      height: 1,
+      width: 38,
+      left: 5,
+      content: '',
+      tags: true
+    });
+
+    // Description label
+    this.screenElements.skillDescriptionLabel = blessed.box({
+      parent: this.screenElements.skillsBox,
+      top: 7,
+      height: 1,
+      width: 60,
+      left: 5,
+      content: 'Description:',
+      tags: true
+    });
+
+    // Description content
+    this.screenElements.skillDescription = blessed.box({
+      parent: this.screenElements.skillsBox,
+      top: 8,
+      height: 10,
+      width: 60,
+      left: 5,
+      content: '',
+      tags: true
+    });
+
     // Set key bindings
     this.screenElements.menu.key(['escape'], () => this.screenElements.menu.select(this.screenElements.menu.fuzzyFind('Exit')));
     this.screenElements.menu.on('select', (el: any) => this.onMenuSelect(el));
     this.screenElements.levelUpButton.key(['escape'], () => this.hideCharacterBox());
     this.screenElements.levelUpButton.key(['enter', 'space'], () => this.levelUp());
+    this.screenElements.levelUpButton.key(['down'], () => this.screenElements.skillNameLabel.focus());
+    this.screenElements.skillNameLabel.key(['up'], () => this.screenElements.levelUpButton.focus());
+    this.screenElements.skillNameLabel.key(['right'], () => this.setCurrentSkill(this.currentSkillIndex + 1));
+    this.screenElements.skillNameLabel.key(['left'], () => this.setCurrentSkill(this.currentSkillIndex - 1));
+    this.screenElements.skillNameLabel.key(['escape'], () => this.hideCharacterBox());
 
     // Append items to screen
     this.screen.append(this.screenElements.menu);
@@ -203,7 +311,10 @@ class LevelUpScreen implements IScreen {
     this.screenElements.requiredXpLabel.setContent(` Required XP: ${requiredXp}`);
     this.screenElements.remainingXpLabel.setContent(`Remaining XP: ${this.town.totalExperience - requiredXp}`);
 
-    // TODO: Everything else
+    // Update skills
+    this.setCurrentSkill(0);
+
+    // Show and focus the character box
     this.screenElements.characterBox.show();
     this.screenElements.levelUpButton.focus();
 
@@ -246,6 +357,53 @@ class LevelUpScreen implements IScreen {
 
     // Re-draw the character box
     this.showCharacterBox();
+  }
+
+  // Set the current skill
+  private setCurrentSkill(index: number) {
+
+    // Sanity check
+    if (!this.currentCharacter)
+      return;
+
+    this.currentSkillIndex = index;
+
+    // If index is less than 0, set index to the last skill
+    if (this.currentSkillIndex < 0)
+      this.currentSkillIndex = this.currentCharacter.skills.length - 1;
+
+    // If index is equal to or greater than the number of skills
+    // then set it to the first skill
+    else if (this.currentSkillIndex >= this.currentCharacter.skills.length)
+      this.currentSkillIndex = 0;
+
+    // Set the current skill
+    var playerSkill = this.currentCharacter.skills[this.currentSkillIndex];
+    this.currentSkill = SkillFactory.getSkill(playerSkill.skill, playerSkill.level, playerSkill.mastered);
+
+    // Update the name of the skills
+    this.screenElements.skillNameLabel.setContent(`{center}${this.currentSkill.name}{/}`);
+
+    // Refresh the skill information
+    this.refreshSkillInformation();
+  }
+
+  // Refresh the skill information
+  private refreshSkillInformation() {
+
+    // Sanity check
+    if (!this.currentSkill)
+      return;
+
+    // Set the skill levels
+    this.screenElements.skillLevelLabel.setContent(`Current Level: ${this.currentSkill.level}`);
+    this.screenElements.maxSkillLevelLabel.setContent(`Maximum Level: ${this.currentSkill.maxLevel}`);
+
+    // Set the skill description
+    this.screenElements.skillDescription.setContent(this.currentSkill.getDescription());
+
+    // Render the screen
+    this.screen.render();
   }
 
   // Hide character box

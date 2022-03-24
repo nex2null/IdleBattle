@@ -239,6 +239,10 @@ class PartyBox {
   //
   private onRosterListSelect(el: any) {
 
+    // Sanity check
+    if (!el)
+      return;
+
     // Remove element from roster list and add to party list
     this.screenElements.rosterList.removeItem(el);
     this.screenElements.currentPartyList.pushItem(el);
@@ -251,6 +255,10 @@ class PartyBox {
   // Handle the party list item being selected
   //
   private onCurrentPartyListSelect(el: any) {
+
+    // Sanity check
+    if (!el)
+      return;
 
     // Remove element from party list and add to roster list
     this.screenElements.currentPartyList.removeItem(el);
