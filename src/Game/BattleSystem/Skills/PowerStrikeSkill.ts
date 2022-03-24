@@ -8,6 +8,7 @@ import ISkill from './ISkill';
 import RandomHelpers from '../../Utilities/RandomHelpers';
 import StunnedEffect from '../BattleEffects/StunnedEffect';
 import DamageTracker from '../DamageTracker';
+import SkillEnum from '../Enums/SkillEnum';
 
 class PowerStrikeSkill implements ISkill {
 
@@ -16,12 +17,40 @@ class PowerStrikeSkill implements ISkill {
 
   // Properties
   name: string;
+  skillEnum: SkillEnum = SkillEnum.PowerStrike;
+  level: number;
+  maxLevel: number = 10;
+  isMastered: boolean;
+  isGeneric: boolean = false;
   targetType: TargetTypeEnum;
 
   // Constructor
-  constructor() {
+  constructor(slvl: number, isMastered: boolean) {
     this.name = 'Power Strike';
+    this.level = slvl;
+    this.isMastered = isMastered;
     this.targetType = TargetTypeEnum.Single;
+  }
+
+  // Get the skill description
+  getDescription(): string {
+    return `POWER STRIKE!`;
+  }
+
+  // Get the required character level in order to level up this skill
+  getLevelUpCharacterLevel(): number {
+    switch (this.level) {
+      case 1: return 2;
+      case 2: return 3;
+      case 3: return 4;
+      case 4: return 5;
+      case 5: return 6;
+      case 6: return 7;
+      case 7: return 8;
+      case 8: return 9;
+      case 9: return 10;
+      default: return 1000;
+    }
   }
 
   // Determine if the skill can be used

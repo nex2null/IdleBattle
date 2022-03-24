@@ -6,17 +6,33 @@ import BattleDamage from '../BattleDamage';
 import BattleLog from '../BattleLog';
 import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import DamageTracker from '../DamageTracker';
+import SkillEnum from '../Enums/SkillEnum';
 
 class AttackSkill implements ISkill {
 
   // Properties
   name: string;
+  skillEnum: SkillEnum = SkillEnum.Attack;
+  level: number = 1;
+  maxLevel: number = 1;
+  isMastered: boolean = false;
+  isGeneric: boolean = true;
   targetType: TargetTypeEnum;
 
   // Constructor
   constructor() {
     this.name = 'Attack';
     this.targetType = TargetTypeEnum.Single;
+  }
+
+  // Get the skill description
+  getDescription(): string {
+    return `Attack a single target dealing base damage equal to the attacker's strength`;
+  }
+
+  // Get the required character level in order to level up this skill
+  getLevelUpCharacterLevel(): number {
+    return 1000;
   }
 
   // Calculate the attack damage

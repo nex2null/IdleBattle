@@ -12,7 +12,7 @@ class SkillFactory {
     switch (skill) {
       case SkillEnum.Attack: return new AttackSkill();
       case SkillEnum.Defend: return new DefendSkill();
-      case SkillEnum.PowerStrike: return new PowerStrikeSkill();
+      case SkillEnum.PowerStrike: return new PowerStrikeSkill(slvl, mastered);
       case SkillEnum.WebShoot: return new WebShootSkill();
       case SkillEnum.IceBolt: return new IceBoltSkill(slvl, mastered);
       case SkillEnum.FrozenBlades: return new FrozenBladesSkill(slvl, mastered);

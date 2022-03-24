@@ -37,7 +37,8 @@ class PlayerCharacterCreator {
       stats: stats,
       gambits: defaultGambits,
       primaryClass: characterClassEnum,
-      skills: skills
+      skills: skills,
+      skillPoints: 0
     })
   }
 }

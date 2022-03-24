@@ -71,6 +71,46 @@ class Stats {
       lightningResistance: savedData.lightningResistance
     });
   }
+
+  // Adjust stats based on new stats delta
+  adjust(stats: Stats) {
+    this.hp += stats.hp || 0;
+    this.mp += stats.mp || 0;
+    this.strength += stats.strength || 0;
+    this.intelligence += stats.intelligence || 0;
+    this.speed += stats.speed || 0;
+    this.dodgeChance += stats.dodgeChance || 0;
+    this.accuracy += stats.accuracy || 0;
+    this.physicalPower += stats.physicalPower || 0;
+    this.coldPower += stats.coldPower || 0;
+    this.firePower += stats.firePower || 0;
+    this.lightningPower += stats.lightningPower || 0;
+    this.physicalResistance += stats.physicalResistance || 0;
+    this.coldResistance += stats.coldResistance || 0;
+    this.fireResistance += stats.fireResistance || 0;
+    this.lightningResistance += stats.lightningResistance || 0;
+  }
+
+  // Clones the stats
+  clone() {
+    return new Stats({
+      hp: this.hp,
+      mp: this.mp,
+      strength: this.strength,
+      intelligence: this.intelligence,
+      speed: this.speed,
+      dodgeChance: this.dodgeChance,
+      accuracy: this.accuracy,
+      physicalPower: this.physicalPower,
+      coldPower: this.coldPower,
+      firePower: this.firePower,
+      lightningPower: this.lightningPower,
+      physicalResistance: this.physicalResistance,
+      coldResistance: this.coldResistance,
+      fireResistance: this.fireResistance,
+      lightningResistance: this.lightningResistance,
+    });
+  }
 }
 
 export default Stats;

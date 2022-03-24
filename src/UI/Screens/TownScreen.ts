@@ -9,6 +9,7 @@ import EquipmentScreen from "./EquipmentScreen";
 import ForgeScreen from "./ForgeScreen";
 import GambitScreen from "./GambitScreen";
 import IScreen from "./IScreen";
+import LevelUpScreen from "./LevelUpScreen";
 
 class TownScreen implements IScreen {
 
@@ -107,6 +108,7 @@ class TownScreen implements IScreen {
     if (this.town.roster.length > 0) {
       items.push('Equipment');
       items.push('Gambits');
+      items.push('Level Up');
     }
 
     // Handle items always available
@@ -150,7 +152,11 @@ class TownScreen implements IScreen {
 
     // Handle Gambits
     else if (selectedItem === 'Gambits')
-    ScreenManager.getInstance().loadScreen(new GambitScreen());
+      ScreenManager.getInstance().loadScreen(new GambitScreen());
+
+    // Handle Level Up
+    else if (selectedItem === 'Level Up')
+      ScreenManager.getInstance().loadScreen(new LevelUpScreen());
 
     // Handle Exit
     else if (selectedItem === 'Exit')

@@ -7,6 +7,8 @@ import StatEnum from "./Enums/StatEnum";
 import CharacterClassEnum from "./Enums/CharacterClassEnum";
 import PlayerSkill from "./PlayerSkill";
 import { Guid } from "guid-typescript";
+import SkillEnum from "./BattleSystem/Enums/SkillEnum";
+import SkillFactory from "./BattleSystem/Skills/SkillFactory";
 
 class PlayerCharacter {
 
@@ -18,6 +20,7 @@ class PlayerCharacter {
   gambits: Array<Gambit>;
   primaryClass: CharacterClassEnum;
   skills: Array<PlayerSkill>;
+  skillPoints: number;
 
   // Equipment
   equipment: PlayerEquipment;
@@ -32,6 +35,7 @@ class PlayerCharacter {
     this.gambits = args.gambits;
     this.primaryClass = args.primaryClass;
     this.skills = args.skills;
+    this.skillPoints = args.skillPoints || 0;
   }
 
   // Load from saved data
@@ -44,7 +48,8 @@ class PlayerCharacter {
       equipment: savedData.equipment ? PlayerEquipment.load(savedData.equipment) : null,
       gambits: savedData.gambits.map((x: any) => Gambit.load(x)),
       primaryClass: savedData.primaryClass,
-      skills: savedData.skills.map((x: any) => PlayerSkill.load(x))
+      skills: savedData.skills.map((x: any) => PlayerSkill.load(x)),
+      skillPoints: savedData.skillPoints
     });
   }
 
@@ -70,8 +75,47 @@ class PlayerCharacter {
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
-      gambits: this.gambits
+      gambits: this.gambits,
+      skills: this.skills
     });
+  }
+
+  // Get player skill
+  getPlayerSkill(skillEnum: SkillEnum) {
+    return this.skills.find(x => x.skill === skillEnum);
+  }
+
+  // Learn a new skill
+  learnSkill(skillEnum: SkillEnum) {
+
+    // If we already know this skill, do nothing
+    if (this.getPlayerSkill(skillEnum))
+      return;
+    
+    // Add the skill as a level 1 skill
+    this.skills.push(new PlayerSkill(skillEnum, 1, false));
+  }
+
+  // Level up a skill
+  levelSkill(skillEnum: SkillEnum) {
+
+    // Ensure we have skill points
+    if (this.skillPoints < 1)
+      return;
+
+    // Find the skill
+    var playerSkill = this.getPlayerSkill(skillEnum);
+    if (!playerSkill)
+      return;
+
+    // Verify the skill can be leveled
+    var skill = SkillFactory.getSkill(playerSkill.skill, playerSkill.level, playerSkill.mastered);
+    if (skill.level >= skill.maxLevel)
+      return;
+
+    // Level the skill
+    playerSkill.level++;
+    this.skillPoints--;
   }
 }
 

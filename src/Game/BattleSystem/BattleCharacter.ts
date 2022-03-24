@@ -9,6 +9,7 @@ import { Guid } from "guid-typescript";
 import DamageTracker from './DamageTracker';
 import BattleEffectEnum from './Enums/BattleEffectEnum';
 import IEffect from './BattleEffects/IEffect';
+import PlayerSkill from '../PlayerSkill';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 
@@ -25,6 +26,7 @@ export default class BattleCharacter {
   effects: Array<BaseEffect>;
   gambits: Array<Gambit>;
   uid: string;
+  skills: Array<PlayerSkill>;
 
   // TODO: Refactor enemy specific things to enemy base class
   maxNumberOfItemsToDrop: number;
@@ -40,6 +42,7 @@ export default class BattleCharacter {
     hostileToCharacterType: BattleCharacterTypeEnum,
     gambits: Array<Gambit>,
     effects?: Array<BaseEffect>,
+    skills: Array<PlayerSkill>,
     maxNumberOfItemsToDrop?: number,
     lootGenerationOptions?: Array<LootGenerationOption>,
     goldWorth?: number
@@ -47,11 +50,12 @@ export default class BattleCharacter {
     this.name = args.name;
     this.level = args.level;
     this.baseStats = args.baseStats;
-    this.currentStats = { ...args.baseStats };
+    this.currentStats = args.baseStats.clone();
     this.characterType = args.characterType;
     this.hostileToCharacterType = args.hostileToCharacterType;
     this.currentCharge = 0;
     this.uid = Guid.create().toString();
+    this.skills = args.skills;
 
     this.gambits = args.gambits;
     this.effects = args.effects || [];
