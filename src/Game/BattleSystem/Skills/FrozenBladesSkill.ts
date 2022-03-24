@@ -4,6 +4,7 @@ import BattleCharacter from '../BattleCharacter';
 import BattleLog from '../BattleLog';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
 import FrozenBladesEffect from '../BattleEffects/FrozenBladesEffect';
+import SkillEnum from '../Enums/SkillEnum';
 
 class FrozenBladesSkill implements ISkill {
 
@@ -16,6 +17,7 @@ class FrozenBladesSkill implements ISkill {
   isMastered: boolean;
   isGeneric: boolean = false;
   name: string;
+  skillEnum: SkillEnum = SkillEnum.FrozenBlades;
   targetType: TargetTypeEnum;
   readonly mpCost: number;
   readonly addedCold: number;
@@ -33,6 +35,22 @@ class FrozenBladesSkill implements ISkill {
   // Get the skill description
   getDescription(): string {
     return `Enchants a target's weapon with frost, dealing additional cold damage with a chance to chill for all physical attacks.`;
+  }
+
+  // Get the required character level in order to level up this skill
+  getLevelUpCharacterLevel(): number {
+    switch (this.level) {
+      case 1: return 2;
+      case 2: return 3;
+      case 3: return 4;
+      case 4: return 5;
+      case 5: return 6;
+      case 6: return 7;
+      case 7: return 8;
+      case 8: return 9;
+      case 9: return 10;
+      default: return 1000;
+    }
   }
 
   // Determine if the skill can be used
