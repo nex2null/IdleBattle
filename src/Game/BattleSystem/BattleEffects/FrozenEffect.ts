@@ -26,11 +26,13 @@ class FrozenEffect extends BaseEffect {
     return this.character.getEffect(this.type) == null;
   }
 
-  // Process charge being ticked
-  processChargeTick(charge: number): void {
+  // Determine if charge can be gained
+  canGainCharge(): boolean {
+    return false;
+  }
 
-    // Undo the added charge
-    this.character.currentCharge -= charge;
+  // Process charge being ticked
+  processChargeTick(): void {
 
     // Figure out if the effect should be removed
     this.freezeLength--;
@@ -48,7 +50,7 @@ class FrozenEffect extends BaseEffect {
     // Physical damage has a chance to break freeze
     if (!freezeBroken) {
       var physicalDamage = damage.amounts.get(DamageTypeEnum.Physical);
-      freezeBroken = physicalDamage && physicalDamage > 0 && RandomHelpers.getRandomInt(1, 100) <= 20;
+      freezeBroken = physicalDamage && physicalDamage > 0 && RandomHelpers.getRandomInt(1, 100) <= 25;
     }
 
     // If the freeze is broken, remove it

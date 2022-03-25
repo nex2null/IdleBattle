@@ -46,6 +46,9 @@ interface IEffect {
 
   // Process charge being ticked
   processChargeTick(charge: number): void;
+
+  // Determine if charge can be gained
+  canGainCharge(): boolean;
 }
 
 export default IEffect;

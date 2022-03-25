@@ -25,11 +25,13 @@ class StunnedEffect extends BaseEffect {
     return this.character.getEffect(this.type) == null;
   }
 
-  // Process charge being ticked
-  processChargeTick(charge: number): void {
+  // Determine if charge can be gained
+  canGainCharge(): boolean {
+    return false;
+  }
 
-    // Undo the added charge
-    this.character.currentCharge -= charge;
+  // Process charge being ticked
+  processChargeTick(): void {
 
     // Figure out if the effect should be removed
     this.stunLength--;
