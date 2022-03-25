@@ -23,7 +23,7 @@ export default class BattleCharacter {
   currentStats: Stats;
   characterType: BattleCharacterTypeEnum;
   hostileToCharacterType: BattleCharacterTypeEnum;
-  effects: Array<BaseEffect>;
+  effects: Array<IEffect>;
   gambits: Array<Gambit>;
   uid: string;
   skills: Array<PlayerSkill>;
@@ -41,7 +41,7 @@ export default class BattleCharacter {
     characterType: BattleCharacterTypeEnum,
     hostileToCharacterType: BattleCharacterTypeEnum,
     gambits: Array<Gambit>,
-    effects?: Array<BaseEffect>,
+    effects?: Array<IEffect>,
     skills: Array<PlayerSkill>,
     maxNumberOfItemsToDrop?: number,
     lootGenerationOptions?: Array<LootGenerationOption>,
@@ -71,9 +71,12 @@ export default class BattleCharacter {
 
     if (!this.isAlive())
       return;
+    
+    // Determine if charge can be added
+    var canAddCharge = this.effects.find(x => !x.canGainCharge()) == null;
 
     // Figure out how much charge to add
-    var chargeToAdd = this.currentStats.speed;
+    var chargeToAdd = canAddCharge ? this.currentStats.speed : 0;
 
     // Add the charge to current charge and process the 'tick'
     this.currentCharge += chargeToAdd;
