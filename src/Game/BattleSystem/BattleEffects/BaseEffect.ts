@@ -64,6 +64,11 @@ class BaseEffect implements IEffect {
   // Process charge being ticked
   processChargeTick(charge: number): void {
   }
+
+  // Determine if charge can be gained
+  canGainCharge(): boolean {
+    return true;
+  }
 }
 
 export default BaseEffect;
