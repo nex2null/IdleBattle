@@ -26,7 +26,7 @@ class ColdSnapSkill implements ISkill {
     this.level = slvl;
     this.isMastered = isMastered;
     this.mpCost = 20 - this.level * 2;
-    this.name = 'Frozen Armor';
+    this.name = 'Cold Snap';
     this.targetType = TargetTypeEnum.Single;
   }
 
