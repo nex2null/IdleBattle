@@ -4,7 +4,8 @@ enum BattleEffectEnum {
   Slowed = 'Slowed',
   Stunned = 'Stunned',
   FrozenBlades = 'Frozen Blades',
-  Frozen = 'Frozen'
+  Frozen = 'Frozen',
+  FrozenArmor = 'Frozen Armor'
 }
 
 export default BattleEffectEnum;

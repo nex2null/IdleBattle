@@ -39,10 +39,10 @@ interface IEffect {
   afterDamageDealt(damage: BattleDamage, target: BattleCharacter, battleLog: BattleLog): void;
 
   // Handle before damage is taken
-  beforeDamageTaken(damage: BattleDamage): void;
+  beforeDamageTaken(damage: BattleDamage, attacker: BattleCharacter, battleLog: BattleLog): void;
 
   // Handle after damage is taken
-  afterDamageTaken(damage: BattleDamage): void;
+  afterDamageTaken(damage: BattleDamage, attacker: BattleCharacter, battleLog: BattleLog): void;
 
   // Process charge being ticked
   processChargeTick(charge: number): void;

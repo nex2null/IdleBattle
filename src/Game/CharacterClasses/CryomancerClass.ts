@@ -46,6 +46,7 @@ class CryomancerClass implements ICharacterClass {
   getLevelUpSkills(newLevel: number): Array<SkillEnum> {
     switch (newLevel) {
       case 6: return [SkillEnum.FrozenBlades];
+      case 12: return [SkillEnum.FrozenArmor];
       default: return [];
     }
   }

@@ -95,3 +95,15 @@ function getDamageReductionPercent(defense: number, attacker: BattleCharacter, d
   // TODO: Augment this with other stats
   return reductionPercent > .75 ? .75 : reductionPercent;
 }
+
+// Gets the amount of resistance a defender would need to achieve a desired level of damage reduction
+export function getRequiredResistanceForPercentReduction(defender: BattleCharacter, desiredReductionPercent: number) {
+
+  // The divisor scales by the character's level, a higher level requires a
+  // larger amount of defense to achieve a high damage reduction percent
+  // every 5 levels increases the divisor by 1
+  var divisor = 1 + .2 * defender.level;
+
+  // The required resistance is the desired overall reduction multiplied by the divisor
+  return desiredReductionPercent * divisor;
+}
