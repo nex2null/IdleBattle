@@ -139,7 +139,7 @@ export default class BattleCharacter {
     this.effects.forEach(x => x.beforeDamageDealt(damage, target));
 
     // The target takes the damage
-    target.takeDamage(damage, battleLog, damageTracker);
+    target.takeDamage(damage, this, battleLog, damageTracker);
 
     // Handle effects for after damage is dealt
     this.effects.forEach(x => x.afterDamageDealt(damage, target, battleLog));
@@ -158,10 +158,10 @@ export default class BattleCharacter {
   }
 
   // Takes damage
-  takeDamage(damage: BattleDamage, battleLog: BattleLog, damageTracker: DamageTracker) {
+  takeDamage(damage: BattleDamage, attacker: BattleCharacter, battleLog: BattleLog, damageTracker: DamageTracker) {
 
     // Allow effects to modify damage before processing
-    this.effects.forEach(x => x.beforeDamageTaken(damage));
+    this.effects.forEach(x => x.beforeDamageTaken(damage, attacker, battleLog));
 
     // Round the damage
     damage.round();
@@ -178,7 +178,7 @@ export default class BattleCharacter {
     this.currentStats.hp = this.currentStats.hp < 0 ? 0 : this.currentStats.hp;
 
     // Allow effects to process damage taken
-    this.effects.forEach(x => x.afterDamageTaken(damage));
+    this.effects.forEach(x => x.afterDamageTaken(damage, attacker, battleLog));
 
     // If the character has died, set charge to 0 and log
     if (!this.isAlive()) {

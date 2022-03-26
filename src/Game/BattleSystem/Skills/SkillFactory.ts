@@ -1,6 +1,7 @@
 import SkillEnum from "../Enums/SkillEnum";
 import AttackSkill from "./AttackSkill";
 import DefendSkill from "./DefendSkill";
+import FrozenArmorSkill from "./FrozenArmorSkill";
 import FrozenBladesSkill from "./FrozenBladesSkill";
 import IceBoltSkill from "./IceBoltSkill";
 import ISkill from "./ISkill";
@@ -16,6 +17,7 @@ class SkillFactory {
       case SkillEnum.WebShoot: return new WebShootSkill();
       case SkillEnum.IceBolt: return new IceBoltSkill(slvl, mastered);
       case SkillEnum.FrozenBlades: return new FrozenBladesSkill(slvl, mastered);
+      case SkillEnum.FrozenArmor: return new FrozenArmorSkill(slvl, mastered);
     }
   }
 }
