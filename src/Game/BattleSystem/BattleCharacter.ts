@@ -69,18 +69,31 @@ export default class BattleCharacter {
   // Updates the charge level of the character
   updateCharge() {
 
+    // Make sure we're alive
     if (!this.isAlive())
       return;
-    
+
+    // Increase charge by the character's speed
+    var increasedCharge = this.increaseCharge(this.currentStats.speed);
+
+    // Process the charge 'tick'
+    this.effects.forEach(x => x.processChargeTick(increasedCharge));
+  }
+
+  // Increase the charge level of the character by a certain amount
+  increaseCharge(amount: number): number {
+
     // Determine if charge can be added
     var canAddCharge = this.effects.find(x => !x.canGainCharge()) == null;
 
     // Figure out how much charge to add
-    var chargeToAdd = canAddCharge ? this.currentStats.speed : 0;
+    var chargeToAdd = canAddCharge ? amount : 0;
 
-    // Add the charge to current charge and process the 'tick'
+    // Add the charge to current charge
     this.currentCharge += chargeToAdd;
-    this.effects.forEach(x => x.processChargeTick(chargeToAdd));
+
+    // Return the charge that was added
+    return chargeToAdd;
   }
 
   // Determines if the character is ready to act

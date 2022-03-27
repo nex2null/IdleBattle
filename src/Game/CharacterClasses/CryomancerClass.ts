@@ -47,6 +47,7 @@ class CryomancerClass implements ICharacterClass {
     switch (newLevel) {
       case 6: return [SkillEnum.FrozenBlades];
       case 12: return [SkillEnum.FrozenArmor];
+      case 18: return [SkillEnum.ColdSnap];
       default: return [];
     }
   }
