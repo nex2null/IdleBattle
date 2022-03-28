@@ -32,6 +32,7 @@ export default class BattleCharacter {
   maxNumberOfItemsToDrop: number;
   lootGenerationOptions: Array<LootGenerationOption> = [];
   goldWorth: number;
+  xpWorth: number;
 
   // Constructor
   constructor(args: {
@@ -45,7 +46,8 @@ export default class BattleCharacter {
     skills: Array<PlayerSkill>,
     maxNumberOfItemsToDrop?: number,
     lootGenerationOptions?: Array<LootGenerationOption>,
-    goldWorth?: number
+    goldWorth?: number,
+    xpWorth?: number
   }) {
     this.name = args.name;
     this.level = args.level;
@@ -64,6 +66,7 @@ export default class BattleCharacter {
     this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;
     this.lootGenerationOptions = args.lootGenerationOptions || [];
     this.goldWorth = args.goldWorth || 0;
+    this.xpWorth = args.xpWorth || 0;
   }
 
   // Updates the charge level of the character

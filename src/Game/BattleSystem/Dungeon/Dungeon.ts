@@ -4,14 +4,14 @@ import BattleCharacter from '../BattleCharacter';
 class Dungeon {
 
     // Properties
-    difficultyLevel: number;
+    name: string;
     levels: Array<DungeonLevel>;
     currentLevel: DungeonLevel;
     currentLevelNumber: number;
 
     // Constructor
-    constructor(difficultyLevel: number, levels: Array<DungeonLevel>) {
-        this.difficultyLevel = difficultyLevel;
+    constructor(name: string, levels: Array<DungeonLevel>) {
+        this.name = name;
         this.levels = levels;
         this.currentLevel = levels[0];
         this.currentLevelNumber = 1;

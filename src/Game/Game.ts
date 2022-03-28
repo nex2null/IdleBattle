@@ -1,8 +1,6 @@
 import Town from './Town';
 import Battle from './BattleSystem/Battle';
 import Dungeon from './BattleSystem/Dungeon/Dungeon';
-import Spider from './BattleSystem/Enemies/Spider';
-import DungeonLevel from './BattleSystem/Dungeon/DungeonLevel';
 import BattleLog from './BattleSystem/BattleLog';
 import { LootGenerator } from './Itemization/LootGenerator';
 import GameOptions from './GameOptions';
@@ -27,18 +25,11 @@ class Game {
   }
 
   // Start a new battle
-  startBattle(dungeonId: number): Battle {
+  startBattle(dungeon: Dungeon): Battle {
 
     // Verify a battle is not already started
     if (this.currentBattle != null)
       return this.currentBattle;
-
-    // Create the dungeon
-    var dungeon = new Dungeon(1, [
-      new DungeonLevel([new Spider('Spider 1'), new Spider('Spider 2')]),
-      new DungeonLevel([new Spider('Spider 3')]),
-      new DungeonLevel([new Spider('Spider 4'), new Spider('Spider 5')])
-    ]);
 
     // Create the battle
     var battleLog = new BattleLog();
@@ -58,15 +49,11 @@ class Game {
     // If we didn't lose the battle then get rewards
     if (!this.currentBattle.isBattleLost()) {
 
-      // Modify XP by the number of levels we completed
+      // Grab defeated enemies
       var dungeon = this.currentBattle.dungeon;
-      var xpModified = dungeon.currentLevelNumber / dungeon.levels.length * 100;
+      var defeatedEnemies = dungeon.getDefeatedEnemies();
 
-      // Get XP
-      var dungeonDifficulty = this.currentBattle.dungeon.difficultyLevel;
-      this.town.totalExperience += Math.round(dungeonDifficulty * dungeonDifficulty * xpModified);
-
-      // Get Items and gold
+      // Get items, experience, and gold
       var defeatedEnemies = dungeon.getDefeatedEnemies();
       for (var i = 0; i < defeatedEnemies.length; i++) {
         var enemy = defeatedEnemies[i];
@@ -75,6 +62,7 @@ class Game {
           enemy.lootGenerationOptions);
         this.town.inventory.addItems(items);
         this.town.totalGold += enemy.goldWorth;
+        this.town.totalExperience += enemy.xpWorth;
       }
     }
 
