@@ -4,7 +4,7 @@ import Game from "../../Game/Game";
 import Town from "../../Game/Town";
 import ScreenManager from "../ScreenManager";
 import BarracksScreen from "./BarracksScreen";
-import BattleScreen from "./BattleScreen";
+import DungeonChoiceScreen from "./DungeonChoiceScreen";
 import EquipmentScreen from "./EquipmentScreen";
 import ForgeScreen from "./ForgeScreen";
 import GambitScreen from "./GambitScreen";
@@ -136,7 +136,7 @@ class TownScreen implements IScreen {
 
     // Handle battle
     if (selectedItem === 'Battle')
-      this.StartBattle();
+      ScreenManager.getInstance().loadScreen(new DungeonChoiceScreen());
 
     // Handle equipment
     else if (selectedItem === 'Equipment')
@@ -161,18 +161,6 @@ class TownScreen implements IScreen {
     // Handle Exit
     else if (selectedItem === 'Exit')
       process.exit(0);
-  }
-
-  //
-  // Starts a new battle
-  //
-  private StartBattle() {
-
-    // Initialize a new battle
-    var battle = Game.getInstance().startBattle(1);
-
-    // Switch to the battle screen
-    ScreenManager.getInstance().loadScreen(new BattleScreen(battle));
   }
 }
 
