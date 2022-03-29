@@ -95,6 +95,21 @@ class RecruitBox {
       width: 74
     });
 
+    // Class description box
+    this.screenElements.recruitClassDescription = blessed.box({
+      parent: this.screenElements.recruitBox,
+      top: 4,
+      height: 7,
+      width: 72,
+      label: ' Description ',
+      left: 3,
+      content: '',
+      tags: true,
+      border: {
+        type: 'line'
+      }
+    });
+
     // Recruit name label
     this.screenElements.recruitNameLabel = blessed.text({
       parent: this.screenElements.recruitBox,
@@ -231,6 +246,9 @@ class RecruitBox {
 
     // Update the name of the class
     this.screenElements.recruitClassLabel.setContent(`{center}${classToRecruit.getName()}{/}`);
+
+    // Update the class description
+    this.screenElements.recruitClassDescription.setContent(`${classToRecruit.getDescription()}`);
 
     // Render
     this.screen.render();
