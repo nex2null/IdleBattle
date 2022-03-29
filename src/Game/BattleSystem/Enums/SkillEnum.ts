@@ -6,7 +6,8 @@ enum SkillEnum {
   IceBolt = 'Ice Bolt',
   FrozenBlades = 'Frozen Blades',
   FrozenArmor = 'Frozen Armor',
-  ColdSnap = 'Cold Snap'
+  ColdSnap = 'Cold Snap',
+  HolyStrike = 'Holy Strike'
 }
 
 export default SkillEnum;
