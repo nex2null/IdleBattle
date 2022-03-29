@@ -33,7 +33,7 @@ class Town {
 
     // Setup unlocked classes
     // TODO: Change this
-    this.unlockedClasses = savedData.unlockedClasses || [CharacterClassEnum.Cryomancer];
+    this.unlockedClasses = savedData.unlockedClasses || [CharacterClassEnum.Cryomancer, CharacterClassEnum.Paladin];
   }
 
   // Get characters not in party

@@ -1,5 +1,6 @@
 enum CharacterClassEnum {
-  Cryomancer = 'Cryomancer'
+  Cryomancer = 'Cryomancer',
+  Paladin = 'Paladin'
 }
 
 export default CharacterClassEnum;
