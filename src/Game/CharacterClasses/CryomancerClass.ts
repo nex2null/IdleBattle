@@ -16,6 +16,11 @@ class CryomancerClass implements ICharacterClass {
     return 'Cryomancer'
   }
 
+  // Gets the description of the class
+  getDescription(): string {
+    return 'A Cryomancer is an expert in cold magic.\n\nThey control the battlefield with various chilling effects and offensive spells.'
+  }
+
   // Gets skills the class starts with
   getStartingSkills(): PlayerSkill[] {
     return [

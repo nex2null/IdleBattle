@@ -11,6 +11,9 @@ interface ICharacterClass {
   // Gets the name of the class
   getName(): string;
 
+  // Gets the description of the class
+  getDescription(): string;
+
   // Gets skills the class starts with
   getStartingSkills(): PlayerSkill[];
 
