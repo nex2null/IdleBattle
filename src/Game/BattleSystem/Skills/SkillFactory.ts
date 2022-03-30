@@ -4,6 +4,7 @@ import ColdSnapSkill from "./ColdSnapSkill";
 import DefendSkill from "./DefendSkill";
 import FrozenArmorSkill from "./FrozenArmorSkill";
 import FrozenBladesSkill from "./FrozenBladesSkill";
+import HealSkill from "./HealSkill";
 import HolyStrikeSkill from "./HolyStrikeSkill";
 import IceBoltSkill from "./IceBoltSkill";
 import ISkill from "./ISkill";
@@ -22,6 +23,7 @@ class SkillFactory {
       case SkillEnum.FrozenArmor: return new FrozenArmorSkill(slvl, mastered);
       case SkillEnum.ColdSnap: return new ColdSnapSkill(slvl, mastered);
       case SkillEnum.HolyStrike: return new HolyStrikeSkill(slvl, mastered);
+      case SkillEnum.Heal: return new HealSkill(slvl, mastered);
     }
   }
 }
