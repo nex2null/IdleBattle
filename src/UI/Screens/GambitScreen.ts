@@ -11,6 +11,7 @@ import PlayerCharacter from "../../Game/PlayerCharacter";
 import GambitConditionEnum from "../../Game/BattleSystem/Enums/GambitConditionEnum";
 import Gambit from "../../Game/BattleSystem/Gambits/Gambit";
 import SkillEnum from "../../Game/BattleSystem/Enums/SkillEnum";
+import GambitConditionFactory from "../../Game/BattleSystem/Gambits/Conditions/GambitConditionFactory";
 
 class GambitScreen implements IScreen {
 
@@ -260,6 +261,9 @@ class GambitScreen implements IScreen {
     this.screenElements.cancelButton.key(['left'], () => this.screenElements.okButton.focus());
     this.screenElements.cancelButton.key(['enter', 'space', 'escape'], () => this.hideGambitEdit());
 
+    // Set ui callbacks
+    this.screenElements.gambitConditionList.on('select item', (el: any, sel: any) => this.handleGambitConditionFocused(el, sel));
+
     // Append items to screen
     this.screen.append(this.screenElements.menu);
     this.screen.append(this.screenElements.gambitTable);
@@ -485,8 +489,8 @@ class GambitScreen implements IScreen {
     this.screenElements.gambitConditionList.select(index);
 
     // Set the condition inputs
-    // TODO
-    this.screenElements.gambitConditionInputList.setItems([]);
+    var gambitCondition = GambitConditionFactory.getGambitCondition(gambit.conditionEnum);
+    this.screenElements.gambitConditionInputList.setItems(gambitCondition.getValidInputs());
     index = this.screenElements.gambitConditionInputList.fuzzyFind(gambit.conditionInput || '');
     this.screenElements.gambitConditionInputList.select(index);
 
@@ -502,6 +506,23 @@ class GambitScreen implements IScreen {
     // Focus on the condition list
     this.screenElements.gambitConditionList.focus();
     this.screen.render();
+  }
+
+  //
+  // Handles gambit condition being focused
+  //
+  private handleGambitConditionFocused(element: any, index: any) {
+
+    // Grab the condition
+    var conditionText = this.screenElements.gambitConditionList.getItem(index).getText();
+    var conditionEnum = conditionText as GambitConditionEnum;
+    var condition = GambitConditionFactory.getGambitCondition(conditionEnum);
+
+    // Set the condition inputs
+    var conditionInputs = condition.getValidInputs();
+    this.screenElements.gambitConditionInputList.setItems(conditionInputs);
+    if (conditionInputs)
+      this.screenElements.gambitConditionInputList.select(0);
   }
 
   //

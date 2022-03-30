@@ -1,7 +1,8 @@
 enum GambitConditionEnum {
   AllyAny = 'Ally: Any',
   EnemyAny = 'Enemy: Any',
-  Self = 'Self'
+  Self = 'Self',
+  AllyHealthLessThan = 'Ally: HP < X'
 }
 
 export default GambitConditionEnum;

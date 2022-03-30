@@ -53,7 +53,7 @@ class Gambit {
       return null;
 
     // Grab the potential matches for the condition
-    var potentialTargets = condition.getTargets(user, characters);
+    var potentialTargets = condition.getTargets(user, characters, this.conditionInput);
 
     // Filter the targets by which ones the action can be beneficial on
     var targets = potentialTargets.filter(x => skill.isBeneficialOn(x));
