@@ -52,6 +52,7 @@ class PaladinClass implements ICharacterClass {
   getLevelUpSkills(newLevel: number): Array<SkillEnum> {
     switch (newLevel) {
       case 6: return [SkillEnum.Heal];
+      case 12: return [SkillEnum.CrusadersPrayer];
       default: return [];
     }
   }

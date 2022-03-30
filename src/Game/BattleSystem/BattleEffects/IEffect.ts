@@ -27,7 +27,7 @@ interface IEffect {
   onRemove(): void;
 
   // Handle before an action is performed
-  beforeActionPerformed(): void;
+  beforeActionPerformed(battleLog: BattleLog): void;
 
   // Handle after an action is performed
   afterActionPerformed(): void;

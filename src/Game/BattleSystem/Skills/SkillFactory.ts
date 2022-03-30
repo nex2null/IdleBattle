@@ -1,6 +1,7 @@
 import SkillEnum from "../Enums/SkillEnum";
 import AttackSkill from "./AttackSkill";
 import ColdSnapSkill from "./ColdSnapSkill";
+import CrusadersPrayerSkill from "./CrusadersPrayerSkill";
 import DefendSkill from "./DefendSkill";
 import FrozenArmorSkill from "./FrozenArmorSkill";
 import FrozenBladesSkill from "./FrozenBladesSkill";
@@ -24,6 +25,7 @@ class SkillFactory {
       case SkillEnum.ColdSnap: return new ColdSnapSkill(slvl, mastered);
       case SkillEnum.HolyStrike: return new HolyStrikeSkill(slvl, mastered);
       case SkillEnum.Heal: return new HealSkill(slvl, mastered);
+      case SkillEnum.CrusadersPrayer: return new CrusadersPrayerSkill(slvl, mastered);
     }
   }
 }

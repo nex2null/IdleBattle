@@ -38,7 +38,7 @@ class BaseEffect implements IEffect {
   }
 
   // Handle before an action is performed
-  beforeActionPerformed(): void {
+  beforeActionPerformed(battleLog: BattleLog): void {
   }
 
   // Handle after an action is performed
