@@ -84,6 +84,18 @@ affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum
 affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Discharging, 55, 81, 90, StatEnum.LightningPower));
 affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Electrocuting, 60, 91, 100, StatEnum.LightningPower));
 
+// Healing Power Prefixes
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Refreshing, 1, 1, 10, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Rejuvenating, 10, 11, 20, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Replenishing, 19, 21, 30, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Revitalizing, 27, 31, 40, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Renewing, 34, 41, 50, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Restoring, 40, 51, 60, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Priestly, 45, 61, 70, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Saintly, 50, 71, 80, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Heavenly, 55, 81, 90, StatEnum.HealingPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Angelic, 60, 91, 100, StatEnum.HealingPower));
+
 // Physical Resistance Suffixes
 affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Rock, 1, 1, 5, StatEnum.PhysicalResistance));
 affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Stone, 10, 6, 10, StatEnum.PhysicalResistance));

@@ -52,6 +52,18 @@ enum EquipmentAffixTypeEnum {
     Discharging = 'discharging',
     Electrocuting = 'electrocuting',
 
+    // Add heal power
+    Refreshing = 'refreshing',
+    Rejuvenating = 'rejuvenating',
+    Replenishing = 'replenishing',
+    Revitalizing = 'revitalizing',
+    Renewing = 'renewing',
+    Restoring = 'restoring',
+    Priestly = 'priestly',
+    Saintly = 'saintly',
+    Heavenly = 'heavenly',
+    Angelic = 'angelic',
+
     //
     // Suffixes
     //

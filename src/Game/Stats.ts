@@ -11,6 +11,7 @@ class Stats {
   coldPower: number;
   firePower: number;
   lightningPower: number;
+  healPower: number;
   physicalResistance: number;
   coldResistance: number;
   fireResistance: number;
@@ -29,6 +30,7 @@ class Stats {
     coldPower?: number,
     firePower?: number,
     lightningPower?: number,
+    healPower?: number,
     physicalResistance?: number,
     coldResistance?: number,
     fireResistance?: number,
@@ -45,6 +47,7 @@ class Stats {
     this.coldPower = args.coldPower || 0;
     this.firePower = args.firePower || 0;
     this.lightningPower = args.lightningPower || 0;
+    this.healPower = args.healPower || 0;
     this.physicalResistance = args.physicalResistance || 0;
     this.coldResistance = args.coldResistance || 0;
     this.fireResistance = args.fireResistance || 0;
@@ -65,6 +68,7 @@ class Stats {
       coldPower: savedData.coldPower,
       firePower: savedData.firePower,
       lightningPower: savedData.lightningPower,
+      healPower: savedData.healPower,
       physicalResistance: savedData.physicalResistance,
       coldResistance: savedData.coldResistance,
       fireResistance: savedData.fireResistance,
@@ -74,42 +78,22 @@ class Stats {
 
   // Adjust stats based on new stats delta
   adjust(stats: Stats) {
-    this.maxHp += stats.maxHp || 0;
-    this.maxMp += stats.maxMp || 0;
-    this.strength += stats.strength || 0;
-    this.intelligence += stats.intelligence || 0;
-    this.speed += stats.speed || 0;
-    this.dodgeChance += stats.dodgeChance || 0;
-    this.accuracy += stats.accuracy || 0;
-    this.physicalPower += stats.physicalPower || 0;
-    this.coldPower += stats.coldPower || 0;
-    this.firePower += stats.firePower || 0;
-    this.lightningPower += stats.lightningPower || 0;
-    this.physicalResistance += stats.physicalResistance || 0;
-    this.coldResistance += stats.coldResistance || 0;
-    this.fireResistance += stats.fireResistance || 0;
-    this.lightningResistance += stats.lightningResistance || 0;
-  }
-
-  // Clones the stats
-  clone() {
-    return new Stats({
-      maxHp: this.maxHp,
-      maxMp: this.maxMp,
-      strength: this.strength,
-      intelligence: this.intelligence,
-      speed: this.speed,
-      dodgeChance: this.dodgeChance,
-      accuracy: this.accuracy,
-      physicalPower: this.physicalPower,
-      coldPower: this.coldPower,
-      firePower: this.firePower,
-      lightningPower: this.lightningPower,
-      physicalResistance: this.physicalResistance,
-      coldResistance: this.coldResistance,
-      fireResistance: this.fireResistance,
-      lightningResistance: this.lightningResistance,
-    });
+    this.maxHp += stats.maxHp;
+    this.maxMp += stats.maxMp;
+    this.strength += stats.strength;
+    this.intelligence += stats.intelligence;
+    this.speed += stats.speed;
+    this.dodgeChance += stats.dodgeChance;
+    this.accuracy += stats.accuracy;
+    this.physicalPower += stats.physicalPower;
+    this.coldPower += stats.coldPower;
+    this.firePower += stats.firePower;
+    this.lightningPower += stats.lightningPower;
+    this.healPower += stats.healPower;
+    this.physicalResistance += stats.physicalResistance;
+    this.coldResistance += stats.coldResistance;
+    this.fireResistance += stats.fireResistance;
+    this.lightningResistance += stats.lightningResistance;
   }
 }
 

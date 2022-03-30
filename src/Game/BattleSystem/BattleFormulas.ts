@@ -41,8 +41,12 @@ export function processDamage(attacker: BattleCharacter, defender: BattleCharact
 
 // Does any heal processing given a base heal
 export function processHeal(healer: BattleCharacter, target: BattleCharacter, baseAmount: number): number {
-  // TODO: heal power
-  return baseAmount;
+
+  // Factor in heal power
+  var increasePercent = getHealIncreasePercent(healer.currentStats.healPower, healer);
+
+  // Augment base amount by percent
+  return baseAmount * (1 + increasePercent);
 }
 
 // Get the defense value a defender has to a given damage type
@@ -71,7 +75,20 @@ function getPowerValue(damageType: DamageTypeEnum, attacker: BattleCharacter): n
 function getDamageIncreasePercent(power: number, attacker: BattleCharacter) {
 
   // TODO: Figure out a divisor that makes sense
-  var divisor = 2;
+  var divisor = 1;
+
+  // Divide defense by divisor to get the damage reduction percentage
+  var increasePercent = +((power / divisor / 100).toFixed(2));
+
+  // TODO: Augment this with other stats
+  return increasePercent;
+}
+
+// Get the heal increase percentage that a power value will provide
+function getHealIncreasePercent(power: number, healer: BattleCharacter) {
+
+  // TODO: Figure out a divisor that makes sense
+  var divisor = 1;
 
   // Divide defense by divisor to get the damage reduction percentage
   var increasePercent = +((power / divisor / 100).toFixed(2));
