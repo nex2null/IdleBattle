@@ -39,6 +39,12 @@ export function processDamage(attacker: BattleCharacter, defender: BattleCharact
   return baseDamage;
 }
 
+// Does any heal processing given a base heal
+export function processHeal(healer: BattleCharacter, target: BattleCharacter, baseAmount: number): number {
+  // TODO: heal power
+  return baseAmount;
+}
+
 // Get the defense value a defender has to a given damage type
 function getDefenseValue(damageType: DamageTypeEnum, defender: BattleCharacter): number {
   switch (damageType) {

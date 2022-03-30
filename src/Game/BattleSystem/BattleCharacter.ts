@@ -256,4 +256,27 @@ export default class BattleCharacter {
     this.currentStats.mp -= mp;
     if (this.currentStats.mp < 0) this.currentStats.mp = 0;
   }
+
+  // Heals a character
+  healCharacter(target: BattleCharacter, amount: number, battleLog: BattleLog) {
+
+    // TODO: things
+
+    // Heal the character
+    target.receiveHeal(this, amount, battleLog);
+  }
+
+  // Receives a heal from a character
+  receiveHeal(healer: BattleCharacter, amount: number, battleLog: BattleLog) {
+    
+    // TODO: effects
+
+    // Increase current HP by the amount healed
+    this.currentStats.hp += amount;
+    if (this.currentStats.hp > this.currentStats.maxHp)
+      this.currentStats.hp = this.currentStats.maxHp;
+
+    // Log that we were healed
+    battleLog.addMessage(`${this.name} is healed for {green-fg}${amount}{/green-fg} hp`);
+  }
 }
