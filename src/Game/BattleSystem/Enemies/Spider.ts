@@ -14,8 +14,8 @@ class Spider extends BattleCharacter {
       name: name,
       level: 1,
       baseStats: new Stats({
-        hp: 25,
-        mp: 0,
+        maxHp: 25,
+        maxMp: 0,
         strength: 3,
         speed: 14,
         physicalResistance: 20

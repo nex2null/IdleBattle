@@ -59,8 +59,8 @@ class PlayerCharacter {
       name: this.name,
       level: this.level,
       baseStats: new Stats({
-        hp: this.stats.hp + this.equipment.getStatValue(StatEnum.Hp),
-        mp: this.stats.mp + this.equipment.getStatValue(StatEnum.Mp),
+        maxHp: this.stats.maxHp + this.equipment.getStatValue(StatEnum.Hp),
+        maxMp: this.stats.maxMp + this.equipment.getStatValue(StatEnum.Mp),
         strength: this.stats.strength + this.equipment.getStatValue(StatEnum.Strength),
         intelligence: this.stats.intelligence + this.equipment.getStatValue(StatEnum.Intelligence),
         speed: this.equipment.weapon ? this.equipment.getStatValue(StatEnum.Speed) : this.equipment.getStatValue(StatEnum.Speed) + 20,
@@ -91,7 +91,7 @@ class PlayerCharacter {
     // If we already know this skill, do nothing
     if (this.getPlayerSkill(skillEnum))
       return;
-    
+
     // Add the skill as a level 1 skill
     this.skills.push(new PlayerSkill(skillEnum, 1, false));
   }

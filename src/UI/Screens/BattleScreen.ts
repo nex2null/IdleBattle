@@ -487,8 +487,8 @@ class BattleScreen implements IScreen {
 
     // Update gauge values
     characterElements.chargeGauge.setPercent(character.currentCharge / 250 * 100);
-    characterElements.hpGauge.setPercent((character.currentStats.hp / character.baseStats.hp) * 100);
-    characterElements.mpGauge.setPercent((character.currentStats.mp / character.baseStats.mp) * 100);
+    characterElements.hpGauge.setPercent((character.currentStats.hp / character.currentStats.maxHp) * 100);
+    characterElements.mpGauge.setPercent((character.currentStats.mp / character.currentStats.maxMp) * 100);
 
     // Update labels
     characterElements.chargeGauge.setLabel(`Charge: ${Math.round(character.currentCharge / 250 * 100)}%`);

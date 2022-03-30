@@ -31,8 +31,8 @@ class CryomancerClass implements ICharacterClass {
   // Get stats the class starts with
   getStartingStats(): Stats {
     return new Stats({
-      hp: 50,
-      mp: 75,
+      maxHp: 50,
+      maxMp: 75,
       strength: 2,
       intelligence: 6
     });
@@ -41,8 +41,8 @@ class CryomancerClass implements ICharacterClass {
   // Get the stat increases on level up
   getLevelUpStatIncreases(newLevel: number): Stats {
     return new Stats({
-      hp: 3,
-      mp: 5,
+      maxHp: 3,
+      maxMp: 5,
       intelligence: 2
     });
   }

@@ -1,7 +1,7 @@
 class Stats {
 
-  hp: number;
-  mp: number;
+  maxHp: number;
+  maxMp: number;
   strength: number;
   intelligence: number;
   speed: number;
@@ -18,8 +18,8 @@ class Stats {
 
   // Constructor
   constructor(args: {
-    hp?: number,
-    mp?: number,
+    maxHp?: number,
+    maxMp?: number,
     strength?: number,
     intelligence?: number,
     speed?: number,
@@ -34,8 +34,8 @@ class Stats {
     fireResistance?: number,
     lightningResistance?: number
   }) {
-    this.hp = args.hp || 0;
-    this.mp = args.mp || 0;
+    this.maxHp = args.maxHp || 0;
+    this.maxMp = args.maxMp || 0;
     this.strength = args.strength || 0;
     this.intelligence = args.intelligence || 0;
     this.speed = args.speed || 0;
@@ -54,8 +54,8 @@ class Stats {
   // Load from saved data
   static load(savedData: any) {
     return new Stats({
-      hp: savedData.hp,
-      mp: savedData.mp,
+      maxHp: savedData.maxHp,
+      maxMp: savedData.maxMp,
       strength: savedData.strength,
       intelligence: savedData.intelligence,
       speed: savedData.speed,
@@ -74,8 +74,8 @@ class Stats {
 
   // Adjust stats based on new stats delta
   adjust(stats: Stats) {
-    this.hp += stats.hp || 0;
-    this.mp += stats.mp || 0;
+    this.maxHp += stats.maxHp || 0;
+    this.maxMp += stats.maxMp || 0;
     this.strength += stats.strength || 0;
     this.intelligence += stats.intelligence || 0;
     this.speed += stats.speed || 0;
@@ -94,8 +94,8 @@ class Stats {
   // Clones the stats
   clone() {
     return new Stats({
-      hp: this.hp,
-      mp: this.mp,
+      maxHp: this.maxHp,
+      maxMp: this.maxMp,
       strength: this.strength,
       intelligence: this.intelligence,
       speed: this.speed,
