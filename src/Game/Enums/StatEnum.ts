@@ -10,7 +10,7 @@ enum StatEnum {
   ColdPower = 'cold-power',
   FirePower = 'fire-power',
   LightningPower = 'lightning-power',
-  HealingPower = 'healing-power',
+  HealPower = 'heal-power',
   PhysicalResistance = 'physical-resistance',
   ColdResistance = 'cold-resistance',
   FireResistance = 'fire-resistance',
