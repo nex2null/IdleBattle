@@ -1,5 +1,4 @@
 import BattleCharacterTypeEnum from './Enums/BattleCharacterTypeEnum';
-import BaseEffect from './BattleEffects/BaseEffect';
 import Gambit from './Gambits/Gambit';
 import BattleLog from './BattleLog';
 import BattleDamage from './BattleDamage';
@@ -10,6 +9,7 @@ import DamageTracker from './DamageTracker';
 import BattleEffectEnum from './Enums/BattleEffectEnum';
 import IEffect from './BattleEffects/IEffect';
 import PlayerSkill from '../PlayerSkill';
+import BattleStats from './BattleStats';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 
@@ -20,7 +20,7 @@ export default class BattleCharacter {
   level: number;
   currentCharge: number;
   baseStats: Stats;
-  currentStats: Stats;
+  currentStats: BattleStats;
   characterType: BattleCharacterTypeEnum;
   hostileToCharacterType: BattleCharacterTypeEnum;
   effects: Array<IEffect>;
@@ -52,7 +52,7 @@ export default class BattleCharacter {
     this.name = args.name;
     this.level = args.level;
     this.baseStats = args.baseStats;
-    this.currentStats = args.baseStats.clone();
+    this.currentStats = new BattleStats(args.baseStats);
     this.characterType = args.characterType;
     this.hostileToCharacterType = args.hostileToCharacterType;
     this.currentCharge = 0;

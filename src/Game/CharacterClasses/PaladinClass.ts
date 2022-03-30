@@ -31,8 +31,8 @@ class PaladinClass implements ICharacterClass {
   // Get stats the class starts with
   getStartingStats(): Stats {
     return new Stats({
-      hp: 70,
-      mp: 60,
+      maxHp: 70,
+      maxMp: 60,
       strength: 5,
       intelligence: 4
     });
@@ -41,8 +41,8 @@ class PaladinClass implements ICharacterClass {
   // Get the stat increases on level up
   getLevelUpStatIncreases(newLevel: number): Stats {
     return new Stats({
-      hp: 4,
-      mp: 4,
+      maxHp: 4,
+      maxMp: 4,
       intelligence: 1,
       strength: 1
     });

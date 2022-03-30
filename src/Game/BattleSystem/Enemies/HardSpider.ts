@@ -14,8 +14,8 @@ class HardSpider extends BattleCharacter {
       name: name,
       level: 1,
       baseStats: new Stats({
-        hp: 100,
-        mp: 0,
+        maxHp: 100,
+        maxMp: 0,
         strength: 12,
         speed: 18,
         physicalResistance: 50,
