@@ -22,6 +22,7 @@ class ChilledEffect extends BaseEffect {
     return `${characterName} is chilled`;
   }
 
+  // Handle when the effect is applied
   onApply(): void {
 
     // If no existing chill effect was found, then add this one

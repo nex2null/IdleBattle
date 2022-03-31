@@ -68,6 +68,7 @@ class PlayerCharacter {
         coldPower: this.equipment.getStatValue(StatEnum.ColdPower),
         lightningPower: this.equipment.getStatValue(StatEnum.LightningPower),
         physicalPower: this.equipment.getStatValue(StatEnum.PhysicalPower),
+        healPower: this.equipment.getStatValue(StatEnum.HealPower),
         fireResistance: this.equipment.getStatValue(StatEnum.FireResistance),
         coldResistance: this.equipment.getStatValue(StatEnum.ColdResistance),
         lightningResistance: this.equipment.getStatValue(StatEnum.LightningResistance),

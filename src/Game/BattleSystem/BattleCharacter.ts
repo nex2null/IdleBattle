@@ -113,7 +113,7 @@ export default class BattleCharacter {
   act(characters: Array<BattleCharacter>, battleLog: BattleLog, damageTracker: DamageTracker) {
 
     // Do any pre-action work
-    this.beforeActionPerformed();
+    this.beforeActionPerformed(battleLog);
 
     // If I am no longer ready to act after pre-action work then do nothing
     if (!this.isReadyToAct()) {
@@ -204,10 +204,10 @@ export default class BattleCharacter {
   }
 
   // Handle before an action is performed
-  beforeActionPerformed() {
+  beforeActionPerformed(battleLog: BattleLog) {
 
     // Allow effects to trigger before an action has been performed
-    this.effects.forEach(x => x.beforeActionPerformed());
+    this.effects.forEach(x => x.beforeActionPerformed(battleLog));
   }
 
   // Mark that a character performed an action
@@ -263,13 +263,16 @@ export default class BattleCharacter {
     // TODO: things
 
     // Heal the character
-    target.receiveHeal(this, amount, battleLog);
+    target.receiveHeal(amount, battleLog, this);
   }
 
   // Receives a heal from a character
-  receiveHeal(healer: BattleCharacter, amount: number, battleLog: BattleLog) {
+  receiveHeal(amount: number, battleLog: BattleLog, healer?: BattleCharacter) {
     
     // TODO: effects
+
+    // Round
+    amount = Math.round(amount);
 
     // Increase current HP by the amount healed
     this.currentStats.hp += amount;
