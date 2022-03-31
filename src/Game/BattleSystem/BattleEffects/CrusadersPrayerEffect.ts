@@ -6,13 +6,14 @@ import BattleLog from '../BattleLog';
 class CrusadersPrayerEffect extends BaseEffect {
 
   // Properties
+  startingTurns: number;
   turnsLeft: number;
   healAmount: number = 0;
 
   // Constructor
   constructor(character: BattleCharacter, turns: number, healAmount: number) {
     super(character, BattleEffectEnum.CrusadersPrayer, '{white-bg}{green-fg}CPR{/green-fg}{/white-bg}');
-    this.turnsLeft = turns;
+    this.startingTurns = this.turnsLeft = turns;
     this.healAmount = healAmount;
   }
 
@@ -31,6 +32,11 @@ class CrusadersPrayerEffect extends BaseEffect {
     this.turnsLeft--;
     if (this.turnsLeft <= 0)
       this.character.removeEffect(this);
+  }
+
+  // Refreshes the number of turns 
+  refreshTurns() {
+    this.turnsLeft = this.startingTurns;
   }
 }
 
