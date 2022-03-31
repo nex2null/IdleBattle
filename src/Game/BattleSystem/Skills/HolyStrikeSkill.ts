@@ -7,6 +7,9 @@ import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import ISkill from './ISkill';
 import DamageTracker from '../DamageTracker';
 import SkillEnum from '../Enums/SkillEnum';
+import BattleEffectEnum from '../Enums/BattleEffectEnum';
+import RandomHelpers from '../../Utilities/RandomHelpers';
+import CrusadersPrayerEffect from '../BattleEffects/CrusadersPrayerEffect';
 
 class HolyStrikeSkill implements ISkill {
 
@@ -104,7 +107,12 @@ class HolyStrikeSkill implements ISkill {
       // Deal damage
       character.dealDamage(damageToDo, target, battleLog, damageTracker);
 
-      // TODO: Mastery
+      // If the skill is mastered and we have an active crusader's prayer on ourself
+      // then there is a 20% chance to refresh it
+      var crusadersPrayerEffect = character.getEffect(BattleEffectEnum.CrusadersPrayer);
+      var shouldRefresh = RandomHelpers.getRandomInt(1, 100) <= 20;
+      if (this.isMastered && shouldRefresh && crusadersPrayerEffect)
+        (<CrusadersPrayerEffect>crusadersPrayerEffect).refreshTurns();
     }
     else {
       battleLog.addMessage(`${character.name} misses!`)
