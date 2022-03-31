@@ -21,6 +21,7 @@ class PlayerCharacter {
   primaryClass: CharacterClassEnum;
   skills: Array<PlayerSkill>;
   skillPoints: number;
+  masteryPoints: number;
 
   // Equipment
   equipment: PlayerEquipment;
@@ -36,6 +37,7 @@ class PlayerCharacter {
     this.primaryClass = args.primaryClass;
     this.skills = args.skills;
     this.skillPoints = args.skillPoints || 0;
+    this.masteryPoints = args.masteryPoints || 0;
   }
 
   // Load from saved data
@@ -49,7 +51,8 @@ class PlayerCharacter {
       gambits: savedData.gambits.map((x: any) => Gambit.load(x)),
       primaryClass: savedData.primaryClass,
       skills: savedData.skills.map((x: any) => PlayerSkill.load(x)),
-      skillPoints: savedData.skillPoints
+      skillPoints: savedData.skillPoints,
+      masteryPoints: savedData.masteryPoints
     });
   }
 
@@ -117,6 +120,46 @@ class PlayerCharacter {
     // Level the skill
     playerSkill.level++;
     this.skillPoints--;
+  }
+
+  // Master a skill
+  masterSkill(skillEnum: SkillEnum) {
+
+    // Ensure we have mastery points
+    if (this.masteryPoints < 1)
+      return;
+
+    // Find the skill and ensure it isn't already mastered
+    var playerSkill = this.getPlayerSkill(skillEnum);
+    if (!playerSkill || playerSkill.mastered)
+      return;
+
+    // Verify the skill can be mastered
+    var skill = SkillFactory.getSkill(playerSkill.skill, playerSkill.level, playerSkill.mastered);
+    if (skill.level != skill.maxLevel)
+      return;
+
+    // Master the skill
+    playerSkill.mastered = true;
+    this.masteryPoints--;
+  }
+
+  // Level up the character
+  levelUp(levelUpStats: Stats, levelUpSkills: Array<SkillEnum>) {
+
+    // Increase level and skill points
+    this.level++;
+    this.skillPoints++;
+
+    // Add stats
+    this.stats.adjust(levelUpStats);
+
+    // Learn new skills
+    levelUpSkills.forEach(x => this.learnSkill(x));
+
+    // If the current level is divisable by 10, gain a mastery point
+    if (this.level % 10 === 0)
+      this.masteryPoints++;
   }
 }
 
