@@ -245,11 +245,44 @@ class LevelUpScreen implements IScreen {
       tags: true
     });
 
+    // Mastery points label
+    this.screenElements.masteryPointsLabel = blessed.box({
+      parent: this.screenElements.skillLevelBox,
+      top: 4,
+      height: 1,
+      width: 38,
+      left: 11,
+      content: '',
+      tags: true
+    });
+
     // Level skill button
     this.screenElements.levelSkillButton = blessed.button({
       parent: this.screenElements.skillLevelBox,
       tags: true,
       content: '{center}LEVEL SKILL{/center}',
+      top: 1,
+      left: 34,
+      width: 20,
+      height: 3,
+      padding: {
+        top: 1
+      },
+      style: {
+        bold: true,
+        fg: 'white',
+        bg: 'green',
+        focus: {
+          inverse: true
+        }
+      }
+    });
+
+    // Master skill button
+    this.screenElements.masterSkillButton = blessed.button({
+      parent: this.screenElements.skillLevelBox,
+      tags: true,
+      content: '{center}MASTER SKILL{/center}',
       top: 1,
       left: 34,
       width: 20,
@@ -274,13 +307,16 @@ class LevelUpScreen implements IScreen {
     this.screenElements.levelUpButton.key(['enter', 'space'], () => this.levelUp());
     this.screenElements.levelUpButton.key(['down'], () => this.screenElements.skillNameLabel.focus());
     this.screenElements.skillNameLabel.key(['up'], () => this.screenElements.levelUpButton.focus());
-    this.screenElements.skillNameLabel.key(['down'], () => this.tryFocusSkillLevelButton());
+    this.screenElements.skillNameLabel.key(['down'], () => this.tryFocusSkillLevelOrMasterButton());
     this.screenElements.skillNameLabel.key(['right'], () => this.setCurrentSkill(this.currentSkillIndex + 1));
     this.screenElements.skillNameLabel.key(['left'], () => this.setCurrentSkill(this.currentSkillIndex - 1));
     this.screenElements.skillNameLabel.key(['escape'], () => this.hideCharacterBox());
     this.screenElements.levelSkillButton.key(['up'], () => this.screenElements.skillNameLabel.focus());
     this.screenElements.levelSkillButton.key(['enter', 'space'], () => this.levelUpCurrentSkill());
     this.screenElements.levelSkillButton.key(['escape'], () => this.hideCharacterBox());
+    this.screenElements.masterSkillButton.key(['up'], () => this.screenElements.skillNameLabel.focus());
+    this.screenElements.masterSkillButton.key(['enter', 'space'], () => this.masterCurrentSkill());
+    this.screenElements.masterSkillButton.key(['escape'], () => this.hideCharacterBox());
 
     // Append items to screen
     this.screen.append(this.screenElements.menu);
@@ -381,10 +417,8 @@ class LevelUpScreen implements IScreen {
     var requiredXp = currentClass.getRequiredXpToLevel(nextLevel);
 
     // Verify we have required XP
-    if (requiredXp > this.town.totalExperience) {
-      // TODO SHOW ERROR MESSAGE
+    if (requiredXp > this.town.totalExperience)
       return;
-    }
 
     // Grab the stats
     var levelUpStats = currentClass.getLevelUpStatIncreases(nextLevel);
@@ -393,10 +427,7 @@ class LevelUpScreen implements IScreen {
     var levelUpSkills = currentClass.getLevelUpSkills(nextLevel);
 
     // Level up the character
-    this.currentCharacter.level++;
-    this.currentCharacter.stats.adjust(levelUpStats);
-    levelUpSkills.forEach(x => this.currentCharacter?.learnSkill(x));
-    this.currentCharacter.skillPoints++;
+    this.currentCharacter.levelUp(levelUpStats, levelUpSkills);
 
     // Remove the required XP from the town xp
     this.town.totalExperience -= requiredXp;
@@ -441,12 +472,13 @@ class LevelUpScreen implements IScreen {
     if (!this.currentSkill || !this.currentCharacter)
       return;
 
-    // Update the skill points
-    this.screenElements.skillPointsLabel.setContent(` Skill Points: ${this.currentCharacter.skillPoints}`);
+    // Update the skill / mastery points
+    this.screenElements.skillPointsLabel.setContent(`  Skill Points: ${this.currentCharacter.skillPoints}`);
+    this.screenElements.masteryPointsLabel.setContent(`Mastery Points: ${this.currentCharacter.masteryPoints}`);
 
     // Set the skill levels
-    this.screenElements.skillLevelLabel.setContent(`Current Level: ${this.currentSkill.level}`);
-    this.screenElements.maxSkillLevelLabel.setContent(`Maximum Level: ${this.currentSkill.maxLevel}`);
+    this.screenElements.skillLevelLabel.setContent(` Current Level: ${this.currentSkill.level}`);
+    this.screenElements.maxSkillLevelLabel.setContent(` Maximum Level: ${this.currentSkill.maxLevel}`);
 
     // Set the skill description
     this.screenElements.skillDescription.setContent(this.currentSkill.getDescription());
@@ -458,19 +490,28 @@ class LevelUpScreen implements IScreen {
     else
       this.screenElements.levelSkillButton.hide();
 
+    // Determine if the master skill button is visible
+    var skillIsMastered = this.currentCharacter.getPlayerSkill(this.currentSkill.skillEnum)?.mastered;
+    var canMasterSkill = !this.currentSkill.isGeneric && !skillIsMastered && this.currentSkill.level === this.currentSkill.maxLevel;
+    if (canMasterSkill)
+      this.screenElements.masterSkillButton.show();
+    else
+      this.screenElements.masterSkillButton.hide();
+
     // Render the screen
     this.screen.render();
   }
 
   // Attempt to focus on the skill level button
-  private tryFocusSkillLevelButton() {
+  private tryFocusSkillLevelOrMasterButton() {
 
-    // Do nothing if level skill button is hidden
-    if (this.screenElements.levelSkillButton.hidden)
-      return;
+    // Try to focus skill level button
+    if (!this.screenElements.levelSkillButton.hidden)
+      this.screenElements.levelSkillButton.focus();
 
-    // Otherwise focus the level skill button
-    this.screenElements.levelSkillButton.focus();
+    // Try to focus skill mastery button
+    if (!this.screenElements.masterSkillButton.hidden)
+      this.screenElements.masterSkillButton.focus();
   }
 
   // Levels up the current skill
@@ -485,6 +526,28 @@ class LevelUpScreen implements IScreen {
 
     // Reset the skill
     this.setCurrentSkill(this.currentSkillIndex);
+
+    // If the level up skill button is hidden then focus on the skill name label instead
+    if (this.screenElements.levelSkillButton.hidden)
+      this.screenElements.skillNameLabel.focus();
+  }
+
+  // Masters the current skill
+  private masterCurrentSkill() {
+
+    // Sanity check
+    if (!this.currentSkill || !this.currentCharacter)
+      return;
+
+    // Master the skill
+    this.currentCharacter.masterSkill(this.currentSkill.skillEnum);
+
+    // Reset the skill
+    this.setCurrentSkill(this.currentSkillIndex);
+
+    // If the master skill button is hidden then focus on the skill name label instead
+    if (this.screenElements.masterSkillButton.hidden)
+      this.screenElements.skillNameLabel.focus();
   }
 
   // Hide character box
