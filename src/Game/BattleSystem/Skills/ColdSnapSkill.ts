@@ -5,6 +5,7 @@ import BattleLog from '../BattleLog';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
 import SkillEnum from '../Enums/SkillEnum';
 import FrozenEffect from '../BattleEffects/FrozenEffect';
+import { calculateStatusEffectHit } from '../BattleFormulas';
 
 class ColdSnapSkill implements ISkill {
 
@@ -84,6 +85,13 @@ class ColdSnapSkill implements ISkill {
 
     // Spend MP
     character.spendMp(this.mpCost);
+
+    // Determine if the freeze is resisted
+    var freezeResisted = !calculateStatusEffectHit(character, target);
+    if (freezeResisted) {
+      battleLog.addMessage(`${target.name} resists!`);
+      return;
+    }
 
     // Remove the chilled effect
     var chillEffect = target.getEffect(BattleEffectEnum.Chilled);

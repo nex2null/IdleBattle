@@ -11,7 +11,7 @@ class ChilledEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter) {
-    super(character, BattleEffectEnum.Chilled, '{blue-bg}{white-fg}CHL{/white-fg}{/blue-bg}');
+    super(character, BattleEffectEnum.Chilled, '{blue-bg}{white-fg}CHL{/white-fg}{/blue-bg}', true);
     this.stacks = 1;
     this.decayTurns = 3;
     this.removedSpeed = 0;

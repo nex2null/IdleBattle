@@ -114,7 +114,19 @@ enum EquipmentAffixTypeEnum {
     Tempest = 'tempest',
     Tornado = 'tornado',
     Vortex = 'vortex',
-    Maelstrom = 'maelstrom'
+    Maelstrom = 'maelstrom',
+
+    // Status Resistance
+    Snuffing = 'snuffing',
+    Vitiation = 'vitiation',
+    Revoking = 'revoking',
+    Rebuttal = 'rebuttal',
+    Abjuration = 'abjuration',
+    Cancelling = 'cancelling',
+    Dismissal = 'dismissal',
+    Expunging = 'expunging',
+    Annulment = 'annulment',
+    Nullification = 'nullification',
 }
 
 export default EquipmentAffixTypeEnum;

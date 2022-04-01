@@ -10,12 +10,14 @@ class BaseEffect implements IEffect {
   character: BattleCharacter;
   type: BattleEffectEnum;
   uiCode: string;
+  readonly isNegative: boolean;
 
   // Constructor
-  constructor(character: BattleCharacter, type: BattleEffectEnum, uiCode: string) {
+  constructor(character: BattleCharacter, type: BattleEffectEnum, uiCode: string, isNegative: boolean) {
     this.character = character;
     this.type = type;
     this.uiCode = uiCode;
+    this.isNegative = isNegative;
   }
 
   // Get the message to display when a character is inflicted with this effect

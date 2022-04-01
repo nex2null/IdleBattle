@@ -16,7 +16,7 @@ class FrozenArmorEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter, turns: number, addedColdResistance: number, applyToAllDamage: boolean) {
-    super(character, BattleEffectEnum.FrozenArmor, '{blue-bg}{white-fg}FZA{/white-fg}{/blue-bg}');
+    super(character, BattleEffectEnum.FrozenArmor, '{blue-bg}{white-fg}FZA{/white-fg}{/blue-bg}', false);
     this.turnsLeft = turns;
     this.addedColdResistance = addedColdResistance;
     this.applyToAllDamage = applyToAllDamage;

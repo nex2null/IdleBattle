@@ -12,7 +12,7 @@ class CrusadersPrayerEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter, turns: number, healAmount: number) {
-    super(character, BattleEffectEnum.CrusadersPrayer, '{white-bg}{green-fg}CPR{/green-fg}{/white-bg}');
+    super(character, BattleEffectEnum.CrusadersPrayer, '{white-bg}{green-fg}CPR{/green-fg}{/white-bg}', false);
     this.startingTurns = this.turnsLeft = turns;
     this.healAmount = healAmount;
   }
