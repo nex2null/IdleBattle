@@ -8,7 +8,7 @@ class DefendedEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter) {
-    super(character, BattleEffectEnum.Defended, '{white-bg}{black-fg}DFN{/black-fg}{/white-bg}');
+    super(character, BattleEffectEnum.Defended, '{white-bg}{black-fg}DFN{/black-fg}{/white-bg}', false);
   }
 
   // Get the message to display when a character is inflicted with this effect

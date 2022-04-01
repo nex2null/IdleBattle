@@ -17,7 +17,7 @@ class FrozenBladesEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter, turns: number, addedColdDamage: number, canFreeze: boolean) {
-    super(character, BattleEffectEnum.FrozenBlades, '{blue-bg}{white-fg}FZB{/white-fg}{/blue-bg}');
+    super(character, BattleEffectEnum.FrozenBlades, '{blue-bg}{white-fg}FZB{/white-fg}{/blue-bg}', false);
     this.turnsLeft = turns;
     this.addedColdDamage = addedColdDamage;
     this.canFreeze = canFreeze;

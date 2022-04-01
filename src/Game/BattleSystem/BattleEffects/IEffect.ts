@@ -14,6 +14,9 @@ interface IEffect {
   // The ui code of the effect (3 characters, tags allowed)
   uiCode: string;
 
+  // Whether the effect is a negative effect
+  isNegative: boolean;
+
   // Get the message to display when a character is inflicted with this effect
   getInflictedMessage(characterName: string): string;
 

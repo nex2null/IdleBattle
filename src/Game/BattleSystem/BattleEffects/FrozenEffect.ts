@@ -12,7 +12,7 @@ class FrozenEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter) {
-    super(character, BattleEffectEnum.Frozen, '{white-bg}{blue-fg}FRZ{/blue-fg}{/white-bg}');
+    super(character, BattleEffectEnum.Frozen, '{white-bg}{blue-fg}FRZ{/blue-fg}{/white-bg}', true);
     this.freezeLength = 40;
   }
 

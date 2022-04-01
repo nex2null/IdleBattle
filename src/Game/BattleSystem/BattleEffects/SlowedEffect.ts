@@ -10,7 +10,7 @@ class SlowedEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter, turnsToSlow: number) {
-    super(character, BattleEffectEnum.Slowed, '{white-bg}{blue-fg}SLW{/blue-fg}{/white-bg}');
+    super(character, BattleEffectEnum.Slowed, '{white-bg}{blue-fg}SLW{/blue-fg}{/white-bg}', true);
     this.turnsLeft = turnsToSlow;
   }
 

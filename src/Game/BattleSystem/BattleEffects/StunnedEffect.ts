@@ -9,7 +9,7 @@ class StunnedEffect extends BaseEffect {
 
   // Constructor
   constructor(character: BattleCharacter, stunLength: number) {
-    super(character, BattleEffectEnum.Stunned, '{white-bg}{black-fg}STN{/black-fg}{/white-bg}');
+    super(character, BattleEffectEnum.Stunned, '{white-bg}{black-fg}STN{/black-fg}{/white-bg}', true);
     this.stunLength = stunLength;
   }
 
