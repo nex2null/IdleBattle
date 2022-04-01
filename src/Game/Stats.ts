@@ -16,6 +16,7 @@ class Stats {
   coldResistance: number;
   fireResistance: number;
   lightningResistance: number;
+  statusResistance: number;
 
   // Constructor
   constructor(args: {
@@ -34,7 +35,8 @@ class Stats {
     physicalResistance?: number,
     coldResistance?: number,
     fireResistance?: number,
-    lightningResistance?: number
+    lightningResistance?: number,
+    statusResistance?: number
   }) {
     this.maxHp = args.maxHp || 0;
     this.maxMp = args.maxMp || 0;
@@ -52,6 +54,7 @@ class Stats {
     this.coldResistance = args.coldResistance || 0;
     this.fireResistance = args.fireResistance || 0;
     this.lightningResistance = args.lightningResistance || 0;
+    this.statusResistance = args.statusResistance || 0;
   }
 
   // Load from saved data
@@ -72,7 +75,8 @@ class Stats {
       physicalResistance: savedData.physicalResistance,
       coldResistance: savedData.coldResistance,
       fireResistance: savedData.fireResistance,
-      lightningResistance: savedData.lightningResistance
+      lightningResistance: savedData.lightningResistance,
+      statusResistance: savedData.statusResistance
     });
   }
 
@@ -94,6 +98,7 @@ class Stats {
     this.coldResistance += stats.coldResistance;
     this.fireResistance += stats.fireResistance;
     this.lightningResistance += stats.lightningResistance;
+    this.statusResistance += stats.statusResistance;
   }
 }
 

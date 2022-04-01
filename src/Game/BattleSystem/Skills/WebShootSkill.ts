@@ -1,7 +1,7 @@
 import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import SlowedEffect from '../BattleEffects/SlowedEffect';
 import ISkill from './ISkill';
-import { calculateHit } from '../BattleFormulas';
+import { calculateHit, calculateStatusEffectHit } from '../BattleFormulas';
 import BattleCharacter from '../BattleCharacter';
 import BattleLog from '../BattleLog';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
@@ -64,11 +64,11 @@ class WebShootSkill implements ISkill {
     // Log
     battleLog.addMessage(`${character.name} shoots a sticky web at ${target.name}.`);
 
-    // Determine if the attack hits
-    var attackHits = calculateHit(character, target);
+    // Determine if the slow hits
+    var slowHits = calculateStatusEffectHit(character, target);
 
-    // If the attack hits then apply the slow
-    if (attackHits) {
+    // If the slow hits then apply the slow
+    if (slowHits) {
       var slowedEffect = new SlowedEffect(target, 3);
       character.inflictEffect(slowedEffect, target, battleLog);
     }

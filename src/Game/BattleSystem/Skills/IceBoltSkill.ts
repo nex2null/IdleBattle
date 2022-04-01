@@ -1,4 +1,4 @@
-import { calculateHit, processDamage } from '../BattleFormulas';
+import { calculateHit, calculateStatusEffectHit, processDamage } from '../BattleFormulas';
 import DamageTypeEnum from '../Enums/DamageTypeEnum';
 import BattleCharacter from '../BattleCharacter';
 import BattleDamage from '../BattleDamage';
@@ -100,7 +100,8 @@ class IceBoltSkill implements ISkill {
 
       // If the target is alive determine if they are chilled
       var chillRollSuccess = this.isMastered || RandomHelpers.getRandomInt(1, 100) <= 50;
-      var applyChill = target.isAlive() && chillRollSuccess;
+      var chillHits = calculateStatusEffectHit(character, target);
+      var applyChill = target.isAlive() && chillRollSuccess && chillHits;
       if (applyChill) {
         var chillEffect = new ChilledEffect(target);
         character.inflictEffect(chillEffect, target, battleLog);

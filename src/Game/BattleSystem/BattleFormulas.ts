@@ -3,7 +3,7 @@ import BattleDamage from './BattleDamage';
 import DamageTypeEnum from "./Enums/DamageTypeEnum";
 
 // Determine if a hit is calculated
-export function calculateHit(attacker: BattleCharacter, defender: BattleCharacter) {
+export function calculateHit(attacker: BattleCharacter, defender: BattleCharacter): boolean {
 
   // The base miss % is 5%
   var baseMissPercent = 5;
@@ -19,6 +19,19 @@ export function calculateHit(attacker: BattleCharacter, defender: BattleCharacte
   return roll > Math.round(missPercent);
 }
 
+// Calculate if a status effect can hit the defender
+export function calculateStatusEffectHit(attacker: BattleCharacter, defender: BattleCharacter): boolean {
+
+  // Get the status resistance percent
+  var statusResistance = defender.currentStats.statusResistance;
+  var resistancePercent = getResistancePercent(statusResistance, attacker, defender);
+
+  // TODO: Give attacker a way to negate the resistance
+
+  // Roll a number 0 to 1, and we need to beat the resistance percent
+  return Math.random() > resistancePercent;
+}
+
 // Does any damage processing given a base damage
 export function processDamage(attacker: BattleCharacter, defender: BattleCharacter, baseDamage: BattleDamage): BattleDamage {
 
@@ -29,11 +42,11 @@ export function processDamage(attacker: BattleCharacter, defender: BattleCharact
     baseDamage.amounts.set(type, amount * (1 + increasePercent))
   });
 
-  // Reduce damage by defender defenses
+  // Reduce damage by defender resistance
   baseDamage.amounts.forEach((amount, type) => {
     var defenseValue = getDefenseValue(type, defender);
-    var reductionPercent = getDamageReductionPercent(defenseValue, attacker, defender);
-    baseDamage.amounts.set(type, amount * (1 - reductionPercent));
+    var resistancePercent = getResistancePercent(defenseValue, attacker, defender);
+    baseDamage.amounts.set(type, amount * (1 - resistancePercent));
   });
 
   return baseDamage;
@@ -98,28 +111,28 @@ function getHealIncreasePercent(power: number, healer: BattleCharacter) {
 }
 
 // Get the damage reduction percentage that a defense value will provide against a given attacker
-function getDamageReductionPercent(defense: number, attacker: BattleCharacter, defender: BattleCharacter) {
+function getResistancePercent(defense: number, attacker: BattleCharacter, defender: BattleCharacter) {
 
   // The divisor scales by the character's level, a higher level requires a
-  // larger amount of defense to achieve a high damage reduction percent
+  // larger amount of defense to achieve a high resistance percent
   // every 5 levels increases the divisor by 1
   var divisor = 1 + .2 * defender.level;
 
   // Add .1 to the divisor for every level the attacker is above the defender
-  // which makes a higher level attacker naturally have more damage penetration
+  // which makes a higher level attacker naturally have more penetration
   // against lower level defenders
   if (attacker.level > defender.level)
     divisor += .1 * (attacker.level - defender.level)
 
-  // Divide defense by divisor to get the damage reduction percentage
-  var reductionPercent = +((defense / divisor / 100).toFixed(2));
+  // Divide defense by divisor to get the resistance percentage
+  var resistancePercent = +((defense / divisor / 100).toFixed(2));
 
-  // Reduction percent is capped at 75%
+  // Resistance percent is capped at 75%
   // TODO: Augment this with other stats
-  return reductionPercent > .75 ? .75 : reductionPercent;
+  return resistancePercent > .75 ? .75 : resistancePercent;
 }
 
-// Gets the amount of resistance a defender would need to achieve a desired level of damage reduction
+// Gets the amount of resistance a defender would need to achieve a desired level of percent resistance
 export function getRequiredResistanceForPercentReduction(defender: BattleCharacter, desiredReductionPercent: number) {
 
   // The divisor scales by the character's level, a higher level requires a

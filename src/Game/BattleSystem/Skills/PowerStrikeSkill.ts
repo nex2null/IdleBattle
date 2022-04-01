@@ -1,4 +1,4 @@
-import { calculateHit, processDamage } from '../BattleFormulas';
+import { calculateHit, calculateStatusEffectHit, processDamage } from '../BattleFormulas';
 import DamageTypeEnum from '../Enums/DamageTypeEnum';
 import BattleCharacter from '../BattleCharacter';
 import BattleDamage from '../BattleDamage';
@@ -101,7 +101,8 @@ class PowerStrikeSkill implements ISkill {
 
       // If the target is alive determine if they are stunned
       var applyStun = target.isAlive() && RandomHelpers.getRandomInt(1, 100) <= 50;
-      if (applyStun) {
+      var stunHits = calculateStatusEffectHit(character, target);
+      if (applyStun && stunHits) {
         // TODO: Determine stun length
         var stunEffect = new StunnedEffect(target, 10);
         character.inflictEffect(stunEffect, target, battleLog);
