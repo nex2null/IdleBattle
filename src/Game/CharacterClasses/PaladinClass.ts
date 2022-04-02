@@ -53,6 +53,7 @@ class PaladinClass implements ICharacterClass {
     switch (newLevel) {
       case 6: return [SkillEnum.Heal];
       case 12: return [SkillEnum.CrusadersPrayer];
+      case 18: return [SkillEnum.Purify];
       default: return [];
     }
   }

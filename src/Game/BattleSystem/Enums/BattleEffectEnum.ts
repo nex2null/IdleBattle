@@ -6,7 +6,8 @@ enum BattleEffectEnum {
   FrozenBlades = 'Frozen Blades',
   Frozen = 'Frozen',
   FrozenArmor = 'Frozen Armor',
-  CrusadersPrayer = 'CrusadersPrayer'
+  CrusadersPrayer = 'CrusadersPrayer',
+  Purify = 'Purify'
 }
 
 export default BattleEffectEnum;
