@@ -6,10 +6,8 @@ import GameSaver from "../../IO/GameSaver";
 import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
 import Town from "../../Game/Town";
-import Dungeon from "../../Game/BattleSystem/Dungeon/Dungeon";
 import BattleScreen from "./BattleScreen";
 import DungeonEnum from "../../Game/BattleSystem/Dungeon/DungeonEnum";
-import DungeonFactory from "../../Game/BattleSystem/Dungeon/DungeonFactory";
 
 //
 // Dungeon Choice Screen
@@ -120,24 +118,9 @@ class DungeonChoiceScreen implements IScreen {
       return;
     }
 
-    // Grab the selected dungeon
-    var dungeonEnum = selectedItem as DungeonEnum;
-    var dungeon = DungeonFactory.getDungeon(dungeonEnum);
-
-    // Start a battle with the dungeon
-    this.startBattle(dungeon);
-  }
-
-  //
-  // Starts a new battle
-  //
-  private startBattle(dungeon: Dungeon) {
-
-    // Initialize a new battle
-    var battle = Game.getInstance().startBattle(dungeon);
-
     // Switch to the battle screen
-    ScreenManager.getInstance().loadScreen(new BattleScreen(battle));
+    var dungeonEnum = selectedItem as DungeonEnum;
+    ScreenManager.getInstance().loadScreen(new BattleScreen(dungeonEnum));
   }
 }
 

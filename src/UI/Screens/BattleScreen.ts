@@ -14,20 +14,24 @@ import IScreen from "./IScreen";
 import TownScreen from "./TownScreen";
 import { getAsciiString } from "../Helpers/AsciiHelper";
 import BattleDamageFeedbackEnum from "../../Game/BattleSystem/Enums/BattleDamageFeedbackEnum";
+import DungeonEnum from "../../Game/BattleSystem/Dungeon/DungeonEnum";
+import DungeonFactory from "../../Game/BattleSystem/Dungeon/DungeonFactory";
 
 class BattleScreen implements IScreen {
 
   // Properties
   screen: any;
+  dungeonEnum: DungeonEnum;
   battle: Battle;
   gameOptions: GameOptions;
   screenElements: any;
   messageCount: number = 0;
 
   // Constructor
-  constructor(battle: Battle) {
+  constructor(dungeonEnum: DungeonEnum) {
     this.screen = null;
-    this.battle = battle;
+    this.dungeonEnum = dungeonEnum;
+    this.battle = this.startBattle();
     this.screenElements = {};
     this.gameOptions = Game.getInstance().options;
   }
@@ -93,6 +97,18 @@ class BattleScreen implements IScreen {
   }
 
   //
+  // Starts a battle
+  //
+  private startBattle(): Battle {
+
+    // Grab the selected dungeon
+    var dungeon = DungeonFactory.getDungeon(this.dungeonEnum);
+
+    // Initialize a new battle
+    return Game.getInstance().startBattle(dungeon);
+  }
+
+  //
   // Processes the battle
   //
   private async processBattle() {
@@ -129,9 +145,12 @@ class BattleScreen implements IScreen {
     }
 
     if (this.battle.isBattleWon() || this.battle.isBattleLost()) {
-      this.logMessage("{red-fg}---- PRESS ESCAPE TO EXIT THE BATTLE ----{/red-fg}");
+      this.logMessage("{red-fg}---- PRESS 'ESCAPE' TO EXIT, OR SPACE TO BATTLE AGAIN ----{/red-fg}");
       this.screenElements.logBox.key(['escape'], () => {
         this.leaveBattle();
+      });
+      this.screenElements.logBox.key(['space'], () => {
+        this.restartBattle();
       });
     }
 
@@ -237,6 +256,12 @@ class BattleScreen implements IScreen {
   // Renders the battle log
   //
   private renderLog() {
+
+    // If we already have a log box, remove it before rendering
+    if (this.screenElements.logBox)
+      this.screen.remove(this.screenElements.logBox);
+
+    // Initialize the log box
     this.screenElements.logBox = blessed.box({
       label: 'Log',
       top: 38,
@@ -550,6 +575,26 @@ class BattleScreen implements IScreen {
   private leaveBattle() {
     Game.getInstance().leaveBattle();
     ScreenManager.getInstance().loadScreen(new TownScreen());
+  }
+
+  //
+  // Restarts the battle
+  //
+  private restartBattle() {
+
+    // Restart the battle
+    Game.getInstance().leaveBattle();
+    this.battle = this.startBattle();
+
+    // Re-render screen elements
+    this.renderLog();
+    this.renderBattleCharacters();
+
+    // Reset message count
+    this.messageCount = 0;
+
+    // Start the battle loop
+    this.startBattleLoop();
   }
 }
 
