@@ -85,7 +85,7 @@ class FrozenArmorSkill implements ISkill {
 
   // Determine if the skill is benefecial
   isBeneficialOn(target: BattleCharacter) {
-    return target.getEffect(BattleEffectEnum.FrozenArmor) == null;
+    return target.isAlive() && target.getEffect(BattleEffectEnum.FrozenArmor) == null;
   }
 }
 

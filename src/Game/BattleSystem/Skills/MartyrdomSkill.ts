@@ -4,11 +4,9 @@ import BattleCharacter from '../BattleCharacter';
 import BattleLog from '../BattleLog';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
 import SkillEnum from '../Enums/SkillEnum';
-import { getRequiredResistanceForPercentReduction } from '../BattleFormulas';
-import FrozenArmorEffect from '../BattleEffects/FrozenArmorEffect';
-import PurifyEffect from '../BattleEffects/PurifyEffect';
+import MartyrdomEffect from '../BattleEffects/MartyrdomEffect';
 
-class PurifySkill implements ISkill {
+class MartyrdomSkill implements ISkill {
 
   // Properties
   level: number;
@@ -16,22 +14,26 @@ class PurifySkill implements ISkill {
   isMastered: boolean;
   isGeneric: boolean = false;
   name: string;
-  skillEnum: SkillEnum = SkillEnum.Purify;
+  skillEnum: SkillEnum = SkillEnum.Martyrdom;
   targetType: TargetTypeEnum;
   readonly mpCost: number;
+  readonly damageReductionAmount: number;
+  readonly numberOfTimesToRedirect: number;
 
   // Constructor
   constructor(slvl: number, isMastered: boolean) {
     this.level = slvl;
     this.isMastered = isMastered;
-    this.mpCost = 10 + this.level;
-    this.name = 'Purify';
-    this.targetType = TargetTypeEnum.Single;
+    this.mpCost = 10 + ((this.level - 1) * 2);
+    this.damageReductionAmount = .25 + (this.level * .025);
+    this.numberOfTimesToRedirect = isMastered ? 2 : 1;
+    this.name = "Martyrdom";
+    this.targetType = TargetTypeEnum.NotSelf;
   }
 
   // Get the skill description
   getDescription(): string {
-    return `Purifies a target, removing negative status effects.\nRemoves 2 effects at level 5, and 3 effects at level 10.`;
+    return `Redirects the next source of damage a target would take. Also reduces the received damage.`;
   }
 
   // Get the required character level in order to level up this skill
@@ -57,12 +59,6 @@ class PurifySkill implements ISkill {
     return character.canSpendMp(this.mpCost);
   }
 
-  getNumberOfEffectsToRemove(): number {
-    if (this.level < 5) return 1;
-    if (this.level < 10) return 2;
-    return 3;
-  }
-
   // Use the skill
   use(
     character: BattleCharacter,
@@ -70,36 +66,24 @@ class PurifySkill implements ISkill {
     battleLog: BattleLog
   ) {
 
-    // Only first target is ever relevant
+    // Grab the first target
     var target = targets[0];
 
     // Log
-    battleLog.addMessage(`${character.name} uses purify on ${target.name}`);
+    battleLog.addMessage(`${character.name} uses martyrdom on ${target.name}`);
 
     // Spend MP
     character.spendMp(this.mpCost);
 
-    // Remove negative effects
-    for (var i = 0; i < this.getNumberOfEffectsToRemove(); i++) {
-      var effectToRemove = target.effects.find(x => x.isNegative);
-      if (!effectToRemove)
-        break;
-      target.removeEffect(effectToRemove);
-    }
-
-    // If the skill is mastered, apply the purify effect for 4 turns
-    // increasing status resistance by 25%
-    if (this.isMastered) {
-      var addedResistance = getRequiredResistanceForPercentReduction(target, 25);
-      var purifyEffect = new PurifyEffect(target, addedResistance, 4);
-      character.inflictEffect(purifyEffect, target, battleLog);
-    }
+    // Inflict martyrdom effect on target
+    var martyrdomEffect = new MartyrdomEffect(target, character, this.numberOfTimesToRedirect, this.damageReductionAmount);
+    character.inflictEffect(martyrdomEffect, target, battleLog);
   }
 
   // Determine if the skill is benefecial
   isBeneficialOn(target: BattleCharacter) {
-    return target.isAlive() && (this.isMastered || target.effects.filter(x => x.isNegative).length > 0);
+    return target.isAlive() && target.getEffect(BattleEffectEnum.Martyrdom) == null;
   }
 }
 
-export default PurifySkill;
+export default MartyrdomSkill;

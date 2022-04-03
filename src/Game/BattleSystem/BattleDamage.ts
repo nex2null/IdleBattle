@@ -28,6 +28,14 @@ class BattleDamage {
     });
   }
 
+  // Reduces all damage by a percent
+  // NOTE: percent should be a decimal value (ie: .5 = 50%)
+  reduceByPercentage(percent: number) {
+    this.amounts.forEach((amount, type) => {
+      this.amounts.set(type, amount * percent);
+    });
+  }
+
   // Gets the total amount of all damage
   getTotalAmount() {
     var total = 0;

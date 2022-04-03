@@ -9,6 +9,7 @@ import HealSkill from "./HealSkill";
 import HolyStrikeSkill from "./HolyStrikeSkill";
 import IceBoltSkill from "./IceBoltSkill";
 import ISkill from "./ISkill";
+import MartyrdomSkill from "./MartyrdomSkill";
 import PowerStrikeSkill from "./PowerStrikeSkill";
 import PurifySkill from "./PurifySkill";
 import WebShootSkill from "./WebShootSkill";
@@ -28,6 +29,7 @@ class SkillFactory {
       case SkillEnum.Heal: return new HealSkill(slvl, mastered);
       case SkillEnum.CrusadersPrayer: return new CrusadersPrayerSkill(slvl, mastered);
       case SkillEnum.Purify: return new PurifySkill(slvl, mastered);
+      case SkillEnum.Martyrdom: return new MartyrdomSkill(slvl, mastered);
     }
   }
 }

@@ -7,7 +7,8 @@ enum BattleEffectEnum {
   Frozen = 'Frozen',
   FrozenArmor = 'Frozen Armor',
   CrusadersPrayer = 'CrusadersPrayer',
-  Purify = 'Purify'
+  Purify = 'Purify',
+  Martyrdom = 'Martyrdom'
 }
 
 export default BattleEffectEnum;

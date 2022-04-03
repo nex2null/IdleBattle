@@ -35,6 +35,10 @@ interface IEffect {
   // Handle after an action is performed
   afterActionPerformed(): void;
 
+  // Handle being targeted for damage
+  // Returns: A new target
+  onDamageTarget(damage: BattleDamage): BattleCharacter | null;
+
   // Handle before damage is dealt
   beforeDamageDealt(damage: BattleDamage, target: BattleCharacter): void;
 

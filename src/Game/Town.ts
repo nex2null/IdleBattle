@@ -43,7 +43,13 @@ class Town {
 
   // Get player characters in party
   getCharactersInParty(): Array<PlayerCharacter> {
-    return this.roster.filter(x => this.currentParty.includes(x.uid));
+    var party: Array<PlayerCharacter> = [];
+    for (var i = 0; i < this.currentParty.length; i++) {
+      var character = this.roster.find(x => x.uid === this.currentParty[i]);
+      if (character)
+        party.push(character);
+    }
+    return party;
   }
 }
 

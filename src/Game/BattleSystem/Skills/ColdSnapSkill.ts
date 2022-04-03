@@ -109,7 +109,7 @@ class ColdSnapSkill implements ISkill {
 
   // Determine if the skill is benefecial
   isBeneficialOn(target: BattleCharacter) {
-    return target.getEffect(BattleEffectEnum.Frozen) == null && target.getEffect(BattleEffectEnum.Chilled) != null;
+    return target.isAlive() && target.getEffect(BattleEffectEnum.Frozen) == null && target.getEffect(BattleEffectEnum.Chilled) != null;
   }
 }
 

@@ -149,6 +149,18 @@ export default class BattleCharacter {
     battleLog: BattleLog,
     damageTracker: DamageTracker) {
 
+    // Determine if the target needs to be changed
+    var newTarget: BattleCharacter | null = null;
+    for (var i = 0; i < target.effects.length; i++) {
+      newTarget = target.effects[0].onDamageTarget(damage);
+      if (newTarget)
+        break;
+    }
+
+    // Update the target if it was changed
+    if (newTarget)
+      target = newTarget;
+
     // TODO: Stat-based damage things (non-effects)
 
     // Handle effects for before damage is dealt

@@ -10,7 +10,8 @@ enum SkillEnum {
   HolyStrike = 'Holy Strike',
   Heal = 'Heal',
   CrusadersPrayer = "Crusader's Prayer",
-  Purify = 'Purify'
+  Purify = 'Purify',
+  Martyrdom = 'Martyrdom'
 }
 
 export default SkillEnum;
