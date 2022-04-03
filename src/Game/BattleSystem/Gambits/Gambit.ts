@@ -62,6 +62,10 @@ class Gambit {
     if (skill.targetType === TargetTypeEnum.Self)
       targets = targets.filter(x => x === user);
 
+    // If the skill target is 'not-self' then remove the caster from the targets list
+    if (skill.targetType === TargetTypeEnum.NotSelf)
+      targets = targets.filter(x => x !== user);
+
     // If there are no targets left then the action cannot be performed
     if (targets.length === 0)
       return null;

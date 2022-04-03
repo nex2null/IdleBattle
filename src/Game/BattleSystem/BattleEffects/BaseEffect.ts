@@ -47,6 +47,12 @@ class BaseEffect implements IEffect {
   afterActionPerformed(): void {
   }
 
+  // Handle being targeted for damage
+  // Returns: A new target
+  onDamageTarget(damage: BattleDamage): BattleCharacter | null {
+    return null;
+  }
+
   // Handle before damage is dealt
   beforeDamageDealt(damage: BattleDamage, target: BattleCharacter): void {
   }
