@@ -50,8 +50,8 @@ class DefendSkill implements ISkill {
     character.applyEffect(defenseEffect, battleLog);
   }
 
-  // Determine if the skill is benefecial
-  isBeneficialOn(target: BattleCharacter) {
+  // Determine if the skill is valid for a target
+  isValidTarget(target: BattleCharacter) {
     return true;
   }
 }

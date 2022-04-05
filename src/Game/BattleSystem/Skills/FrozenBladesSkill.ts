@@ -83,8 +83,8 @@ class FrozenBladesSkill implements ISkill {
     character.inflictEffect(frozenBladesEffect, target, battleLog);
   }
 
-  // Determine if the skill is benefecial
-  isBeneficialOn(target: BattleCharacter) {
+  // Determine if the skill is valid for a target
+  isValidTarget(target: BattleCharacter) {
     return target.isAlive() && target.getEffect(BattleEffectEnum.FrozenBlades) == null;
   }
 }

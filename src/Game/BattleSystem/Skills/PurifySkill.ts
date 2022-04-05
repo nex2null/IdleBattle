@@ -96,8 +96,8 @@ class PurifySkill implements ISkill {
     }
   }
 
-  // Determine if the skill is benefecial
-  isBeneficialOn(target: BattleCharacter) {
+  // Determine if the skill is valid for a target
+  isValidTarget(target: BattleCharacter) {
     return target.isAlive() && (this.isMastered || target.effects.filter(x => x.isNegative).length > 0);
   }
 }
