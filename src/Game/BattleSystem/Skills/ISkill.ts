@@ -27,8 +27,8 @@ interface ISkill {
   // The target type of the skill
   targetType: TargetTypeEnum;
 
-  // Determine if the skill is benefecial
-  isBeneficialOn(target: BattleCharacter): boolean;
+  // Determine if the skill is valid for a target
+  isValidTarget(target: BattleCharacter): boolean;
 
   // Get the skill description
   getDescription(): string;

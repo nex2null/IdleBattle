@@ -84,8 +84,8 @@ class AttackSkill implements ISkill {
     }
   }
 
-  // Determine if the skill is benefecial
-  isBeneficialOn(target: BattleCharacter) {
+  // Determine if the skill is valid for a target
+  isValidTarget(target: BattleCharacter) {
     return target.isAlive();
   }
 }

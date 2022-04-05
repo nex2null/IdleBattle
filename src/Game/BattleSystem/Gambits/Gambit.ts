@@ -53,14 +53,12 @@ class Gambit {
       return null;
 
     // Grab the potential matches for the condition
-    var potentialTargets = condition.getTargets(user, characters, this.conditionInput);
+    var potentialTargets = skill.targetType === TargetTypeEnum.Self
+      ? [user]
+      : condition.getTargets(user, characters, this.conditionInput);
 
-    // Filter the targets by which ones the action can be beneficial on
-    var targets = potentialTargets.filter(x => skill.isBeneficialOn(x));
-
-    // If the skill target is 'self' then only alow the target to be the caster
-    if (skill.targetType === TargetTypeEnum.Self)
-      targets = targets.filter(x => x === user);
+    // Filter the targets by which ones are valid
+    var targets = potentialTargets.filter(x => skill.isValidTarget(x));
 
     // If the skill target is 'not-self' then remove the caster from the targets list
     if (skill.targetType === TargetTypeEnum.NotSelf)
