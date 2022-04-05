@@ -55,6 +55,7 @@ class PaladinClass implements ICharacterClass {
       case 12: return [SkillEnum.CrusadersPrayer];
       case 18: return [SkillEnum.Purify];
       case 24: return [SkillEnum.Martyrdom];
+      case 30: return [SkillEnum.SacredFlame];
       default: return [];
     }
   }

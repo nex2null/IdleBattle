@@ -55,14 +55,14 @@ class FrozenArmorEffect extends BaseEffect {
   }
 
   // Handle after damage is taken
-  afterDamageTaken(damage: BattleDamage, attacker: BattleCharacter, battleLog: BattleLog) {
+  afterDamageTaken(damage: BattleDamage, attacker: BattleCharacter | null, battleLog: BattleLog) {
 
     // Determine if the damage can chill
     var physicalDamage = damage.amounts.get(DamageTypeEnum.Physical);
     var canChill = damage.getTotalAmount() > 0 && (this.applyToAllDamage || (physicalDamage && physicalDamage > 0));
 
     // If we can chill, then roll for chill
-    if (canChill) {
+    if (canChill && attacker) {
       var chillSuccess = RandomHelpers.getRandomInt(1, 100) <= 25;
       if (chillSuccess) {
         var chillEffect = new ChilledEffect(attacker);
