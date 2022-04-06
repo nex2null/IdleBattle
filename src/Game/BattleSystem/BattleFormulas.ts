@@ -33,21 +33,30 @@ export function calculateStatusEffectHit(attacker: BattleCharacter, defender: Ba
 }
 
 // Does any damage processing given a base damage
-export function processDamage(attacker: BattleCharacter, defender: BattleCharacter, baseDamage: BattleDamage): BattleDamage {
+export function processDamage(
+  attacker: BattleCharacter,
+  defender: BattleCharacter,
+  baseDamage: BattleDamage,
+  ignorePower?: boolean,
+  ignoreDefense?: boolean): BattleDamage {
 
   // Increase damage by attacker power
-  baseDamage.amounts.forEach((amount, type) => {
-    var powerValue = getPowerValue(type, attacker);
-    var increasePercent = getDamageIncreasePercent(powerValue, attacker);
-    baseDamage.amounts.set(type, amount * (1 + increasePercent))
-  });
+  if (!ignorePower) {
+    baseDamage.amounts.forEach((amount, type) => {
+      var powerValue = getPowerValue(type, attacker);
+      var increasePercent = getDamageIncreasePercent(powerValue, attacker);
+      baseDamage.amounts.set(type, amount * (1 + increasePercent))
+    });
+  }
 
   // Reduce damage by defender resistance
-  baseDamage.amounts.forEach((amount, type) => {
-    var defenseValue = getDefenseValue(type, defender);
-    var resistancePercent = getResistancePercent(defenseValue, attacker, defender);
-    baseDamage.amounts.set(type, amount * (1 - resistancePercent));
-  });
+  if (!ignoreDefense) {
+    baseDamage.amounts.forEach((amount, type) => {
+      var defenseValue = getDefenseValue(type, defender);
+      var resistancePercent = getResistancePercent(defenseValue, attacker, defender);
+      baseDamage.amounts.set(type, amount * (1 - resistancePercent));
+    });
+  }
 
   return baseDamage;
 }

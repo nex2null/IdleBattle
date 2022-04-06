@@ -186,7 +186,7 @@ export default class BattleCharacter {
   }
 
   // Takes damage
-  takeDamage(damage: BattleDamage, attacker: BattleCharacter, battleLog: BattleLog, damageTracker: DamageTracker) {
+  takeDamage(damage: BattleDamage, attacker: BattleCharacter | null, battleLog: BattleLog, damageTracker: DamageTracker) {
 
     // Allow effects to modify damage before processing
     this.effects.forEach(x => x.beforeDamageTaken(damage, attacker, battleLog));
