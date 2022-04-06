@@ -1,4 +1,4 @@
-import { calculateHit, processDamage } from '../BattleFormulas';
+import { calculateHit, calculateStatusEffectHit, processDamage } from '../BattleFormulas';
 import DamageTypeEnum from '../Enums/DamageTypeEnum';
 import BattleCharacter from '../BattleCharacter';
 import BattleDamage from '../BattleDamage';
@@ -7,6 +7,8 @@ import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import ISkill from './ISkill';
 import DamageTracker from '../DamageTracker';
 import SkillEnum from '../Enums/SkillEnum';
+import RandomHelpers from '../../Utilities/RandomHelpers';
+import BurningEffect from '../BattleEffects/BurningEffect';
 
 class SacredFlameSkill implements ISkill {
 
@@ -59,10 +61,15 @@ class SacredFlameSkill implements ISkill {
     return character.canSpendMp(this.mpCost);
   }
 
+  // Calculate base damage
+  calculateBaseDamage(user: BattleCharacter) {
+    return user.currentStats.maxHp * this.lifePercent;
+  }
+
   // Calculate the self damage
   calculateSelfDamage(user: BattleCharacter) {
 
-    var baseDamageAmount = user.currentStats.maxHp * this.lifePercent;
+    var baseDamageAmount = this.calculateBaseDamage(user);
     var baseDamage = new BattleDamage(baseDamageAmount, DamageTypeEnum.Fire);
 
     // Process the base damage (power is ignored)
@@ -72,7 +79,7 @@ class SacredFlameSkill implements ISkill {
   // Calculate the damage
   calculateDamage(user: BattleCharacter, target: BattleCharacter) {
 
-    var baseDamageAmount = user.currentStats.maxHp * this.lifePercent;
+    var baseDamageAmount = this.calculateBaseDamage(user);
     var baseDamage = new BattleDamage(baseDamageAmount, DamageTypeEnum.Fire);
 
     // Process the base damage
@@ -112,7 +119,15 @@ class SacredFlameSkill implements ISkill {
         // Deal the damage
         character.dealDamage(damageToDo, target, battleLog, damageTracker);
 
-        // TODO: Mastery
+        // If the target is alive determine if they are chilled
+        var burnRollSuccess = this.isMastered || RandomHelpers.getRandomInt(1, 100) <= 50;
+        var burnHits = calculateStatusEffectHit(character, target);
+        var applyBurn = target.isAlive() && burnRollSuccess && burnHits;
+        if (applyBurn) {
+          var burnDamage = this.calculateBaseDamage(character) * .5;
+          var burnEffect = new BurningEffect(target, character, 4, burnDamage);
+          character.inflictEffect(burnEffect, target, battleLog);
+        }
       }
       else {
         battleLog.addMessage(`${target.name} dodges the inferno!`);

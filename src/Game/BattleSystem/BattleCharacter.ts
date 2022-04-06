@@ -113,7 +113,7 @@ export default class BattleCharacter {
   act(characters: Array<BattleCharacter>, battleLog: BattleLog, damageTracker: DamageTracker) {
 
     // Do any pre-action work
-    this.beforeActionPerformed(battleLog);
+    this.beforeActionPerformed(battleLog, damageTracker);
 
     // If I am no longer ready to act after pre-action work then do nothing
     if (!this.isReadyToAct()) {
@@ -216,10 +216,10 @@ export default class BattleCharacter {
   }
 
   // Handle before an action is performed
-  beforeActionPerformed(battleLog: BattleLog) {
+  beforeActionPerformed(battleLog: BattleLog, damageTracker: DamageTracker) {
 
     // Allow effects to trigger before an action has been performed
-    this.effects.forEach(x => x.beforeActionPerformed(battleLog));
+    this.effects.forEach(x => x.beforeActionPerformed(battleLog, damageTracker));
   }
 
   // Mark that a character performed an action

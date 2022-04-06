@@ -16,10 +16,14 @@ class CrusadersPrayerEffect extends BaseEffect {
     this.startingTurns = this.turnsLeft = turns;
     this.healAmount = healAmount;
   }
-
   // Get the message to display when a character is inflicted with this effect
   getInflictedMessage(characterName: string): string {
     return `${characterName} receives the crusade's blessing`;
+  }
+
+  // Whether the effect can be applied
+  canApply() {
+    return this.character.getEffect(this.type) == null;
   }
 
   // Handle before an action is performed

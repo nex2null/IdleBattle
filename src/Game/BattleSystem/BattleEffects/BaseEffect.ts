@@ -3,6 +3,7 @@ import BattleCharacter from '../BattleCharacter';
 import IEffect from './IEffect';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
 import BattleLog from '../BattleLog';
+import DamageTracker from '../DamageTracker';
 
 class BaseEffect implements IEffect {
 
@@ -40,7 +41,7 @@ class BaseEffect implements IEffect {
   }
 
   // Handle before an action is performed
-  beforeActionPerformed(battleLog: BattleLog): void {
+  beforeActionPerformed(battleLog: BattleLog, damageTracker: DamageTracker): void {
   }
 
   // Handle after an action is performed

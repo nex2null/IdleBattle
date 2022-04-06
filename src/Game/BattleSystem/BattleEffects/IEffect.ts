@@ -1,6 +1,7 @@
 import BattleCharacter from '../BattleCharacter';
 import BattleDamage from '../BattleDamage';
 import BattleLog from '../BattleLog';
+import DamageTracker from '../DamageTracker';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
 
 interface IEffect {
@@ -30,7 +31,7 @@ interface IEffect {
   onRemove(): void;
 
   // Handle before an action is performed
-  beforeActionPerformed(battleLog: BattleLog): void;
+  beforeActionPerformed(battleLog: BattleLog, damageTracker: DamageTracker): void;
 
   // Handle after an action is performed
   afterActionPerformed(): void;
