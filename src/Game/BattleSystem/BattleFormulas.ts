@@ -1,8 +1,9 @@
+import RandomHelpers from "../Utilities/RandomHelpers";
 import BattleCharacter from "./BattleCharacter";
 import BattleDamage from './BattleDamage';
 import DamageTypeEnum from "./Enums/DamageTypeEnum";
 
-// Determine if a hit is calculated
+// Determine if a skill hits
 export function calculateHit(attacker: BattleCharacter, defender: BattleCharacter): boolean {
 
   // The base miss % is 5%
@@ -17,6 +18,25 @@ export function calculateHit(attacker: BattleCharacter, defender: BattleCharacte
   // Roll a number 0 to 100 and if it is less than the miss percent the attack misses
   var roll = Math.random() * 100;
   return roll > Math.round(missPercent);
+}
+
+// Determine if a skill crits
+export function calculateCrit(attacker: BattleCharacter, defender: BattleCharacter): boolean {
+
+  // The base crit % is 5%
+  var baseCritPercent = 5;
+
+  // Attacker's increased critical strike chance adds to the percent
+  // Defender's resiliency offsets increased crit chance
+  var increasedCritChance = (attacker.currentStats.critChance - defender.currentStats.resiliency) / 100;
+
+  // Base crit percent is augmented by the increased crit chance (this can be negative)
+  var increasedCritPercent = baseCritPercent * increasedCritChance;
+  var critPercent = baseCritPercent + increasedCritPercent;
+
+  // Roll a number 0 to 100 and if it is less than the crit percent the attack crits
+  var roll = RandomHelpers.getRandomInt(1, 100);
+  return roll < critPercent;
 }
 
 // Calculate if a status effect can hit the defender
