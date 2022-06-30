@@ -10,6 +10,7 @@ import BattleEffectEnum from './Enums/BattleEffectEnum';
 import IEffect from './BattleEffects/IEffect';
 import PlayerSkill from '../PlayerSkill';
 import BattleStats from './BattleStats';
+import { calculateCrit } from './BattleFormulas';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 
@@ -163,6 +164,14 @@ export default class BattleCharacter {
 
     // TODO: Stat-based damage things (non-effects)
 
+    // Determine if the damage crits
+    var isCrit = this.determineCrit(target);
+    if (isCrit) {
+      // TODO: effects
+      battleLog.addMessage(`{yellow-fg}${this.name} crits!{/yellow-fg}`);
+      damage.increaseByPercentage(.5);
+    }
+
     // Handle effects for before damage is dealt
     this.effects.forEach(x => x.beforeDamageDealt(damage, target));
 
@@ -293,5 +302,14 @@ export default class BattleCharacter {
 
     // Log that we were healed
     battleLog.addMessage(`${this.name} is healed for {green-fg}${amount}{/green-fg} hp`);
+  }
+
+  // Determine if a character crits with a skill
+  determineCrit(target: BattleCharacter): boolean {
+    
+    // TODO: effects
+
+    // Calculate crit
+    return calculateCrit(this, target);
   }
 }
