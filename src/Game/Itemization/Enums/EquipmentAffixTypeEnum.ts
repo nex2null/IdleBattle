@@ -64,6 +64,18 @@ enum EquipmentAffixTypeEnum {
     Heavenly = 'heavenly',
     Angelic = 'angelic',
 
+    // Add crit chance
+    Needled = 'needled',
+    Stinging = 'stinging',
+    Stabbing = 'stabbing',
+    Piercing = 'piercing',
+    Penetrating = 'penetrating',
+    Jagged = 'jagged',
+    Razored = 'razored',
+    Gashing = 'gashing',
+    Wounding = 'wounding',
+    Disembowling = 'disembowling',
+
     //
     // Suffixes
     //
@@ -127,6 +139,18 @@ enum EquipmentAffixTypeEnum {
     Expunging = 'expunging',
     Annulment = 'annulment',
     Nullification = 'nullification',
+
+    // Resiliency
+    Stout = 'stout',
+    Stalwart = 'stalwart',
+    Tenacious = 'tenacious',
+    Resilient = 'resilient',
+    Relentless = 'relentless',
+    Fortified = 'fortified',
+    Unassailable = 'unassailable',
+    Indomitable = 'indomitable',
+    Impenetrable = 'impenetrable',
+    Impervious = 'impervious',
 }
 
 export default EquipmentAffixTypeEnum;
