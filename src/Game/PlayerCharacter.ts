@@ -58,11 +58,19 @@ class PlayerCharacter {
 
   // Create a battle character representation of this player character
   toBattleCharacter(): BattleCharacter {
+
+    // Calculate max hp
+    var maxHp = this.stats.maxHp + this.equipment.getStatValue(StatEnum.Hp);
+    var increasedHpPercent = this.equipment.getStatValue(StatEnum.IncreasedHpPercent);
+    if (increasedHpPercent > 0)
+      maxHp *= (1 + increasedHpPercent / 100);
+
+    // Return the battle character
     return new BattleCharacter({
       name: this.name,
       level: this.level,
       baseStats: new Stats({
-        maxHp: this.stats.maxHp + this.equipment.getStatValue(StatEnum.Hp),
+        maxHp: maxHp,
         maxMp: this.stats.maxMp + this.equipment.getStatValue(StatEnum.Mp),
         strength: this.stats.strength + this.equipment.getStatValue(StatEnum.Strength),
         intelligence: this.stats.intelligence + this.equipment.getStatValue(StatEnum.Intelligence),
@@ -76,7 +84,8 @@ class PlayerCharacter {
         coldResistance: this.stats.coldResistance + this.equipment.getStatValue(StatEnum.ColdResistance),
         lightningResistance: this.stats.lightningResistance + this.equipment.getStatValue(StatEnum.LightningResistance),
         physicalResistance: this.stats.physicalResistance + this.equipment.getStatValue(StatEnum.PhysicalResistance),
-        statusResistance: this.stats.statusResistance + this.equipment.getStatValue(StatEnum.StatusResistance)
+        statusResistance: this.stats.statusResistance + this.equipment.getStatValue(StatEnum.StatusResistance),
+        increasedHpPercent: this.stats.increasedHpPercent + this.equipment.getStatValue(StatEnum.IncreasedHpPercent)
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
