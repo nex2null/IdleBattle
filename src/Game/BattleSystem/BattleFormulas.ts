@@ -144,8 +144,8 @@ function getResistancePercent(defense: number, attacker: BattleCharacter, defend
 
   // The divisor scales by the character's level, a higher level requires a
   // larger amount of defense to achieve a high resistance percent
-  // every 5 levels increases the divisor by 1
-  var divisor = 1 + .2 * defender.level;
+  // every 10 levels increases the divisor by 1
+  var divisor = 1 + .1 * defender.level;
 
   // Add .1 to the divisor for every level the attacker is above the defender
   // which makes a higher level attacker naturally have more penetration
@@ -166,8 +166,8 @@ export function getRequiredResistanceForPercentReduction(target: BattleCharacter
 
   // The divisor scales by the character's level, a higher level requires a
   // larger amount of defense to achieve a high damage reduction percent
-  // every 5 levels increases the divisor by 1
-  var divisor = 1 + .2 * target.level;
+  // every 10 levels increases the divisor by 1
+  var divisor = 1 + .1 * target.level;
 
   // The required resistance is the desired overall reduction multiplied by the divisor
   return desiredReductionPercent * divisor;
