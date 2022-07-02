@@ -223,8 +223,8 @@ class LevelUpScreen implements IScreen {
       tags: true
     });
 
-    // Max skill level label
-    this.screenElements.maxSkillLevelLabel = blessed.box({
+    // Required character level label
+    this.screenElements.reqCharacterLevelLabel = blessed.box({
       parent: this.screenElements.skillLevelBox,
       top: 2,
       height: 1,
@@ -477,14 +477,19 @@ class LevelUpScreen implements IScreen {
     this.screenElements.masteryPointsLabel.setContent(`Mastery Points: ${this.currentCharacter.masteryPoints}`);
 
     // Set the skill levels
+    var reqCharLevel = this.currentSkill.getLevelUpCharacterLevel();
     this.screenElements.skillLevelLabel.setContent(` Current Level: ${this.currentSkill.level}`);
-    this.screenElements.maxSkillLevelLabel.setContent(` Maximum Level: ${this.currentSkill.maxLevel}`);
+    this.screenElements.reqCharacterLevelLabel.setContent(`Req Char Level: ${reqCharLevel == 1000 ? 'SKILL MAXED' : reqCharLevel}`);
 
     // Set the skill description
     this.screenElements.skillDescription.setContent(this.currentSkill.getDescription());
 
-    // Determine if the level up skill button is visible
-    var canLevelSkill = !this.currentSkill.isGeneric && this.currentSkill.level < this.currentSkill.maxLevel;
+    // Determine if the skill can be leveled
+    var canLevelSkill = !this.currentSkill.isGeneric &&
+      this.currentSkill.level < this.currentSkill.maxLevel &&
+      this.currentSkill.getLevelUpCharacterLevel() <= this.currentCharacter.level;
+
+    // Show / hide the skill level button based on whether the skill can be leveled
     if (canLevelSkill)
       this.screenElements.levelSkillButton.show();
     else
