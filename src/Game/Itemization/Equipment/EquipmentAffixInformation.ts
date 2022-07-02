@@ -95,6 +95,18 @@ affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 8,
 affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 9, 80, 81, 90));
 affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 10, 90, 91, 100));
 
+// Crit Chance Prefixes
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 1, 1, 20, 25));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 2, 10, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 3, 20, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 4, 30, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 5, 40, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 6, 50, 46, 50));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 7, 60, 51, 55));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 8, 70, 56, 60));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 9, 80, 61, 65));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 10, 90, 66, 70));
+
 // Physical Resistance Suffixes
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 1, 1, 1, 5));
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 2, 10, 6, 10));
@@ -154,5 +166,17 @@ affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResista
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 8, 70, 36, 40));
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 9, 80, 41, 45));
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 10, 90, 46, 50));
+
+// Resiliency Suffixes
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 1, 1, 20, 25));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 2, 10, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 3, 20, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 4, 30, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 5, 40, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 6, 50, 46, 50));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 7, 60, 51, 55));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 8, 70, 56, 60));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 9, 80, 61, 65));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 10, 90, 66, 70));
 
 export { EquipmentAffixInformation, affixInformations };
