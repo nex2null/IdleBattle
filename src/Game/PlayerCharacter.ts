@@ -62,8 +62,10 @@ class PlayerCharacter {
     // Calculate max hp
     var maxHp = this.stats.maxHp + this.equipment.getStatValue(StatEnum.Hp);
     var increasedHpPercent = this.equipment.getStatValue(StatEnum.IncreasedHpPercent);
-    if (increasedHpPercent > 0)
+    if (increasedHpPercent > 0) {
       maxHp *= (1 + increasedHpPercent / 100);
+      maxHp = Math.round(maxHp);
+    }
 
     // Return the battle character
     return new BattleCharacter({

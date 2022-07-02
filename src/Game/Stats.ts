@@ -42,7 +42,7 @@ class Stats {
     statusResistance?: number,
     critChance?: number,
     resiliency?: number,
-    increasedHpPercent: number
+    increasedHpPercent?: number
   }) {
     this.maxHp = args.maxHp || 0;
     this.maxMp = args.maxMp || 0;
