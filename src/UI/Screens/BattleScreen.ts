@@ -26,6 +26,7 @@ class BattleScreen implements IScreen {
   gameOptions: GameOptions;
   screenElements: any;
   messageCount: number = 0;
+  autoRetry: boolean = false;
 
   // Constructor
   constructor(dungeonEnum: DungeonEnum) {
@@ -145,13 +146,14 @@ class BattleScreen implements IScreen {
     }
 
     if (this.battle.isBattleWon() || this.battle.isBattleLost()) {
-      this.logMessage("{red-fg}---- PRESS 'ESCAPE' TO EXIT, OR SPACE TO BATTLE AGAIN ----{/red-fg}");
-      this.screenElements.logBox.key(['escape'], () => {
-        this.leaveBattle();
-      });
-      this.screenElements.logBox.key(['space'], () => {
+      if (this.autoRetry) {
         this.restartBattle();
-      });
+      } else {
+        this.logMessage("{red-fg}---- PRESS 'ESCAPE' TO EXIT ----{/red-fg}");
+        this.screenElements.logBox.key(['escape'], () => {
+          this.leaveBattle();
+        });
+      }
     }
 
     this.screen.render();
@@ -312,6 +314,7 @@ class BattleScreen implements IScreen {
     this.screenElements.logBox.key(['s'], () => this.toggleSpeed());
     this.screenElements.logBox.key(['a'], () => this.toggleAutoAdvance());
     this.screenElements.logBox.key(['d'], () => this.toggleDamageFeedback());
+    this.screenElements.logBox.key(['r'], () => this.toggleAutoRetry());
   }
 
   //
@@ -356,6 +359,9 @@ class BattleScreen implements IScreen {
 
     // Set feedback
     content += `\t{green-fg}D{/}mg feedback: ${this.gameOptions.battleDamageFeedback}`;
+
+    // Set auto retry
+    content += `\tAuto {green-fg}R{/}etry: ${this.autoRetry}`;
 
     // Set content
     this.screenElements.battleOptionsBox.setContent(content);
@@ -568,6 +574,19 @@ class BattleScreen implements IScreen {
     // Update the battle options
     this.updateBattleOptions();
   }
+
+  //
+  // Toggle auto retry battle
+  //
+  private toggleAutoRetry() {
+
+    // TODO: Force speed
+
+    // Toggle auto retry
+    this.autoRetry = !this.autoRetry;
+    this.updateBattleOptions();
+  }
+
 
   //
   // Leaves the battle
