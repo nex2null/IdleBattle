@@ -230,7 +230,7 @@ class EquipmentForge {
       var affixValue = RandomHelpers.getRandomInt(randomAffix.minValue, randomAffix.maxValue);
 
       // Generate our affix
-      generatedAffixes.push(new EquipmentAffix(randomAffix.type, randomAffix.slot, randomAffix.modifiedStat, affixValue));
+      generatedAffixes.push(new EquipmentAffix(randomAffix.slot, randomAffix.modifiedStat, randomAffix.tier, affixValue));
     }
 
     return generatedAffixes;
@@ -390,7 +390,7 @@ class EquipmentForge {
       var currentAffix = equipment.affixes[i];
 
       // Grab the affix information
-      var affixInformation = affixInformations.find(x => x.type == currentAffix.type);
+      var affixInformation = affixInformations.find(x => x.modifiedStat == currentAffix.modifiedStat && x.tier == currentAffix.tier);
       if (!affixInformation)
         continue;
 

@@ -4,6 +4,7 @@ class BattleDamage {
 
   // Properties
   amounts: Map<DamageTypeEnum, number> = new Map<DamageTypeEnum, number>();
+  isCrit: boolean = false;
 
   // Constructor
   constructor(amount: number, type: DamageTypeEnum) {
@@ -25,6 +26,14 @@ class BattleDamage {
   round() {
     this.amounts.forEach((amount, type) => {
       this.amounts.set(type, Math.round(amount));
+    });
+  }
+
+  // Reduces all damage by a percent
+  // NOTE: percent should be a decimal value (ie: .5 = 50%)
+  increaseByPercentage(percent: number) {
+    this.amounts.forEach((amount, type) => {
+      this.amounts.set(type, amount * (1 + percent));
     });
   }
 

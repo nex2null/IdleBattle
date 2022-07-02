@@ -11,11 +11,13 @@ enum StatEnum {
   FirePower = 'fire-power',
   LightningPower = 'lightning-power',
   HealPower = 'heal-power',
+  CritChance = 'crit-chance',
   PhysicalResistance = 'physical-resistance',
   ColdResistance = 'cold-resistance',
   FireResistance = 'fire-resistance',
   LightningResistance = 'lightning-resistance',
-  StatusResistance = 'status-resistance'
+  StatusResistance = 'status-resistance',
+  Resiliency = 'resiliency'
 }
 
 export default StatEnum;

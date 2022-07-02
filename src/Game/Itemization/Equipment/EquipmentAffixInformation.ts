@@ -1,5 +1,4 @@
 import EquipmentAffixSlotEnum from "../Enums/EquipmentAffixSlotEnum";
-import EquipmentAffixTypeEnum from '../Enums/EquipmentAffixTypeEnum';
 import StatEnum from '../../Enums/StatEnum';
 
 // Information about equipment affixes
@@ -7,27 +6,27 @@ class EquipmentAffixInformation {
 
     // Properties
     slot: EquipmentAffixSlotEnum;
-    type: EquipmentAffixTypeEnum;
     requiredLevel: number;
     minValue: number;
     maxValue: number;
     modifiedStat: StatEnum;
+    tier: number;
 
     // Constructor
     constructor(
         slot: EquipmentAffixSlotEnum,
-        type: EquipmentAffixTypeEnum,
+        modifiedStat: StatEnum,
+        tier: number,
         requiredLevel: number,
         minValue: number,
-        maxValue: number,
-        modifiedStat: StatEnum
+        maxValue: number
     ) {
         this.slot = slot;
-        this.type = type;
         this.requiredLevel = requiredLevel;
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.modifiedStat = modifiedStat;
+        this.tier = tier;
     }
 }
 
@@ -37,123 +36,147 @@ var sfx = EquipmentAffixSlotEnum.Suffix;
 var affixInformations = new Array<EquipmentAffixInformation>();
 
 // Physical Power Prefixes
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Rusty, 1, 1, 10, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Heavy, 10, 11, 20, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Sharpened, 20, 21, 30, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Serrated, 30, 31, 40, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Wicked, 40, 41, 50, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Vicious, 50, 51, 60, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Bloodthirsty, 60, 61, 70, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Cruel, 70, 71, 80, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Tyrranical, 80, 81, 90, StatEnum.PhysicalPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Merciless, 90, 91, 100, StatEnum.PhysicalPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 1, 1, 1, 10));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 2, 10, 11, 20));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 3, 20, 21, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 4, 30, 31, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 5, 40, 41, 50));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 6, 50, 51, 60));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 7, 60, 61, 70));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 8, 70, 71, 80));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 9, 80, 81, 90));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.PhysicalPower, 10, 90, 91, 100));
 
 // Cold Power Prefixes
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Frosted, 1, 1, 10, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Chilled, 10, 11, 20, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Icy, 20, 21, 30, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Arctic, 30, 31, 40, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Frigid, 40, 41, 50, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Freezing, 50, 51, 60, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Frozen, 60, 61, 70, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Glaciated, 70, 71, 80, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Polar, 80, 81, 90, StatEnum.ColdPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Numbing, 90, 91, 100, StatEnum.ColdPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 1, 1, 1, 10));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 2, 10, 11, 20));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 3, 20, 21, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 4, 30, 31, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 5, 40, 41, 50));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 6, 50, 51, 60));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 7, 60, 61, 70));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 8, 70, 71, 80));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 9, 80, 81, 90));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.ColdPower, 10, 90, 91, 100));
 
 // Fire Power Prefixes
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Heated, 1, 1, 10, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Smoldering, 10, 11, 20, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Smoking, 20, 21, 30, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Sizzling, 30, 31, 40, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Burning, 40, 41, 50, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Flaming, 50, 51, 60, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Scorching, 60, 61, 70, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Incinerating, 70, 71, 80, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Blasting, 80, 81, 90, StatEnum.FirePower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Cremating, 90, 91, 100, StatEnum.FirePower));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 1, 1, 1, 10));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 2, 10, 11, 20));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 3, 20, 21, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 4, 30, 31, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 5, 40, 41, 50));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 6, 50, 51, 60));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 7, 60, 61, 70));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 8, 70, 71, 80));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 9, 80, 81, 90));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.FirePower, 10, 90, 91, 100));
 
 // Lightning Power Prefixes
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Humming, 1, 1, 10, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Buzzing, 10, 11, 20, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Snapping, 20, 21, 30, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Popping, 30, 31, 40, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Crackling, 40, 41, 50, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Sparking, 50, 51, 60, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Arcing, 60, 61, 70, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Shocking, 70, 71, 80, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Discharging, 80, 81, 90, StatEnum.LightningPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Electrocuting, 90, 91, 100, StatEnum.LightningPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 1, 1, 1, 10));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 2, 10, 11, 20));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 3, 20, 21, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 4, 30, 31, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 5, 40, 41, 50));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 6, 50, 51, 60));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 7, 60, 61, 70));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 8, 70, 71, 80));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 9, 80, 81, 90));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.LightningPower, 10, 90, 91, 100));
 
 // Heal Power Prefixes
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Refreshing, 1, 1, 10, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Rejuvenating, 10, 11, 20, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Replenishing, 20, 21, 30, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Revitalizing, 30, 31, 40, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Renewing, 40, 41, 50, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Restoring, 50, 51, 60, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Priestly, 60, 61, 70, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Saintly, 70, 71, 80, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Heavenly, 80, 81, 90, StatEnum.HealPower));
-affixInformations.push(new EquipmentAffixInformation(pfx, EquipmentAffixTypeEnum.Angelic, 90, 91, 100, StatEnum.HealPower));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 1, 1, 1, 10));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 2, 10, 11, 20));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 3, 20, 21, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 4, 30, 31, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 5, 40, 41, 50));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 6, 50, 51, 60));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 7, 60, 61, 70));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 8, 70, 71, 80));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 9, 80, 81, 90));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.HealPower, 10, 90, 91, 100));
+
+// Crit Chance Prefixes
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 1, 1, 20, 25));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 2, 10, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 3, 20, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 4, 30, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 5, 40, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 6, 50, 46, 50));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 7, 60, 51, 55));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 8, 70, 56, 60));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 9, 80, 61, 65));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 10, 90, 66, 70));
 
 // Physical Resistance Suffixes
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Rock, 1, 1, 5, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Stone, 10, 6, 10, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Iron, 20, 11, 15, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Steel, 30, 16, 20, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Barriers, 40, 21, 25, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Garrison, 50, 26, 30, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Fortress, 60, 31, 35, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Castle, 70, 36, 40, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Mountain, 80, 41, 45, StatEnum.PhysicalResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Earth, 90, 46, 50, StatEnum.PhysicalResistance));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 1, 1, 1, 5));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 2, 10, 6, 10));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 3, 20, 11, 15));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 4, 30, 16, 20));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 5, 40, 21, 25));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 6, 50, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 7, 60, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 8, 70, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 9, 80, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 10, 90, 46, 50));
 
 // Cold Resistance Suffixes
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Snow, 1, 1, 5, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Hale, 10, 6, 10, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Rime, 20, 11, 15, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Yeti, 30, 16, 20, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Blizzard, 40, 21, 25, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Avalanche, 50, 26, 30, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Tundra, 60, 31, 35, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Winter, 70, 36, 40, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Hibernation, 80, 41, 45, StatEnum.ColdResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.AbsoluteZero, 90, 46, 50, StatEnum.ColdResistance));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 1, 1, 1, 5));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 2, 10, 6, 10));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 3, 20, 11, 15));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 4, 30, 16, 20));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 5, 40, 21, 25));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 6, 50, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 7, 60, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 8, 70, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 9, 80, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.ColdResistance, 10, 90, 46, 50));
 
 // Fire Resistance Suffixes
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Kindling, 1, 1, 5, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Embers, 10, 6, 10, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Drake, 20, 11, 15, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Ashes, 30, 16, 20, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Cinders, 40, 21, 25, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Furnace, 50, 26, 30, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Magma, 60, 31, 35, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Inferno, 70, 36, 40, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Volcano, 80, 41, 45, StatEnum.FireResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Nova, 90, 46, 50, StatEnum.FireResistance));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 1, 1, 1, 5));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 2, 10, 6, 10));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 3, 20, 11, 15));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 4, 30, 16, 20));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 5, 40, 21, 25));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 6, 50, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 7, 60, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 8, 70, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 9, 80, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.FireResistance, 10, 90, 46, 50));
 
 // Lightning Resistance Suffixes
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Clouds, 1, 1, 5, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Squall, 10, 6, 10, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Thunder, 20, 11, 15, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Lightning, 30, 16, 20, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Bolts, 40, 21, 25, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Gale, 50, 26, 30, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Tempest, 60, 31, 35, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Tornado, 70, 36, 40, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Vortex, 80, 41, 45, StatEnum.LightningResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Maelstrom, 90, 46, 50, StatEnum.LightningResistance));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 1, 1, 1, 5));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 2, 10, 6, 10));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 3, 20, 11, 15));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 4, 30, 16, 20));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 5, 40, 21, 25));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 6, 50, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 7, 60, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 8, 70, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 9, 80, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.LightningResistance, 10, 90, 46, 50));
 
 // Status Resistance Suffixes
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Snuffing, 1, 1, 5, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Vitiation, 10, 6, 10, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Revoking, 20, 11, 15, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Rebuttal, 30, 16, 20, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Abjuration, 40, 21, 25, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Cancelling, 50, 26, 30, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Dismissal, 60, 31, 35, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Expunging, 70, 36, 40, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Annulment, 80, 41, 45, StatEnum.StatusResistance));
-affixInformations.push(new EquipmentAffixInformation(sfx, EquipmentAffixTypeEnum.Nullification, 90, 46, 50, StatEnum.StatusResistance));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 1, 1, 1, 5));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 2, 10, 6, 10));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 3, 20, 11, 15));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 4, 30, 16, 20));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 5, 40, 21, 25));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 6, 50, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 7, 60, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 8, 70, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 9, 80, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.StatusResistance, 10, 90, 46, 50));
+
+// Resiliency Suffixes
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 1, 1, 20, 25));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 2, 10, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 3, 20, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 4, 30, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 5, 40, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 6, 50, 46, 50));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 7, 60, 51, 55));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 8, 70, 56, 60));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 9, 80, 61, 65));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 10, 90, 66, 70));
 
 export { EquipmentAffixInformation, affixInformations };
