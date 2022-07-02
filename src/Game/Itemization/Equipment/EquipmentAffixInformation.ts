@@ -107,6 +107,30 @@ affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 8
 affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 9, 80, 61, 65));
 affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.CritChance, 10, 90, 66, 70));
 
+// Hp Prefixes
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 1, 1, 1, 10));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 2, 10, 11, 20));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 3, 20, 21, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 4, 30, 31, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 5, 40, 41, 50));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 6, 50, 51, 60));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 7, 60, 61, 70));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 8, 70, 71, 80));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 9, 80, 81, 90));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Hp, 10, 90, 91, 100));
+
+// Mp Prefixes
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 1, 1, 1, 5));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 2, 10, 6, 10));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 3, 20, 11, 15));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 4, 30, 16, 20));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 5, 40, 21, 25));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 6, 50, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 7, 60, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 8, 70, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 9, 80, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(pfx, StatEnum.Mp, 10, 90, 46, 50));
+
 // Physical Resistance Suffixes
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 1, 1, 1, 25));
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.PhysicalResistance, 2, 10, 26, 50));
@@ -178,5 +202,17 @@ affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 7
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 8, 70, 56, 60));
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 9, 80, 61, 65));
 affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.Resiliency, 10, 90, 66, 70));
+
+// Increased HP Percent Suffixes
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 1, 1, 1, 5));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 2, 10, 6, 10));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 3, 20, 11, 15));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 4, 30, 16, 20));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 5, 40, 21, 25));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 6, 50, 26, 30));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 7, 60, 31, 35));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 8, 70, 36, 40));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 9, 80, 41, 45));
+affixInformations.push(new EquipmentAffixInformation(sfx, StatEnum.IncreasedHpPercent, 10, 90, 46, 50));
 
 export { EquipmentAffixInformation, affixInformations };

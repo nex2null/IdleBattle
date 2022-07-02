@@ -13,7 +13,7 @@
         "build:types": "tsc --emitDeclarationOnly",
         "build:js": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
         "start": "npm run build && node dist/index.js",
-        "local": "npm run build && npm install -g"
+        "local": "npm uninstall -g && npm run build && npm install -g"
     },
     "repository": {
         "type": "git",

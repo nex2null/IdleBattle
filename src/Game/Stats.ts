@@ -19,6 +19,7 @@ class Stats {
   statusResistance: number;
   critChance: number;
   resiliency: number;
+  increasedHpPercent: number;
 
   // Constructor
   constructor(args: {
@@ -40,7 +41,8 @@ class Stats {
     lightningResistance?: number,
     statusResistance?: number,
     critChance?: number,
-    resiliency?: number
+    resiliency?: number,
+    increasedHpPercent?: number
   }) {
     this.maxHp = args.maxHp || 0;
     this.maxMp = args.maxMp || 0;
@@ -61,6 +63,7 @@ class Stats {
     this.statusResistance = args.statusResistance || 0;
     this.critChance = args.critChance || 0;
     this.resiliency = args.resiliency || 0;
+    this.increasedHpPercent = args.increasedHpPercent || 0;
   }
 
   // Load from saved data
@@ -84,7 +87,8 @@ class Stats {
       lightningResistance: savedData.lightningResistance,
       statusResistance: savedData.statusResistance,
       critChance: savedData.critChance,
-      resiliency: savedData.resiliency
+      resiliency: savedData.resiliency,
+      increasedHpPercent: savedData.increasedHpPercent
     });
   }
 
@@ -109,6 +113,7 @@ class Stats {
     this.statusResistance += stats.statusResistance;
     this.critChance += stats.critChance;
     this.resiliency += stats.resiliency;
+    this.increasedHpPercent += stats.increasedHpPercent;
   }
 }
 
