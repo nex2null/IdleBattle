@@ -1,29 +1,28 @@
 import StatEnum from "../../Enums/StatEnum";
 import EquipmentAffixSlotEnum from "../Enums/EquipmentAffixSlotEnum";
-import EquipmentAffixTypeEnum from "../Enums/EquipmentAffixTypeEnum";
 
 class EquipmentAffix {
 
   // Properties
-  type: EquipmentAffixTypeEnum;
   slot: EquipmentAffixSlotEnum;
   modifiedStat: StatEnum;
+  tier: number;
   value: number;
 
   // Constructor
-  constructor(type: EquipmentAffixTypeEnum, slot: EquipmentAffixSlotEnum, modifiedStat: StatEnum, value: number) {
-    this.type = type;
-    this.modifiedStat = modifiedStat;
+  constructor(slot: EquipmentAffixSlotEnum, modifiedStat: StatEnum, tier: number, value: number) {
     this.slot = slot;
+    this.modifiedStat = modifiedStat;
+    this.tier = tier;
     this.value = value;
   }
 
   // Load from saved data
   static load(savedData: any) {
     return new EquipmentAffix(
-      savedData.type,
       savedData.slot,
       savedData.modifiedStat,
+      savedData.tier,
       savedData.value
     );
   }

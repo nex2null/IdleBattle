@@ -881,7 +881,7 @@ class ForgeScreen implements IScreen {
           top: currentLine++,
           height: 1,
           width: blessedBox.width - 2,
-          content: `${prefix.type} (${prefix.modifiedStat}) - ${prefix.value}`
+          content: `${prefix.modifiedStat} (T${prefix.tier}) - ${prefix.value}`
         });
       });
 
@@ -911,7 +911,7 @@ class ForgeScreen implements IScreen {
           top: currentLine++,
           height: 1,
           width: blessedBox.width - 2,
-          content: `${suffix.type} (${suffix.modifiedStat}) - ${suffix.value}`
+          content: `${suffix.modifiedStat} (T${suffix.tier}) - ${suffix.value}`
         });
       });
 
