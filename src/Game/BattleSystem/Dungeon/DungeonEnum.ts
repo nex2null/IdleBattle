@@ -1,6 +1,6 @@
 enum DungeonEnum {
-  SpiderCave = 'Spider Cave',
-  HardSpiderCave = 'Hard Spider Cave'
+  Floor1 = 'Floor 1: Spider Cave',
+  Floor2 = 'Floor 2: Ice Cavern'
 }
 
 export default DungeonEnum;

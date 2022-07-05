@@ -7,23 +7,22 @@ import DungeonLevel from "./DungeonLevel";
 class DungeonFactory {
   static getDungeon(dungeonEnum: DungeonEnum): Dungeon {
     switch (dungeonEnum) {
-      case DungeonEnum.SpiderCave: return createSpiderCave();
-      case DungeonEnum.HardSpiderCave: return createHardSpiderCave();
+      case DungeonEnum.Floor1: return createSpiderCave();
+      case DungeonEnum.Floor2: return createIceCavern();
       default: throw `Cannot create dungeon with enum ${dungeonEnum}`;
     }
   }
 }
 
 function createSpiderCave(): Dungeon {
-  return new Dungeon('Spider Cave', [
+  return new Dungeon('Floor 1 - Spider Cave', [
     new DungeonLevel([new Spider('Spider 1'), new Spider('Spider 2')]),
-    new DungeonLevel([new Spider('Spider 3')]),
-    new DungeonLevel([new Spider('Spider 4'), new Spider('Spider 5')])
+    new DungeonLevel([new Spider('Spider 3'), new Spider('Spider 4')])
   ]);
 }
 
-function createHardSpiderCave(): Dungeon {
-  return new Dungeon('Hard Spider Cave', [
+function createIceCavern(): Dungeon {
+  return new Dungeon('Floor 2 - Ice Cavern', [
     new DungeonLevel([new HardSpider('Spider 1'), new HardSpider('Spider 2')]),
     new DungeonLevel([new HardSpider('Spider 3'), new HardSpider('Spider 4')])
   ]);
