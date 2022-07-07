@@ -39,6 +39,7 @@ class FrozenArmorSkill implements ISkill {
   // Get the required character level in order to level up this skill
   getLevelUpCharacterLevel(): number {
     switch (this.level) {
+      case 0: return 12;
       case 1: return 16;
       case 2: return 20;
       case 3: return 24;

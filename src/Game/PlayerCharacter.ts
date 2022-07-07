@@ -108,8 +108,8 @@ class PlayerCharacter {
     if (this.getPlayerSkill(skillEnum))
       return;
 
-    // Add the skill as a level 1 skill
-    this.skills.push(new PlayerSkill(skillEnum, 1, false));
+    // Add the skill as a level 0 skill
+    this.skills.push(new PlayerSkill(skillEnum, 0, false));
   }
 
   // Level up a skill

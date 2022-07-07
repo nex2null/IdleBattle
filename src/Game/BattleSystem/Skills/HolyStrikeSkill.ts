@@ -40,6 +40,7 @@ class HolyStrikeSkill implements ISkill {
   // Get the required character level in order to level up this skill
   getLevelUpCharacterLevel(): number {
     switch (this.level) {
+      case 0: return 0;
       case 1: return 4;
       case 2: return 8;
       case 3: return 12;

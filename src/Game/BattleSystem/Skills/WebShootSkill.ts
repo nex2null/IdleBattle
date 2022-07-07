@@ -32,6 +32,7 @@ class WebShootSkill implements ISkill {
   // Get the required character level in order to level up this skill
   getLevelUpCharacterLevel(): number {
     switch (this.level) {
+      case 0: return 0;
       case 1: return 2;
       case 2: return 3;
       case 3: return 4;
