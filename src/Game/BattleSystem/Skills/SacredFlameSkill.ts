@@ -41,6 +41,7 @@ class SacredFlameSkill implements ISkill {
   // Get the required character level in order to level up this skill
   getLevelUpCharacterLevel(): number {
     switch (this.level) {
+      case 0: return 30;
       case 1: return 34;
       case 2: return 38;
       case 3: return 42;

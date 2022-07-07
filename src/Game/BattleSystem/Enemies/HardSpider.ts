@@ -14,10 +14,10 @@ class HardSpider extends BattleCharacter {
       name: name,
       level: 1,
       baseStats: new Stats({
-        maxHp: 100,
+        maxHp: 125,
         maxMp: 0,
-        strength: 12,
-        speed: 18,
+        strength: 18,
+        speed: 20,
         physicalResistance: 50,
         fireResistance: 50,
         coldResistance: 50,
@@ -39,7 +39,7 @@ class HardSpider extends BattleCharacter {
         new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 50)
       ],
       goldWorth: 150,
-      xpWorth: 50
+      xpWorth: 75
     });
   }
 }

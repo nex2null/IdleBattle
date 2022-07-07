@@ -62,7 +62,7 @@ class PaladinClass implements ICharacterClass {
 
   // Get the required amount of XP to level up
   getRequiredXpToLevel(newLevel: number): number {
-    return newLevel * 100;
+    return newLevel * newLevel * newLevel + 200;
   }
 }
 

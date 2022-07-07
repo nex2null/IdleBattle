@@ -74,8 +74,8 @@ class LevelUpScreen implements IScreen {
       }
     });
 
-    // Town XP label
-    this.screenElements.townXpLabel = blessed.box({
+    // Character Level label
+    this.screenElements.characterLevelLabel = blessed.box({
       parent: this.screenElements.characterBox,
       top: 1,
       height: 1,
@@ -84,8 +84,8 @@ class LevelUpScreen implements IScreen {
       tags: true
     });
 
-    // Required XP label
-    this.screenElements.requiredXpLabel = blessed.box({
+    // Town XP label
+    this.screenElements.townXpLabel = blessed.box({
       parent: this.screenElements.characterBox,
       top: 2,
       height: 1,
@@ -94,8 +94,8 @@ class LevelUpScreen implements IScreen {
       tags: true
     });
 
-    // Remaining XP label
-    this.screenElements.remainingXpLabel = blessed.box({
+    // Required XP label
+    this.screenElements.requiredXpLabel = blessed.box({
       parent: this.screenElements.characterBox,
       top: 3,
       height: 1,
@@ -388,9 +388,9 @@ class LevelUpScreen implements IScreen {
     var requiredXp = currentClass.getRequiredXpToLevel(nextLevel);
 
     // Update labels
+    this.screenElements.characterLevelLabel.setContent(`       Level: ${this.currentCharacter.level}`);
     this.screenElements.townXpLabel.setContent(`Available XP: ${this.town.totalExperience}`);
     this.screenElements.requiredXpLabel.setContent(` Required XP: ${requiredXp}`);
-    this.screenElements.remainingXpLabel.setContent(`Remaining XP: ${this.town.totalExperience - requiredXp}`);
 
     // Update skills
     this.setCurrentSkill(0);

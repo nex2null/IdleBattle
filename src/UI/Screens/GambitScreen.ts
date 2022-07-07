@@ -317,7 +317,7 @@ class GambitScreen implements IScreen {
     this.currentCharacter = playerCharacter;
 
     // Update player skills
-    this.skills = playerCharacter.skills.map(x => x.skill);
+    this.skills = playerCharacter.skills.filter(x => x.level > 0).map(x => x.skill);
 
     // Load character gambits
     this.loadCharacterGambits(this.currentCharacter);

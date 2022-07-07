@@ -39,6 +39,7 @@ class MartyrdomSkill implements ISkill {
   // Get the required character level in order to level up this skill
   getLevelUpCharacterLevel(): number {
     switch (this.level) {
+      case 0: return 24;
       case 1: return 28;
       case 2: return 32;
       case 3: return 36;
