@@ -26,11 +26,11 @@ class EquipmentImplicitInformation {
 
 // Collection of equipment implicits
 var implicitInformations = new Array<EquipmentImplicitInformation>();
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderSilkRobe, StatEnum.Intelligence, 1, 5));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderSilkRobe, StatEnum.Hp, 1, 10));
 implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderSilkRobe, StatEnum.Mp, 1, 5));
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangDagger, StatEnum.Speed, 25, 25));
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangDagger, StatEnum.Strength, 1, 2));
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangHammer, StatEnum.Speed, 15, 15));
-implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangHammer, StatEnum.Strength, 8, 12));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangDagger, StatEnum.Speed, 20, 20));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangDagger, StatEnum.Strength, 1, 15));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangWand, StatEnum.Speed, 20, 20));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangWand, StatEnum.Intelligence, 1, 15));
 
 export { EquipmentImplicitInformation, implicitInformations };

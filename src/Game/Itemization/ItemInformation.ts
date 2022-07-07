@@ -99,7 +99,7 @@ itemInformations.push(new EquipmentInformation(
   1,
   EquipmentSlotEnum.ChestPiece,
   true,
-  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 5)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 10)),
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 1))
 ));
 
@@ -115,15 +115,15 @@ itemInformations.push(new EquipmentInformation(
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 1))
 ));
 
-// Spider fang hammer
+// Spider fang wand
 itemInformations.push(new EquipmentInformation(
-  ItemTypeEnum.SpiderFangHammer,
-  'Spider Fang Hammer',
+  ItemTypeEnum.SpiderFangWand,
+  'Spider Fang Wand',
   1,
   1,
   EquipmentSlotEnum.Weapon,
   true,
-  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 10)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 5)),
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 1))
 ));
 

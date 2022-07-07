@@ -8,6 +8,6 @@ enum ItemTypeEnum {
 
   // Weapons
   SpiderFangDagger = 'spider-fang-dagger',
-  SpiderFangHammer = 'spider-fang-hammer'
+  SpiderFangWand = 'spider-fang-wand'
 }
 export default ItemTypeEnum;
