@@ -111,10 +111,52 @@ class EquipmentScreen implements IScreen {
       tags: true
     });
 
+    // Equipped off-hand box
+    this.screenElements.offHandBox = blessed.box({
+      parent: this.screenElements.characterBox,
+      top: 11,
+      height: 5,
+      width: 26,
+      left: 'center',
+      border: {
+        type: 'line'
+      },
+      style: {
+        focus: {
+          bg: 'white',
+          fg: 'black'
+        }
+      },
+      label: 'Off-Hand',
+      content: 'Empty',
+      tags: true
+    });
+
+    // Equipped helmet box
+    this.screenElements.helmetBox = blessed.box({
+      parent: this.screenElements.characterBox,
+      top: 17,
+      height: 5,
+      width: 26,
+      left: 'center',
+      border: {
+        type: 'line'
+      },
+      style: {
+        focus: {
+          bg: 'white',
+          fg: 'black'
+        }
+      },
+      label: 'Helmet',
+      content: 'Empty',
+      tags: true
+    });
+
     // Equipped chestpiece box
     this.screenElements.chestBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 11,
+      top: 23,
       height: 5,
       width: 26,
       left: 'center',
@@ -132,10 +174,31 @@ class EquipmentScreen implements IScreen {
       tags: true
     });
 
+    // Equipped gloves box
+    this.screenElements.glovesBox = blessed.box({
+      parent: this.screenElements.characterBox,
+      top: 29,
+      height: 5,
+      width: 26,
+      left: 'center',
+      border: {
+        type: 'line'
+      },
+      style: {
+        focus: {
+          bg: 'white',
+          fg: 'black'
+        }
+      },
+      label: 'Gloves',
+      content: 'Empty',
+      tags: true
+    });
+
     // Equipped boots box
     this.screenElements.bootsBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 17,
+      top: 35,
       height: 5,
       width: 26,
       left: 'center',
@@ -224,16 +287,31 @@ class EquipmentScreen implements IScreen {
     this.screenElements.characterNameLabel.key(['left'], () => this.setCurrentPlayer(this.currentPlayerIndex - 1));
     this.screenElements.characterNameLabel.key(['escape'], () => this.exitScreen());
     this.screenElements.weaponBox.key(['up'], () => this.screenElements.characterNameLabel.focus());
-    this.screenElements.weaponBox.key(['down'], () => this.screenElements.chestBox.focus());
+    this.screenElements.weaponBox.key(['down'], () => this.screenElements.offHandBox.focus());
     this.screenElements.weaponBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.Weapon));
     this.screenElements.weaponBox.key(['escape'], () => this.exitScreen());
     this.screenElements.weaponBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Weapon));
-    this.screenElements.chestBox.key(['up'], () => this.screenElements.weaponBox.focus());
-    this.screenElements.chestBox.key(['down'], () => this.screenElements.bootsBox.focus());
+    this.screenElements.offHandBox.key(['up'], () => this.screenElements.weaponBox.focus());
+    this.screenElements.offHandBox.key(['down'], () => this.screenElements.helmetBox.focus());
+    this.screenElements.offHandBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.OffHand));
+    this.screenElements.offHandBox.key(['escape'], () => this.exitScreen());
+    this.screenElements.offHandBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.OffHand));
+    this.screenElements.helmetBox.key(['up'], () => this.screenElements.offHandBox.focus());
+    this.screenElements.helmetBox.key(['down'], () => this.screenElements.chestBox.focus());
+    this.screenElements.helmetBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.Helmet));
+    this.screenElements.helmetBox.key(['escape'], () => this.exitScreen());
+    this.screenElements.helmetBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Helmet));
+    this.screenElements.chestBox.key(['up'], () => this.screenElements.helmetBox.focus());
+    this.screenElements.chestBox.key(['down'], () => this.screenElements.glovesBox.focus());
     this.screenElements.chestBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.ChestPiece));
     this.screenElements.chestBox.key(['escape'], () => this.exitScreen());
     this.screenElements.chestBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.ChestPiece));
-    this.screenElements.bootsBox.key(['up'], () => this.screenElements.chestBox.focus());
+    this.screenElements.glovesBox.key(['up'], () => this.screenElements.chestBox.focus());
+    this.screenElements.glovesBox.key(['down'], () => this.screenElements.bootsBox.focus());
+    this.screenElements.glovesBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.Gloves));
+    this.screenElements.glovesBox.key(['escape'], () => this.exitScreen());
+    this.screenElements.glovesBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Gloves));
+    this.screenElements.bootsBox.key(['up'], () => this.screenElements.glovesBox.focus());
     this.screenElements.bootsBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.Boots));
     this.screenElements.bootsBox.key(['escape'], () => this.exitScreen());
     this.screenElements.bootsBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Boots));
@@ -244,7 +322,10 @@ class EquipmentScreen implements IScreen {
     // Handle events
     this.screenElements.characterNameLabel.on('focus', () => this.clearCurrentEquipmentDetails());
     this.screenElements.weaponBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.Weapon));
+    this.screenElements.offHandBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.OffHand));
+    this.screenElements.helmetBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.Helmet));
     this.screenElements.chestBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.ChestPiece));
+    this.screenElements.glovesBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.Gloves));
     this.screenElements.bootsBox.on('focus', () => this.handleEquippedItemFocused(EquipmentSlotEnum.Boots));
 
     // Append items to screen
@@ -309,9 +390,21 @@ class EquipmentScreen implements IScreen {
     var equippedWeapon = character.equipment.weapon;
     this.screenElements.weaponBox.setContent(equippedWeapon ? equippedWeapon.name : 'Empty');
 
+    // Update the off-hand name
+    var equippedOffHand = character.equipment.offHand;
+    this.screenElements.offHandBox.setContent(equippedOffHand ? equippedOffHand.name : 'Empty');
+
+    // Update the helmet name
+    var equippedHelmet = character.equipment.helmet;
+    this.screenElements.helmetBox.setContent(equippedHelmet ? equippedHelmet.name : 'Empty');
+
     // Update the chest piece name
     var equippedChestPiece = character.equipment.chest;
     this.screenElements.chestBox.setContent(equippedChestPiece ? equippedChestPiece.name : 'Empty');
+
+    // Update the gloves name
+    var equippedGloves = character.equipment.gloves;
+    this.screenElements.glovesBox.setContent(equippedGloves ? equippedGloves.name : 'Empty');
 
     // Update the boots name
     var equippedBoots = character.equipment.boots;
