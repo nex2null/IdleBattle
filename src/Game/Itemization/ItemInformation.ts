@@ -103,6 +103,42 @@ itemInformations.push(new EquipmentInformation(
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 1))
 ));
 
+// Spider silk boots
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.SpiderSilkBoots,
+  'Spider Silk Boots',
+  1,
+  1,
+  EquipmentSlotEnum.Boots,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 10)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 1))
+));
+
+// Spider silk cap
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.SpiderSilkCap,
+  'Spider Silk Cap',
+  1,
+  1,
+  EquipmentSlotEnum.Helmet,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 10)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 1))
+));
+
+// Spider silk armlets
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.SpiderSilkArmlets,
+  'Spider Silk Armlets',
+  1,
+  1,
+  EquipmentSlotEnum.Gloves,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 10)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, "Spider Fang", 1))
+));
+
 // Spider fang dagger
 itemInformations.push(new EquipmentInformation(
   ItemTypeEnum.SpiderFangDagger,
@@ -122,6 +158,18 @@ itemInformations.push(new EquipmentInformation(
   1,
   1,
   EquipmentSlotEnum.Weapon,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 5)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 1))
+));
+
+// Spider fang shield
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.SpiderFangShield,
+  'Spider Fang Shield',
+  1,
+  1,
+  EquipmentSlotEnum.OffHand,
   true,
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 5)),
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 1))
