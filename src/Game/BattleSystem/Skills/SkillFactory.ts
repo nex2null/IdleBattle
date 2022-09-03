@@ -3,6 +3,7 @@ import AttackSkill from "./AttackSkill";
 import ColdSnapSkill from "./ColdSnapSkill";
 import CrusadersPrayerSkill from "./CrusadersPrayerSkill";
 import DefendSkill from "./DefendSkill";
+import FireballSkill from "./FireballSkill";
 import FrozenArmorSkill from "./FrozenArmorSkill";
 import FrozenBladesSkill from "./FrozenBladesSkill";
 import HealSkill from "./HealSkill";
@@ -32,6 +33,7 @@ class SkillFactory {
       case SkillEnum.Purify: return new PurifySkill(slvl, mastered);
       case SkillEnum.Martyrdom: return new MartyrdomSkill(slvl, mastered);
       case SkillEnum.SacredFlame: return new SacredFlameSkill(slvl, mastered);
+      case SkillEnum.Fireball: return new FireballSkill(slvl, mastered);
     }
   }
 }
