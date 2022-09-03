@@ -11,6 +11,7 @@ import HolyStrikeSkill from "./HolyStrikeSkill";
 import IceBoltSkill from "./IceBoltSkill";
 import ISkill from "./ISkill";
 import MartyrdomSkill from "./MartyrdomSkill";
+import MoltenBladesSkill from "./MoltenBladesSkill";
 import PowerStrikeSkill from "./PowerStrikeSkill";
 import PurifySkill from "./PurifySkill";
 import SacredFlameSkill from "./SacredFlameSkill";
@@ -34,6 +35,7 @@ class SkillFactory {
       case SkillEnum.Martyrdom: return new MartyrdomSkill(slvl, mastered);
       case SkillEnum.SacredFlame: return new SacredFlameSkill(slvl, mastered);
       case SkillEnum.Fireball: return new FireballSkill(slvl, mastered);
+      case SkillEnum.MoltenBlades: return new MoltenBladesSkill(slvl, mastered);
     }
   }
 }
