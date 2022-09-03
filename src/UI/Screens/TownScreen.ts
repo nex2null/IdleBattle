@@ -39,7 +39,6 @@ class TownScreen implements IScreen {
       height: 7,
       label: 'Town',
       content: `
-  Experience: {green-fg}${this.town.totalExperience}{/green-fg}\n
   Gold: {yellow-fg}${this.town.totalGold}{/yellow-fg}`,
       tags: true,
       border: {

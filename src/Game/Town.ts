@@ -6,7 +6,6 @@ import CharacterClassEnum from "./Enums/CharacterClassEnum";
 class Town {
 
   // Properties
-  totalExperience: number;
   totalGold: number;
   inventory: Inventory;
   roster: Array<PlayerCharacter>;
@@ -18,7 +17,6 @@ class Town {
   constructor(savedData: any = {}) {
 
     // Setup properties
-    this.totalExperience = savedData.totalExperience || 0;
     this.totalGold = savedData.totalGold || 0;
     this.equipmentBeingForged = savedData.equipmentBeingForged != null ? Equipment.load(savedData.equipmentBeingForged) : null;
     this.currentParty = savedData.currentParty || [];
