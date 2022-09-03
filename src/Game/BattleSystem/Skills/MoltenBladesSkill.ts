@@ -69,7 +69,7 @@ class MoltenBladesSkill implements ISkill {
   ) {
 
     // If unmastered, only first target is ever relevant
-    var skillTargets = this.isMastered ? targets.slice(0, 1) : targets;
+    var skillTargets = !this.isMastered ? targets.slice(0, 1) : targets;
 
     // Log
     battleLog.addMessage(`${character.name} uses molten blades on ${this.isMastered ? 'the party' : skillTargets[0].name}`);
