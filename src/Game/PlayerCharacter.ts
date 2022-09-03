@@ -22,6 +22,7 @@ class PlayerCharacter {
   skills: Array<PlayerSkill>;
   skillPoints: number;
   masteryPoints: number;
+  experience: number;
 
   // Equipment
   equipment: PlayerEquipment;
@@ -38,6 +39,7 @@ class PlayerCharacter {
     this.skills = args.skills;
     this.skillPoints = args.skillPoints || 0;
     this.masteryPoints = args.masteryPoints || 0;
+    this.experience = args.experience || 0;
   }
 
   // Load from saved data
@@ -52,7 +54,8 @@ class PlayerCharacter {
       primaryClass: savedData.primaryClass,
       skills: savedData.skills.map((x: any) => PlayerSkill.load(x)),
       skillPoints: savedData.skillPoints,
-      masteryPoints: savedData.masteryPoints
+      masteryPoints: savedData.masteryPoints,
+      experience: savedData.experience
     });
   }
 

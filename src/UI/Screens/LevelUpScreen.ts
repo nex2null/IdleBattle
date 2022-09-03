@@ -389,7 +389,7 @@ class LevelUpScreen implements IScreen {
 
     // Update labels
     this.screenElements.characterLevelLabel.setContent(`       Level: ${this.currentCharacter.level}`);
-    this.screenElements.townXpLabel.setContent(`Available XP: ${this.town.totalExperience}`);
+    this.screenElements.townXpLabel.setContent(`Available XP: ${this.currentCharacter.experience}`);
     this.screenElements.requiredXpLabel.setContent(` Required XP: ${requiredXp}`);
 
     // Update skills
@@ -417,7 +417,7 @@ class LevelUpScreen implements IScreen {
     var requiredXp = currentClass.getRequiredXpToLevel(nextLevel);
 
     // Verify we have required XP
-    if (requiredXp > this.town.totalExperience)
+    if (requiredXp > this.currentCharacter.experience)
       return;
 
     // Grab the stats
@@ -429,8 +429,8 @@ class LevelUpScreen implements IScreen {
     // Level up the character
     this.currentCharacter.levelUp(levelUpStats, levelUpSkills);
 
-    // Remove the required XP from the town xp
-    this.town.totalExperience -= requiredXp;
+    // Remove the required XP from the xp
+    this.currentCharacter.experience -= requiredXp;
 
     // Re-draw the character box
     this.showCharacterBox();

@@ -53,8 +53,8 @@ class Game {
       var dungeon = this.currentBattle.dungeon;
       var defeatedEnemies = dungeon.getDefeatedEnemies();
 
-      // Get items, experience, and gold
-      var defeatedEnemies = dungeon.getDefeatedEnemies();
+      // Get items, gold, and calculate total experience
+      var totalExperience = 0;
       for (var i = 0; i < defeatedEnemies.length; i++) {
         var enemy = defeatedEnemies[i];
         var items = LootGenerator.generateLoot(
@@ -62,8 +62,14 @@ class Game {
           enemy.lootGenerationOptions);
         this.town.inventory.addItems(items);
         this.town.totalGold += enemy.goldWorth;
-        this.town.totalExperience += enemy.xpWorth;
+        totalExperience += enemy.xpWorth;
       }
+
+      // Distribute XP evenly to characters in the current party
+      var xpPerCharacter = Math.ceil(totalExperience / this.town.currentParty.length);
+      this.town.getCharactersInParty().forEach(x => {
+        x.experience += xpPerCharacter;
+      });
     }
 
     // Leave the battle
