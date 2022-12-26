@@ -14,7 +14,8 @@ enum SkillEnum {
   Martyrdom = 'Martyrdom',
   SacredFlame = 'Sacred Flame',
   Fireball = 'Fireball',
-  MoltenBlades = 'Molten Blades'
+  MoltenBlades = 'Molten Blades',
+  WickerMan = 'Wicker Man'
 }
 
 export default SkillEnum;

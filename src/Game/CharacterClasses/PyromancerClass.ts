@@ -51,7 +51,7 @@ class PyromancerClass implements ICharacterClass {
   getLevelUpSkills(newLevel: number): Array<SkillEnum> {
     switch (newLevel) {
       case 6: return [SkillEnum.MoltenBlades];
-      //case 12: return [SkillEnum.FrozenArmor];
+      case 12: return [SkillEnum.WickerMan];
       //case 18: return [SkillEnum.ColdSnap];
       default: return [];
     }
