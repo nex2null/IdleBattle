@@ -10,7 +10,8 @@ enum BattleEffectEnum {
   Purify = 'Purify',
   Martyrdom = 'Martyrdom',
   Burning = 'Burning',
-  MoltenBlades = 'Molten Blades'
+  MoltenBlades = 'Molten Blades',
+  WickerMan = 'Wicker Man'
 }
 
 export default BattleEffectEnum;
