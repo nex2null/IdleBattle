@@ -1,6 +1,7 @@
 enum SkillEnum {
   Attack = 'Attack',
   Defend = 'Defend',
+  Focus = 'Focus',
   WebShoot = 'Web Shoot',
   PowerStrike = 'Power Strike',
   IceBolt = 'Ice Bolt',

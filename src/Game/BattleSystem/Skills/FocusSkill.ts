@@ -9,7 +9,7 @@ class DefendSkill implements ISkill {
 
   // Properties
   name: string;
-  skillEnum: SkillEnum = SkillEnum.Defend;
+  skillEnum: SkillEnum = SkillEnum.Focus;
   level: number = 1;
   maxLevel: number = 1;
   isMastered: boolean = false;
@@ -18,13 +18,13 @@ class DefendSkill implements ISkill {
 
   // Constructor
   constructor() {
-    this.name = 'Defend';
+    this.name = 'Focus';
     this.targetType = TargetTypeEnum.Self;
   }
 
   // Get the skill description
   getDescription(): string {
-    return `Enter into a defensive stance, halving all damage taken until your next turn`;
+    return `Focus your mind. Regenerates MP.`;
   }
 
   // Get the required character level in order to level up this skill
@@ -45,13 +45,14 @@ class DefendSkill implements ISkill {
     targets: Array<BattleCharacter>,
     battleLog: BattleLog
   ) {
-
+    
     // Log
-    battleLog.addMessage(`${character.name} defends`);
+    battleLog.addMessage(`${character.name} focuses`);
 
-    // Add a defense effect to the character
-    var defenseEffect = new DefendedEffect(character);
-    character.applyEffect(defenseEffect, battleLog);
+    // Regenerate 10% of MP
+    // TODO: Augment with stats
+    var mpToRegain = character.baseStats.maxMp * .1;
+    character.regainMp(mpToRegain, battleLog);
   }
 
   // Determine if the skill is valid for a target

@@ -53,9 +53,7 @@ class Gambit {
       return null;
 
     // Grab the potential matches for the condition
-    var potentialTargets = skill.targetType === TargetTypeEnum.Self
-      ? [user]
-      : condition.getTargets(user, characters, this.conditionInput);
+    var potentialTargets = condition.getTargets(user, characters, this.conditionInput);
 
     // Filter the targets by which ones are valid
     var targets = potentialTargets.filter(x => skill.isValidTarget(x));

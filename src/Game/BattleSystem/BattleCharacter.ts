@@ -304,6 +304,21 @@ export default class BattleCharacter {
     battleLog.addMessage(`${this.name} is healed for {green-fg}${amount}{/green-fg} hp`);
   }
 
+  // Regain MP
+  regainMp(amount: number, battleLog: BattleLog) {
+
+    // Round
+    amount = Math.round(amount);
+
+    // Increase current MP by the amount regained
+    this.currentStats.mp += amount;
+    if (this.currentStats.mp > this.currentStats.maxMp)
+      this.currentStats.mp = this.currentStats.maxMp;
+
+    // Log that we regained MP
+    battleLog.addMessage(`${this.name} regains {blue-fg}${amount}{/blue-fg} mp`);
+  }
+
   // Determine if a character crits with a skill
   determineCrit(target: BattleCharacter): boolean {
     
