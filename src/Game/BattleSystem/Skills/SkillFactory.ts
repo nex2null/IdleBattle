@@ -4,6 +4,7 @@ import ColdSnapSkill from "./ColdSnapSkill";
 import CrusadersPrayerSkill from "./CrusadersPrayerSkill";
 import DefendSkill from "./DefendSkill";
 import FireballSkill from "./FireballSkill";
+import FocusSkill from "./FocusSkill";
 import FrozenArmorSkill from "./FrozenArmorSkill";
 import FrozenBladesSkill from "./FrozenBladesSkill";
 import HealSkill from "./HealSkill";
@@ -23,6 +24,7 @@ class SkillFactory {
     switch (skill) {
       case SkillEnum.Attack: return new AttackSkill();
       case SkillEnum.Defend: return new DefendSkill();
+      case SkillEnum.Focus: return new FocusSkill();
       case SkillEnum.PowerStrike: return new PowerStrikeSkill(slvl, mastered);
       case SkillEnum.WebShoot: return new WebShootSkill();
       case SkillEnum.IceBolt: return new IceBoltSkill(slvl, mastered);

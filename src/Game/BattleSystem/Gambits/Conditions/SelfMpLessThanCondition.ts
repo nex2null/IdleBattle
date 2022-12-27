@@ -2,10 +2,10 @@ import IGambitCondition from './IGambitCondition';
 import BattleCharacter from '../../BattleCharacter';
 import GambitConditionEnum from '../../Enums/GambitConditionEnum';
 
-class AllyHealthLessThanCondition implements IGambitCondition {
+class SelfMpLessThanCondition implements IGambitCondition {
 
   // Properties
-  conditionEnum: GambitConditionEnum = GambitConditionEnum.AllyHealthLessThan;
+  conditionEnum: GambitConditionEnum = GambitConditionEnum.SelfMpLessThan;
   requiresInput: boolean = true;
 
   // Get valid targets for the gambit condition
@@ -19,12 +19,11 @@ class AllyHealthLessThanCondition implements IGambitCondition {
       input = input.slice(0, -1);
 
     // Parse input
-    var healthPercent = +input / 100;
+    var mpPercent = +input / 100;
 
-    // Filter characters with health less than or equal to the given input %
-    return characters.filter(x =>
-      x.characterType !== user.hostileToCharacterType &&
-      x.currentStats.hp <= x.currentStats.maxHp * healthPercent);
+    // Return the user if their MP is less than or equal to the target percent
+    // otherwise return an empty list
+    return (user.currentStats.mp <= user.currentStats.maxMp * mpPercent) ? [user] : [];
   }
 
   // Get valid inputs for the gambit condition
@@ -43,4 +42,4 @@ class AllyHealthLessThanCondition implements IGambitCondition {
   }
 }
 
-export default AllyHealthLessThanCondition;
+export default SelfMpLessThanCondition;
