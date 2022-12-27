@@ -55,4 +55,32 @@ implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFa
 implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangShield, StatEnum.PhysicalResistance, 5, 15));
 implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangShield, StatEnum.IncreasedHpPercent, 5, 10));
 
+// Weaver Silk Robe
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkRobe, StatEnum.Hp, 11, 20));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkRobe, StatEnum.Mp, 6, 10));
+
+// Weaver Silk Boots
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkBoots, StatEnum.Hp, 11, 20));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkBoots, StatEnum.StatusResistance, 16, 30));
+
+// Weaver Silk Cap
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkCap, StatEnum.Hp, 11, 20));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkCap, StatEnum.Resiliency, 20, 30));
+
+// Weaver Silk Armlets
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkArmlets, StatEnum.Hp, 11, 20));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkArmlets, StatEnum.CritChance, 20, 30));
+
+// Weaver Fang Dagger
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverFangDagger, StatEnum.Speed, 20, 20));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverFangDagger, StatEnum.Strength, 21, 35));
+
+// Weaver Fang Wand
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverFangWand, StatEnum.Speed, 20, 20));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverFangWand, StatEnum.Intelligence, 21, 35));
+
+// Weaver Fang Shield
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverFangShield, StatEnum.PhysicalResistance, 30, 40));
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverFangShield, StatEnum.IncreasedHpPercent, 10, 15));
+
 export { EquipmentImplicitInformation, implicitInformations };

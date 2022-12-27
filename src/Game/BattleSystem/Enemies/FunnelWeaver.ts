@@ -8,21 +8,19 @@ import SkillEnum from '../Enums/SkillEnum';
 import GambitConditionEnum from '../Enums/GambitConditionEnum';
 import PlayerSkill from '../../PlayerSkill';
 
-class HardSpider extends BattleCharacter {
+class FunnelWeaver extends BattleCharacter {
   constructor(name: string) {
     super({
       name: name,
-      level: 1,
+      level: 10,
       baseStats: new Stats({
-        maxHp: 125,
+        maxHp: 1500,
         maxMp: 0,
-        strength: 18,
-        speed: 20,
-        physicalResistance: 50,
-        fireResistance: 50,
-        coldResistance: 50,
-        lightningResistance: 50,
-        physicalPower: 45
+        strength: 25,
+        speed: 15,
+        physicalResistance: 75,
+        fireResistance: 45,
+        coldResistance: 75
       }),
       characterType: BattleCharacterTypeEnum.EnemyParty,
       hostileToCharacterType: BattleCharacterTypeEnum.PlayerParty,
@@ -36,12 +34,12 @@ class HardSpider extends BattleCharacter {
       ],
       maxNumberOfItemsToDrop: 1,
       lootGenerationOptions: [
-        new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 50)
+        new LootGenerationOption(ItemTypeEnum.FunnelWeaverFang, 1, 25)
       ],
-      goldWorth: 150,
-      xpWorth: 75
+      goldWorth: 300,
+      xpWorth: 150
     });
   }
 }
 
-export default HardSpider;
+export default FunnelWeaver;

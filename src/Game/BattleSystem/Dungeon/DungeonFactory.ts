@@ -1,4 +1,4 @@
-import HardSpider from "../Enemies/HardSpider";
+import FunnelWeaver from "../Enemies/FunnelWeaver";
 import Spider from "../Enemies/Spider";
 import Dungeon from "./Dungeon";
 import DungeonEnum from "./DungeonEnum";
@@ -8,7 +8,7 @@ class DungeonFactory {
   static getDungeon(dungeonEnum: DungeonEnum): Dungeon {
     switch (dungeonEnum) {
       case DungeonEnum.Floor1: return createSpiderCave();
-      case DungeonEnum.Floor2: return createIceCavern();
+      case DungeonEnum.Floor2: return createFunnelWeaverCave();
       default: throw `Cannot create dungeon with enum ${dungeonEnum}`;
     }
   }
@@ -21,10 +21,10 @@ function createSpiderCave(): Dungeon {
   ]);
 }
 
-function createIceCavern(): Dungeon {
+function createFunnelWeaverCave(): Dungeon {
   return new Dungeon('Floor 2 - Ice Cavern', [
-    new DungeonLevel([new HardSpider('Spider 1'), new HardSpider('Spider 2')]),
-    new DungeonLevel([new HardSpider('Spider 3'), new HardSpider('Spider 4')])
+    new DungeonLevel([new FunnelWeaver('Funnel Weaver 1'), new FunnelWeaver('Funnel Weaver 2')]),
+    new DungeonLevel([new FunnelWeaver('Funnel Weaver 3'), new FunnelWeaver('Funnel Weaver 4')])
   ]);
 }
 

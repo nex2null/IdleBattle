@@ -86,6 +86,8 @@ var itemInformations = new Array<ItemInformation>();
 
 // Material items
 itemInformations.push(new MaterialInformation(ItemTypeEnum.SpiderFang, "Spider Fang", ItemRarityEnum.Normal, 1));
+itemInformations.push(new MaterialInformation(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", ItemRarityEnum.Normal, 10));
+
 
 //
 // Equipment
@@ -173,6 +175,90 @@ itemInformations.push(new EquipmentInformation(
   true,
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 5)),
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 1))
+));
+
+// Weaver silk robe
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.WeaverSilkRobe,
+  'Weaver Silk Robe',
+  10,
+  10,
+  EquipmentSlotEnum.ChestPiece,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", 10)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", 1))
+));
+
+// Weaver silk boots
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.WeaverSilkBoots,
+  'Weaver Silk Boots',
+  10,
+  10,
+  EquipmentSlotEnum.Boots,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", 10)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", 1))
+));
+
+// Weaver silk cap
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.WeaverSilkCap,
+  'Weaver Silk Cap',
+  10,
+  10,
+  EquipmentSlotEnum.Helmet,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", 10)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", 1))
+));
+
+// Weaver silk armlets
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.WeaverSilkArmlets,
+  'Weaver Silk Armlets',
+  10,
+  10,
+  EquipmentSlotEnum.Gloves,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", 10)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", 1))
+));
+
+// Weaver fang dagger
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.WeaverFangDagger,
+  'Weaver Fang Dagger',
+  10,
+  10,
+  EquipmentSlotEnum.Weapon,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, 'Funnel Weaver Fang', 5)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, 'Funnel Weaver Fang', 1))
+));
+
+// Weaver fang wand
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.WeaverFangWand,
+  'Weaver Fang Wand',
+  10,
+  10,
+  EquipmentSlotEnum.Weapon,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, 'Funnel Weaver Fang', 5)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, 'Funnel Weaver Fang', 1))
+));
+
+// Weaver fang shield
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.WeaverFangShield,
+  'Weaver Fang Shield',
+  10,
+  10,
+  EquipmentSlotEnum.OffHand,
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, 'Funnel Weaver Fang', 5)),
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.FunnelWeaverFang, 'Funnel Weaver Fang', 1))
 ));
 
 export { MaterialInformation, EquipmentInformation, ItemInformation, itemInformations };
