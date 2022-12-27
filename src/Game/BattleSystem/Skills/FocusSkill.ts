@@ -1,4 +1,3 @@
-import DefendedEffect from '../BattleEffects/DefendedEffect';
 import TargetTypeEnum from '../Enums/TargetTypeEnum';
 import ISkill from './ISkill';
 import BattleCharacter from '../BattleCharacter';
@@ -36,7 +35,7 @@ class DefendSkill implements ISkill {
   canUse(
     character: BattleCharacter,
     targets: Array<BattleCharacter>): boolean {
-    return true;
+      return !character.isOnCooldown(this.skillEnum);
   }
 
   // Use the skill
@@ -53,6 +52,9 @@ class DefendSkill implements ISkill {
     // TODO: Augment with stats
     var mpToRegain = character.baseStats.maxMp * .1;
     character.regainMp(mpToRegain, battleLog);
+
+    // Add a cooldown for this skill for 4 full turns
+    character.addCooldown(this.skillEnum, 5);
   }
 
   // Determine if the skill is valid for a target
