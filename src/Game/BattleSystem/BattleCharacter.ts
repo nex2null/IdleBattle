@@ -11,6 +11,7 @@ import IEffect from './BattleEffects/IEffect';
 import PlayerSkill from '../PlayerSkill';
 import BattleStats from './BattleStats';
 import { calculateCrit } from './BattleFormulas';
+import SkillEnum from './Enums/SkillEnum';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 
@@ -28,6 +29,7 @@ export default class BattleCharacter {
   gambits: Array<Gambit>;
   uid: string;
   skills: Array<PlayerSkill>;
+  cooldowns: Map<SkillEnum, number> = new Map<SkillEnum, number>();
 
   // TODO: Refactor enemy specific things to enemy base class
   maxNumberOfItemsToDrop: number;
@@ -238,6 +240,9 @@ export default class BattleCharacter {
 
     // Allow effects to trigger after an action has been performed
     this.effects.forEach(x => x.afterActionPerformed());
+
+    // Tick cooldowns
+    this.tickCooldowns();
   }
 
   // Applies an effect to the character
@@ -326,5 +331,44 @@ export default class BattleCharacter {
 
     // Calculate crit
     return calculateCrit(this, target);
+  }
+
+  // Add a cooldown to a skill
+  addCooldown(skill: SkillEnum, turns: number) {
+
+    // Add the existing cooldown turns to the number of turns
+    var existingTurns = this.cooldowns.get(skill) || 0;
+    turns += existingTurns;
+
+    // Set the number of turns
+    this.cooldowns.set(skill, turns);
+  }
+
+  // Check if a skill is on cooldown
+  isOnCooldown(skill: SkillEnum) {
+    return this.cooldowns.has(skill);
+  }
+
+  // Removes the cooldown on a skill
+  removeCooldown(skill: SkillEnum) {
+    this.cooldowns.delete(skill);
+  }
+
+  // Remove all cooldowns
+  removeAllCooldowns() {
+    this.cooldowns.clear();
+  }
+
+  // Tick the cooldowns
+  tickCooldowns() {
+    var coolingDownSkills = Array.from(this.cooldowns.keys());
+    coolingDownSkills.forEach(skill => {
+      var existingTurns = this.cooldowns.get(skill)!;
+      if (existingTurns <= 1) {
+        this.cooldowns.delete(skill);
+      } else {
+        this.cooldowns.set(skill, existingTurns - 1);
+      }
+    });
   }
 }
