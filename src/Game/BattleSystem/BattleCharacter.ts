@@ -139,7 +139,7 @@ export default class BattleCharacter {
     }
 
     // Use the gambit's skill
-    gambitAction.skill.use(this, gambitAction.targets, battleLog, damageTracker);
+    gambitAction.skill.use(this, gambitAction.targets, battleLog, damageTracker, characters);
 
     // Set that an action was performed
     this.actionPerformed();

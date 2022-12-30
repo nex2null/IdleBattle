@@ -41,7 +41,8 @@ interface ISkill {
     character: BattleCharacter,
     targets: Array<BattleCharacter>,
     battleLog: BattleLog,
-    damageTracker: DamageTracker): void;
+    damageTracker: DamageTracker,
+    allCharacters: Array<BattleCharacter>): void;
 
   // Determine if the skill can be used
   canUse(
