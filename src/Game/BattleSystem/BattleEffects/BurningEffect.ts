@@ -6,6 +6,7 @@ import { processDamage } from '../BattleFormulas';
 import BattleDamage from '../BattleDamage';
 import DamageTypeEnum from '../Enums/DamageTypeEnum';
 import DamageTracker from '../DamageTracker';
+import WickerManEffect from './WickerManEffect';
 
 class BurningEffect extends BaseEffect {
 
@@ -21,6 +22,13 @@ class BurningEffect extends BaseEffect {
     this.sourceCharacter = sourceCharacter;
     this.startingTurns = this.turnsLeft = turns;
     this.baseBurnAmount = baseBurnAmount;
+
+    // If the source character is under the effect of a mastered wicker man effect
+    // then double the base burn amount
+    var wickerManEffect = sourceCharacter.getEffect(BattleEffectEnum.WickerMan) as WickerManEffect;
+    if (wickerManEffect && wickerManEffect.isMastered) {
+      this.baseBurnAmount *= 2;
+    }
   }
 
   // Get the message to display when a character is inflicted with this effect

@@ -7,11 +7,13 @@ class WickerManEffect extends BaseEffect {
   // Properties
   turnsLeft: number;
   increasedFirePower: number = 0;
+  isMastered: boolean;
 
   // Constructor
-  constructor(character: BattleCharacter, increasedFirePower: number, turnsLeft: number) {
+  constructor(character: BattleCharacter, increasedFirePower: number, isMastered: boolean, turnsLeft: number) {
     super(character, BattleEffectEnum.WickerMan, '{#FFA500-fg}WCK{/}', true);
     this.increasedFirePower = increasedFirePower;
+    this.isMastered = isMastered;
     this.turnsLeft = turnsLeft;
   }
 

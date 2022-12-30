@@ -89,7 +89,7 @@ class WickerManSkill implements ISkill {
 
     // Apply wicker man effect - increasing fire power
     var increasedFirePower = this.calculateFirePowerIncrease(character);
-    var wickerManEffect = new WickerManEffect(character, increasedFirePower, 5);
+    var wickerManEffect = new WickerManEffect(character, increasedFirePower, this.isMastered, 5);
     character.inflictEffect(wickerManEffect, character, battleLog);
   }
 
