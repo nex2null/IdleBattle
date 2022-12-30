@@ -103,9 +103,9 @@ class ColdSnapSkill implements ISkill {
     var frozenEffect = new FrozenEffect(target);
     character.inflictEffect(frozenEffect, target, battleLog);
 
-    // If this skill is mastered, the character immediately gains 250 charge
+    // If this skill is mastered, the character immediately gains 125 charge
     if (this.isMastered)
-      character.increaseCharge(250);
+      character.increaseCharge(125);
   }
 
   // Determine if the skill is valid for a target
