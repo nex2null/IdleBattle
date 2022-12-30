@@ -24,9 +24,9 @@ class BurningEffect extends BaseEffect {
     this.baseBurnAmount = baseBurnAmount;
 
     // If the source character is under the effect of a mastered wicker man effect
-    // then double the base burn amount
+    // then double the base burn amount unless the burn is being applied to the source character
     var wickerManEffect = sourceCharacter.getEffect(BattleEffectEnum.WickerMan) as WickerManEffect;
-    if (wickerManEffect && wickerManEffect.isMastered) {
+    if (wickerManEffect && wickerManEffect.isMastered && sourceCharacter != character) {
       this.baseBurnAmount *= 2;
     }
   }
@@ -69,6 +69,13 @@ class BurningEffect extends BaseEffect {
   reset(baseBurnAmount: number) {
     this.turnsLeft = this.startingTurns;
     this.baseBurnAmount = baseBurnAmount;
+  }
+
+  getRemainingDamage(): number {
+
+    // The remaining damage left to deal is the base damage multiplied
+    // by the number of turns remaining
+    return this.baseBurnAmount * this.turnsLeft;
   }
 }
 

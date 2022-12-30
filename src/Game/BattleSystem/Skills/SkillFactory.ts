@@ -1,6 +1,7 @@
 import SkillEnum from "../Enums/SkillEnum";
 import AttackSkill from "./AttackSkill";
 import ColdSnapSkill from "./ColdSnapSkill";
+import CombustSkill from "./CombustSkill";
 import CrusadersPrayerSkill from "./CrusadersPrayerSkill";
 import DefendSkill from "./DefendSkill";
 import FireballSkill from "./FireballSkill";
@@ -40,6 +41,7 @@ class SkillFactory {
       case SkillEnum.Fireball: return new FireballSkill(slvl, mastered);
       case SkillEnum.MoltenBlades: return new MoltenBladesSkill(slvl, mastered);
       case SkillEnum.WickerMan: return new WickerManSkill(slvl, mastered);
+      case SkillEnum.Combust: return new CombustSkill(slvl, mastered);
     }
   }
 }

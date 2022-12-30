@@ -52,7 +52,7 @@ class PyromancerClass implements ICharacterClass {
     switch (newLevel) {
       case 6: return [SkillEnum.MoltenBlades];
       case 12: return [SkillEnum.WickerMan];
-      //case 18: return [SkillEnum.ColdSnap];
+      case 18: return [SkillEnum.Combust];
       default: return [];
     }
   }
