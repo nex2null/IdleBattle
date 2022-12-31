@@ -10,7 +10,7 @@ import BurningEffect from '../BattleEffects/BurningEffect';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
 import RandomHelpers from '../../Utilities/RandomHelpers';
 
-class CombustSkill implements ISkill {
+class SnuffOutSkill implements ISkill {
 
   // Properties
   level: number;
@@ -18,7 +18,7 @@ class CombustSkill implements ISkill {
   isMastered: boolean;
   isGeneric: boolean = false;
   name: string;
-  skillEnum: SkillEnum = SkillEnum.Combust;
+  skillEnum: SkillEnum = SkillEnum.SnuffOut;
   readonly mpCost: number;
   targetType: TargetTypeEnum;
   damageBonus: number;
@@ -28,7 +28,7 @@ class CombustSkill implements ISkill {
     this.level = slvl;
     this.isMastered = isMastered;
     this.mpCost = 15 + ((this.level - 1) * 2);
-    this.name = 'Combust';
+    this.name = 'Snuff Out';
     this.targetType = TargetTypeEnum.Single;
     this.damageBonus = .5 + (.1 * slvl);
   }
@@ -85,7 +85,7 @@ class CombustSkill implements ISkill {
     var target = targets[0];
 
     // Log
-    battleLog.addMessage(`${character.name} combusts ${target.name}`);
+    battleLog.addMessage(`${character.name} snuffs out ${target.name}`);
 
     // Spend MP
     character.spendMp(this.mpCost);
@@ -132,4 +132,4 @@ class CombustSkill implements ISkill {
   }
 }
 
-export default CombustSkill;
+export default SnuffOutSkill;
