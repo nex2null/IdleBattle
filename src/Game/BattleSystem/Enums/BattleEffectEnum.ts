@@ -6,7 +6,7 @@ enum BattleEffectEnum {
   FrozenBlades = 'Frozen Blades',
   Frozen = 'Frozen',
   FrozenArmor = 'Frozen Armor',
-  CrusadersPrayer = 'CrusadersPrayer',
+  CrusadersPrayer = 'Crusaders Prayer',
   Purify = 'Purify',
   Martyrdom = 'Martyrdom',
   Burning = 'Burning',

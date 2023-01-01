@@ -76,8 +76,8 @@ class GambitScreen implements IScreen {
       selectedBg: 'blue',
       interactive: true,
       hidden: true,
-      columnSpacing: 5, // in chars
-      columnWidth: [20, 20, 20], // in chars
+      columnSpacing: 2, // in chars
+      columnWidth: [24, 24, 24], // in chars
       scrollbar: {
         style: {
           bg: 'white'
