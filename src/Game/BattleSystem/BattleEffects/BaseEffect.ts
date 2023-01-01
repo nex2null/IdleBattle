@@ -79,9 +79,9 @@ class BaseEffect implements IEffect {
     return true;
   }
 
-  // Determine if this character must be targeted with actions
-  isForceTarget(): boolean {
-    return false;
+  // Determine if this character must target a character with actions
+  getForceTarget(): BattleCharacter | null {
+    return null;
   }
 }
 

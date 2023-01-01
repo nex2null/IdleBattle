@@ -46,9 +46,9 @@ class TauntedEffect extends BaseEffect {
     }
   }
 
-  // Determine if this character must be targeted with actions
-  isForceTarget(): boolean {
-    return true;
+  // Determine if this character must target a character with actions
+  getForceTarget(): BattleCharacter | null {
+    return this.taunter;
   }
 }
 
