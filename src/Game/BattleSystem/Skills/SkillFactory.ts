@@ -19,6 +19,7 @@ import PurifySkill from "./PurifySkill";
 import SacredFlameSkill from "./SacredFlameSkill";
 import WebShootSkill from "./WebShootSkill";
 import WickerManSkill from "./WickerManSkill";
+import TauntSkill from "./TauntSkill";
 
 class SkillFactory {
   static getSkill(skill: SkillEnum, slvl: number, mastered: boolean): ISkill {
@@ -42,6 +43,7 @@ class SkillFactory {
       case SkillEnum.MoltenBlades: return new MoltenBladesSkill(slvl, mastered);
       case SkillEnum.WickerMan: return new WickerManSkill(slvl, mastered);
       case SkillEnum.SnuffOut: return new SnuffOutSkill(slvl, mastered);
+      case SkillEnum.Taunt: return new TauntSkill(slvl, mastered);
     }
   }
 }

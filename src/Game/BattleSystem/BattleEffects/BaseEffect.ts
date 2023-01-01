@@ -78,6 +78,11 @@ class BaseEffect implements IEffect {
   canGainCharge(): boolean {
     return true;
   }
+
+  // Determine if this character must be targeted with actions
+  isForceTarget(): boolean {
+    return false;
+  }
 }
 
 export default BaseEffect;

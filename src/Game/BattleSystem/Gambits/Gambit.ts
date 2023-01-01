@@ -62,6 +62,14 @@ class Gambit {
     if (skill.targetType === TargetTypeEnum.NotSelf)
       targets = targets.filter(x => x !== user);
 
+    // If the skill targets a single target, then filter the list by targets that MUST be targeted
+    if (skill.targetType === TargetTypeEnum.Single) {
+      var forcedTargets = targets.filter(x => x.effects.find(y => y.isForceTarget()));
+      if (forcedTargets.length > 0) {
+        targets = forcedTargets;
+      }
+    }
+
     // If there are no targets left then the action cannot be performed
     if (targets.length === 0)
       return null;
