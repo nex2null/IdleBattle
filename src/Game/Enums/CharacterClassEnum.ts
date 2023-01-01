@@ -1,7 +1,8 @@
 enum CharacterClassEnum {
   Cryomancer = 'Cryomancer',
   Paladin = 'Paladin',
-  Pyromancer = 'Pyromancer'
+  Pyromancer = 'Pyromancer',
+  Juggernaut = 'Juggernaut'
 }
 
 export default CharacterClassEnum;

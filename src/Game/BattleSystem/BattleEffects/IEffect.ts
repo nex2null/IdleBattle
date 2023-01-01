@@ -57,6 +57,9 @@ interface IEffect {
 
   // Determine if charge can be gained
   canGainCharge(): boolean;
+
+  // Determine if this character must target a character with actions
+  getForceTarget(): BattleCharacter | null;
 }
 
 export default IEffect;

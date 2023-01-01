@@ -2,6 +2,7 @@ import GambitConditionEnum from "../../Enums/GambitConditionEnum";
 import AllyAnyCondition from "./AllyAnyCondition";
 import AllyHealthLessThanCondition from "./AllyHealthLessThanCondition";
 import EnemyAnyCondition from "./EnemyAnyCondition";
+import EnemyWithoutEffectCondition from "./EnemyWithoutEffectCondition";
 import IGambitCondition from "./IGambitCondition";
 import SelfCondition from "./SelfCondition";
 import SelfMpLessThanCondition from "./SelfMpLessThanCondition";
@@ -14,6 +15,7 @@ class GambitConditionFactory {
       case GambitConditionEnum.Self: return new SelfCondition();
       case GambitConditionEnum.AllyHealthLessThan: return new AllyHealthLessThanCondition();
       case GambitConditionEnum.SelfMpLessThan: return new SelfMpLessThanCondition();
+      case GambitConditionEnum.EnemyWithoutEffect: return new EnemyWithoutEffectCondition();
     }
   }
 }

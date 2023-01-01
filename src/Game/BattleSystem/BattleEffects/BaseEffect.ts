@@ -78,6 +78,11 @@ class BaseEffect implements IEffect {
   canGainCharge(): boolean {
     return true;
   }
+
+  // Determine if this character must target a character with actions
+  getForceTarget(): BattleCharacter | null {
+    return null;
+  }
 }
 
 export default BaseEffect;

@@ -62,6 +62,15 @@ class Gambit {
     if (skill.targetType === TargetTypeEnum.NotSelf)
       targets = targets.filter(x => x !== user);
 
+    // If the user is forced to target a target, and they are a valid target, then
+    // they must be selected
+    if (skill.targetType === TargetTypeEnum.Single) {
+      var forcedTargets = user.effects.filter(y => y.getForceTarget() != null).map(x => x.getForceTarget()!);
+      if (forcedTargets.length > 0) {
+        targets = forcedTargets;
+      }
+    }
+
     // If there are no targets left then the action cannot be performed
     if (targets.length === 0)
       return null;

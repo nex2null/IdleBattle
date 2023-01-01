@@ -39,7 +39,8 @@ class Town {
     return [
       CharacterClassEnum.Cryomancer,
       CharacterClassEnum.Paladin,
-      CharacterClassEnum.Pyromancer
+      CharacterClassEnum.Pyromancer,
+      CharacterClassEnum.Juggernaut
     ]
   }
 
