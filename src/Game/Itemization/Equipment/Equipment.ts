@@ -52,6 +52,7 @@ class Equipment extends Item {
       savedData.ilvl,
       savedData.name,
       savedData.slot,
+      savedData.tags,
       savedData.implicits.map((x: any) => EquipmentImplicit.load(x)),
       savedData.affixes.map((x: any) => EquipmentAffix.load(x)),
       savedData.requiredLevel,
