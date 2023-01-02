@@ -159,6 +159,7 @@ class EquipmentForge {
       ilvl,
       equipmentInformation.itemName,
       equipmentInformation.slot,
+      equipmentInformation.tags,
       this.generateImplicits(baseType),
       [],
       equipmentInformation.requiredLvl

@@ -12,6 +12,7 @@ import PlayerSkill from '../PlayerSkill';
 import BattleStats from './BattleStats';
 import { calculateCrit } from './BattleFormulas';
 import SkillEnum from './Enums/SkillEnum';
+import PlayerEquipment from '../PlayerEquipment';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 
@@ -29,6 +30,7 @@ export default class BattleCharacter {
   gambits: Array<Gambit>;
   uid: string;
   skills: Array<PlayerSkill>;
+  equipment: PlayerEquipment | null;
   cooldowns: Map<SkillEnum, number> = new Map<SkillEnum, number>();
 
   // TODO: Refactor enemy specific things to enemy base class
@@ -47,6 +49,7 @@ export default class BattleCharacter {
     gambits: Array<Gambit>,
     effects?: Array<IEffect>,
     skills: Array<PlayerSkill>,
+    equipment: PlayerEquipment | null,
     maxNumberOfItemsToDrop?: number,
     lootGenerationOptions?: Array<LootGenerationOption>,
     goldWorth?: number,
@@ -64,6 +67,7 @@ export default class BattleCharacter {
 
     this.gambits = args.gambits;
     this.effects = args.effects || [];
+    this.equipment = args.equipment;
 
     // TODO: Refactor enemy specific things to enemy base class
     this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;

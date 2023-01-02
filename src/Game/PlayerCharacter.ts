@@ -94,8 +94,9 @@ class PlayerCharacter {
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,
-      gambits: this.gambits,
-      skills: this.skills
+      gambits: [...this.gambits],
+      skills: [...this.skills],
+      equipment: this.equipment
     });
   }
 

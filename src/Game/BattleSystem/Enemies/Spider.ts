@@ -32,6 +32,7 @@ class Spider extends BattleCharacter {
         new PlayerSkill(SkillEnum.Defend, 1, false),
         new PlayerSkill(SkillEnum.WebShoot, 1, false)
       ],
+      equipment: null,
       maxNumberOfItemsToDrop: 1,
       lootGenerationOptions: [
         new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 25)
