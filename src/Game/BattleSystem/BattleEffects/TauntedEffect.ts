@@ -1,18 +1,21 @@
 import BaseEffect from './BaseEffect';
 import BattleCharacter from '../BattleCharacter';
 import BattleEffectEnum from '../Enums/BattleEffectEnum';
+import BattleDamage from '../BattleDamage';
 
 class TauntedEffect extends BaseEffect {
 
   // Properties
   remainingTurns: number;
   taunter: BattleCharacter;
+  taunterDamageReductionPercent: number | null;
 
   // Constructor
-  constructor(character: BattleCharacter, taunter: BattleCharacter, turns: number) {
+  constructor(character: BattleCharacter, taunter: BattleCharacter, turns: number, taunterDamageReductionPercent: number | null) {
     super(character, BattleEffectEnum.Taunted, '{white-bg}{black-fg}TNT{/black-fg}{/white-bg}', false);
     this.remainingTurns = turns;
     this.taunter = taunter;
+    this.taunterDamageReductionPercent = taunterDamageReductionPercent;
   }
 
   // Get the message to display when a character is inflicted with this effect
@@ -49,6 +52,15 @@ class TauntedEffect extends BaseEffect {
   // Determine if this character must target a character with actions
   getForceTarget(): BattleCharacter | null {
     return this.taunter;
+  }
+
+  // Handle before damage is taken
+  beforeDamageTaken(damage: BattleDamage, attacker: BattleCharacter | null): void {
+    
+    // If the attacker is dealing the damage, then reduce the damage by the amount specified
+    if (attacker == this.taunter && this.taunterDamageReductionPercent) {
+      damage.reduceByPercentage(this.taunterDamageReductionPercent);
+    }
   }
 }
 

@@ -74,7 +74,8 @@ class TauntSkill implements ISkill {
     character.spendMp(this.mpCost);
 
     // Inflict taunted on the target
-    var tauntedEffect = new TauntedEffect(target, character, this.turns);
+    var damageReductionPercent = this.isMastered ? .25 : null;
+    var tauntedEffect = new TauntedEffect(target, character, this.turns, damageReductionPercent);
     character.inflictEffect(tauntedEffect, target, battleLog);
   }
 
