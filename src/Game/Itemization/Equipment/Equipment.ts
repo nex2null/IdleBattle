@@ -7,12 +7,14 @@ import EquipmentImplicit from './EquipmentImplicit';
 import { Guid } from "guid-typescript";
 import ItemSuperTypeEnum from "../Enums/ItemSuperTypeEnum";
 import StatEnum from "../../Enums/StatEnum";
+import EquipmentTagEnum from "../Enums/EquipmentTagEnum";
 
 class Equipment extends Item {
 
   // Properties
   name: string;
   slot: EquipmentSlotEnum;
+  tags: Array<EquipmentTagEnum>;
   implicits: Array<EquipmentImplicit>;
   affixes: Array<EquipmentAffix>;
   requiredLevel: number;
@@ -26,6 +28,7 @@ class Equipment extends Item {
     ilvl: number,
     name: string,
     slot: EquipmentSlotEnum,
+    tags: Array<EquipmentTagEnum>,
     implicits: Array<EquipmentImplicit>,
     affixes: Array<EquipmentAffix>,
     requiredLevel: number,
@@ -34,6 +37,7 @@ class Equipment extends Item {
     super(type, ItemSuperTypeEnum.Equipment, rarity, ilvl, 1);
     this.name = name;
     this.slot = slot;
+    this.tags = tags;
     this.implicits = implicits;
     this.affixes = affixes;
     this.requiredLevel = requiredLevel;
@@ -48,6 +52,7 @@ class Equipment extends Item {
       savedData.ilvl,
       savedData.name,
       savedData.slot,
+      savedData.tags,
       savedData.implicits.map((x: any) => EquipmentImplicit.load(x)),
       savedData.affixes.map((x: any) => EquipmentAffix.load(x)),
       savedData.requiredLevel,

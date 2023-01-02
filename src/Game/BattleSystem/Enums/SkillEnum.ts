@@ -18,7 +18,8 @@ enum SkillEnum {
   MoltenBlades = 'Molten Blades',
   WickerMan = 'Wicker Man',
   SnuffOut = 'Snuff Out',
-  Taunt = 'Taunt'
+  Taunt = 'Taunt',
+  ShieldSlam = 'Shield Slam'
 }
 
 export default SkillEnum;

@@ -32,6 +32,7 @@ class FunnelWeaver extends BattleCharacter {
         new PlayerSkill(SkillEnum.Attack, 1, false),
         new PlayerSkill(SkillEnum.WebShoot, 1, false)
       ],
+      equipment: null,
       maxNumberOfItemsToDrop: 1,
       lootGenerationOptions: [
         new LootGenerationOption(ItemTypeEnum.FunnelWeaverFang, 1, 25)
