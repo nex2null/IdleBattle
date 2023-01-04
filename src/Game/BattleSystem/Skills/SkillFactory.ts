@@ -21,6 +21,7 @@ import WebShootSkill from "./WebShootSkill";
 import WickerManSkill from "./WickerManSkill";
 import TauntSkill from "./TauntSkill";
 import ShieldSlamSkill from "./ShieldSlamSkill";
+import LastStandSkill from "./LastStandSkill";
 
 class SkillFactory {
   static getSkill(skill: SkillEnum, slvl: number, mastered: boolean): ISkill {
@@ -46,6 +47,7 @@ class SkillFactory {
       case SkillEnum.SnuffOut: return new SnuffOutSkill(slvl, mastered);
       case SkillEnum.Taunt: return new TauntSkill(slvl, mastered);
       case SkillEnum.ShieldSlam: return new ShieldSlamSkill(slvl, mastered);
+      case SkillEnum.LastStand: return new LastStandSkill(slvl, mastered);
     }
   }
 }

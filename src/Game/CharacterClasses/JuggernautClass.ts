@@ -51,6 +51,7 @@ class JuggernautClass implements ICharacterClass {
   getLevelUpSkills(newLevel: number): Array<SkillEnum> {
     switch (newLevel) {
       case 6: return [SkillEnum.ShieldSlam];
+      case 12: return [SkillEnum.LastStand];
       default: return [];
     }
   }
