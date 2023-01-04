@@ -12,7 +12,8 @@ enum BattleEffectEnum {
   Burning = 'Burning',
   MoltenBlades = 'Molten Blades',
   WickerMan = 'Wicker Man',
-  Taunted = 'Taunted'
+  Taunted = 'Taunted',
+  LastStand = 'Last Stand'
 }
 
 export default BattleEffectEnum;
