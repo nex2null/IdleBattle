@@ -14,10 +14,10 @@ class FunnelWeaver extends BattleCharacter {
       name: name,
       level: 10,
       baseStats: new Stats({
-        maxHp: 1500,
+        maxHp: 1000,
         maxMp: 0,
-        strength: 25,
-        speed: 15,
+        strength: 35,
+        speed: 18,
         physicalResistance: 75,
         fireResistance: 45,
         coldResistance: 75
