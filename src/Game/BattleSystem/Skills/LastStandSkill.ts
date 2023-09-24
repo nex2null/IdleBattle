@@ -75,7 +75,7 @@ class LastStandSkill implements ISkill {
 
     // Determine if there is a minimum percent of HP the character
     // will never go below when the effect ends
-    var minimumHpPercent = this.isMastered ? .1 : null;
+    var minimumHpPercent = this.isMastered ? .25 : null;
 
     // Add the last stand effect
     var lastStandEffect = new LastStandEffect(character, hpToAdd, 4, minimumHpPercent);
