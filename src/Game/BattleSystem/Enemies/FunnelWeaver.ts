@@ -14,13 +14,13 @@ class FunnelWeaver extends BattleCharacter {
       name: name,
       level: 10,
       baseStats: new Stats({
-        maxHp: 1500,
+        maxHp: 500,
         maxMp: 0,
-        strength: 25,
-        speed: 15,
-        physicalResistance: 75,
-        fireResistance: 45,
-        coldResistance: 75
+        strength: 8,
+        speed: 18,
+        physicalResistance: 50,
+        fireResistance: 30,
+        coldResistance: 50
       }),
       characterType: BattleCharacterTypeEnum.EnemyParty,
       hostileToCharacterType: BattleCharacterTypeEnum.PlayerParty,

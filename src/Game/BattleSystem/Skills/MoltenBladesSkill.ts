@@ -9,7 +9,7 @@ import MoltenBladesEffect from '../BattleEffects/MoltenBladesEffect';
 class MoltenBladesSkill implements ISkill {
 
   // Constants
-  readonly moltenBladesTurns: number = 4;
+  readonly moltenBladesTurns: number = 10;
 
   // Properties
   level: number;

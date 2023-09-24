@@ -18,7 +18,9 @@ enum StatEnum {
   LightningResistance = 'lightning-resistance',
   StatusResistance = 'status-resistance',
   Resiliency = 'resiliency',
-  IncreasedHpPercent = 'increased-hp-%'
+  IncreasedHpPercent = 'increased-hp-%',
+  HpRegen = 'hp-regen',
+  MpRegen = 'mp-regen'
 }
 
 export default StatEnum;

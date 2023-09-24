@@ -4,6 +4,7 @@ import BattleCharacter from '../BattleCharacter';
 import BattleLog from '../BattleLog';
 import SkillEnum from '../Enums/SkillEnum';
 import TauntedEffect from '../BattleEffects/TauntedEffect';
+import { calculateStatusEffectHit } from '../BattleFormulas';
 
 class TauntSkill implements ISkill {
 
@@ -24,7 +25,7 @@ class TauntSkill implements ISkill {
     this.isMastered = isMastered;
     this.mpCost = 5 + ((this.level - 1) * 2);
     this.name = 'Taunt';
-    this.targetType = TargetTypeEnum.Single;
+    this.targetType = TargetTypeEnum.All;
     this.turns = Math.ceil(slvl / 2);
   }
 
@@ -64,19 +65,29 @@ class TauntSkill implements ISkill {
     battleLog: BattleLog
   ) {
 
-    // Only first target is ever relevant
-    var target = targets[0];
-
     // Log
-    battleLog.addMessage(`${character.name} taunts ${target.name}`);
+    battleLog.addMessage(`${character.name} taunts all enemies`);
 
     // Spend MP
     character.spendMp(this.mpCost);
 
-    // Inflict taunted on the target
+    // Calculate damage reduction
     var damageReductionPercent = this.isMastered ? .25 : null;
-    var tauntedEffect = new TauntedEffect(target, character, this.turns, damageReductionPercent);
-    character.inflictEffect(tauntedEffect, target, battleLog);
+
+    // Taunt all enemies
+    for (var target of targets) {
+
+      // Determine if the taunt is resisted
+      var tauntResisted = !calculateStatusEffectHit(character, target);
+      if (tauntResisted) {
+        battleLog.addMessage(`${target.name} resists!`);
+        continue;
+      }
+
+      // Apply the taunt
+      var tauntedEffect = new TauntedEffect(target, character, this.turns, damageReductionPercent);
+      character.inflictEffect(tauntedEffect, target, battleLog);
+    }
   }
 
   // Determine if the skill is valid for a target

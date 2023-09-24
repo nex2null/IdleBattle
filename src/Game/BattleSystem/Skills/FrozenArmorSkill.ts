@@ -10,7 +10,7 @@ import FrozenArmorEffect from '../BattleEffects/FrozenArmorEffect';
 class FrozenArmorSkill implements ISkill {
 
   // Constants
-  readonly frozenArmorTurns: number = 4;
+  readonly frozenArmorTurns: number = 10;
 
   // Properties
   level: number;

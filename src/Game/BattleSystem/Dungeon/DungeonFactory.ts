@@ -16,8 +16,9 @@ class DungeonFactory {
 
 function createSpiderCave(): Dungeon {
   return new Dungeon('Floor 1 - Spider Cave', [
-    new DungeonLevel([new Spider('Spider 1'), new Spider('Spider 2')]),
-    new DungeonLevel([new Spider('Spider 3'), new Spider('Spider 4')])
+    new DungeonLevel([new Spider('Spider A'), new Spider('Spider B')]),
+    new DungeonLevel([new Spider('Spider A'), new Spider('Spider B')]),
+    new DungeonLevel([new Spider('Spider A'), new Spider('Spider B'), new Spider('Spider C')])
   ]);
 }
 

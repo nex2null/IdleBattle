@@ -67,6 +67,10 @@ class ColdSnapSkill implements ISkill {
     if (!character.canSpendMp(this.mpCost))
       return false;
 
+    // If this skill is on cooldown we can't cast it
+    if (character.isOnCooldown(this.skillEnum))
+      return false;
+
     // Make sure there is a valid target
     return this.getValidTargets(targets).length > 0;
   }
@@ -106,6 +110,9 @@ class ColdSnapSkill implements ISkill {
     // If this skill is mastered, the character immediately gains 125 charge
     if (this.isMastered)
       character.increaseCharge(125);
+
+    // Add a cooldown for this skill for 5 full turns
+    character.addCooldown(this.skillEnum, 6);
   }
 
   // Determine if the skill is valid for a target
