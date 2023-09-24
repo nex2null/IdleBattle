@@ -34,7 +34,8 @@ class PyromancerClass implements ICharacterClass {
       maxHp: 50,
       maxMp: 75,
       strength: 2,
-      intelligence: 6
+      intelligence: 6,
+      mpRegen: 2
     });
   }
 
@@ -42,8 +43,9 @@ class PyromancerClass implements ICharacterClass {
   getLevelUpStatIncreases(newLevel: number): Stats {
     return new Stats({
       maxHp: 3,
-      maxMp: 5,
-      intelligence: 2
+      maxMp: 2,
+      intelligence: 2,
+      mpRegen: 1
     });
   }
 

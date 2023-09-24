@@ -51,7 +51,7 @@ class DefendSkill implements ISkill {
     // Regenerate 20% of MP
     // TODO: Augment with stats
     var mpToRegain = character.baseStats.maxMp * .2;
-    character.regainMp(mpToRegain, battleLog);
+    character.regainMp(mpToRegain);
 
     // Add a cooldown for this skill for 4 full turns
     character.addCooldown(this.skillEnum, 5);

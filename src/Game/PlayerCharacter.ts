@@ -90,7 +90,9 @@ class PlayerCharacter {
         lightningResistance: this.stats.lightningResistance + this.equipment.getStatValue(StatEnum.LightningResistance),
         physicalResistance: this.stats.physicalResistance + this.equipment.getStatValue(StatEnum.PhysicalResistance),
         statusResistance: this.stats.statusResistance + this.equipment.getStatValue(StatEnum.StatusResistance),
-        increasedHpPercent: this.stats.increasedHpPercent + this.equipment.getStatValue(StatEnum.IncreasedHpPercent)
+        increasedHpPercent: this.stats.increasedHpPercent + this.equipment.getStatValue(StatEnum.IncreasedHpPercent),
+        hpRegen: this.stats.hpRegen + this.equipment.getStatValue(StatEnum.HpRegen),
+        mpRegen: this.stats.mpRegen + this.equipment.getStatValue(StatEnum.MpRegen)
       }),
       characterType: BattleCharacterTypeEnum.PlayerParty,
       hostileToCharacterType: BattleCharacterTypeEnum.EnemyParty,

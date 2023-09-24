@@ -34,7 +34,8 @@ class JuggernautClass implements ICharacterClass {
       maxHp: 90,
       maxMp: 45,
       strength: 3,
-      intelligence: 2
+      intelligence: 2,
+      hpRegen: 5
     });
   }
 
@@ -43,7 +44,8 @@ class JuggernautClass implements ICharacterClass {
     return new Stats({
       maxHp: 8,
       maxMp: 3,
-      strength: 1
+      strength: 1,
+      hpRegen: 4
     });
   }
 

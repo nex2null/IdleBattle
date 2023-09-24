@@ -15,6 +15,7 @@ import SkillEnum from './Enums/SkillEnum';
 import PlayerEquipment from '../PlayerEquipment';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
+const REQUIRED_REGEN_TICKS = 30;
 
 export default class BattleCharacter {
 
@@ -32,6 +33,9 @@ export default class BattleCharacter {
   skills: Array<PlayerSkill>;
   equipment: PlayerEquipment | null;
   cooldowns: Map<SkillEnum, number> = new Map<SkillEnum, number>();
+
+  // Regen properties
+  regenCountdown: number;
 
   // TODO: Refactor enemy specific things to enemy base class
   maxNumberOfItemsToDrop: number;
@@ -69,6 +73,9 @@ export default class BattleCharacter {
     this.effects = args.effects || [];
     this.equipment = args.equipment;
 
+    // Regen properties
+    this.regenCountdown = REQUIRED_REGEN_TICKS;
+
     // TODO: Refactor enemy specific things to enemy base class
     this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;
     this.lootGenerationOptions = args.lootGenerationOptions || [];
@@ -88,6 +95,23 @@ export default class BattleCharacter {
 
     // Process the charge 'tick'
     this.effects.forEach(x => x.processChargeTick(increasedCharge));
+
+    // Tick regen
+    this.tickRegen();
+  }
+
+  // Tick the character's regen
+  tickRegen() {
+
+    // Decrement regen countdown
+    this.regenCountdown--;
+
+    // If regen countdown is zero then regen, and reset countdown
+    if (this.regenCountdown <= 0) {
+      this.regainHp(this.currentStats.hpRegen);
+      this.regainMp(this.currentStats.mpRegen);
+      this.regenCountdown = REQUIRED_REGEN_TICKS;
+    }
   }
 
   // Increase the charge level of the character by a certain amount
@@ -304,28 +328,25 @@ export default class BattleCharacter {
     // Round
     amount = Math.round(amount);
 
-    // Increase current HP by the amount healed
-    this.currentStats.hp += amount;
-    if (this.currentStats.hp > this.currentStats.maxHp)
-      this.currentStats.hp = this.currentStats.maxHp;
+    // Regain HP
+    this.regainHp(amount);
 
     // Log that we were healed
     battleLog.addMessage(`${this.name} is healed for {green-fg}${amount}{/green-fg} hp`);
   }
 
+  // Regain HP
+  regainHp(amount: number) {    
+    this.currentStats.hp += Math.round(amount);;
+    if (this.currentStats.hp > this.currentStats.maxHp)
+      this.currentStats.hp = this.currentStats.maxHp;
+  }
+
   // Regain MP
-  regainMp(amount: number, battleLog: BattleLog) {
-
-    // Round
-    amount = Math.round(amount);
-
-    // Increase current MP by the amount regained
-    this.currentStats.mp += amount;
+  regainMp(amount: number) {
+    this.currentStats.mp += Math.round(amount);
     if (this.currentStats.mp > this.currentStats.maxMp)
       this.currentStats.mp = this.currentStats.maxMp;
-
-    // Log that we regained MP
-    battleLog.addMessage(`${this.name} regains {blue-fg}${amount}{/blue-fg} mp`);
   }
 
   // Determine if a character crits with a skill

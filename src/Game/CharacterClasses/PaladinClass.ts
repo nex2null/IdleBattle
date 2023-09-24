@@ -32,9 +32,11 @@ class PaladinClass implements ICharacterClass {
   getStartingStats(): Stats {
     return new Stats({
       maxHp: 70,
-      maxMp: 60,
+      maxMp: 50,
       strength: 5,
-      intelligence: 4
+      intelligence: 4,
+      hpRegen: 3,
+      mpRegen: 2
     });
   }
 
@@ -44,7 +46,9 @@ class PaladinClass implements ICharacterClass {
       maxHp: 4,
       maxMp: 4,
       intelligence: 1,
-      strength: 1
+      strength: 1,
+      hpRegen: 2,
+      mpRegen: 1
     });
   }
 
