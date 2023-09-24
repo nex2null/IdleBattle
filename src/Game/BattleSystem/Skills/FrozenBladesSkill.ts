@@ -9,7 +9,7 @@ import SkillEnum from '../Enums/SkillEnum';
 class FrozenBladesSkill implements ISkill {
 
   // Constants
-  readonly frozenBladesTurns: number = 4;
+  readonly frozenBladesTurns: number = 10;
 
   // Properties
   level: number;

@@ -63,26 +63,12 @@ class FrozenArmorEffect extends BaseEffect {
 
     // If we can chill, then roll for chill
     if (canChill && attacker) {
-      var chillSuccess = RandomHelpers.getRandomInt(1, 100) <= 25;
+      var chillSuccess = RandomHelpers.getRandomInt(1, 100) <= 50;
       if (chillSuccess) {
         var chillEffect = new ChilledEffect(attacker);
         this.character.inflictEffect(chillEffect, attacker, battleLog);
       }
     }
-
-    // Fire damage always breaks freeze
-    var fireDamage = damage.amounts.get(DamageTypeEnum.Fire);
-    var freezeBroken = fireDamage && fireDamage > 0;
-
-    // Physical damage has a chance to break freeze
-    if (!freezeBroken) {
-      var physicalDamage = damage.amounts.get(DamageTypeEnum.Physical);
-      freezeBroken = physicalDamage && physicalDamage > 0 && RandomHelpers.getRandomInt(1, 100) <= 25;
-    }
-
-    // If the freeze is broken, remove it
-    if (freezeBroken)
-      this.character.removeEffect(this);
   }
 }
 

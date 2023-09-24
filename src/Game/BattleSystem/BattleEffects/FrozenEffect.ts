@@ -47,10 +47,9 @@ class FrozenEffect extends BaseEffect {
     var fireDamage = damage.amounts.get(DamageTypeEnum.Fire);
     var freezeBroken = fireDamage && fireDamage > 0;
 
-    // Physical damage has a chance to break freeze
+    // All other damage has a chance to break freeze
     if (!freezeBroken) {
-      var physicalDamage = damage.amounts.get(DamageTypeEnum.Physical);
-      freezeBroken = physicalDamage && physicalDamage > 0 && RandomHelpers.getRandomInt(1, 100) <= 25;
+      freezeBroken = damage.getTotalAmount() > 0 && RandomHelpers.getRandomInt(1, 100) <= 25;
     }
 
     // If the freeze is broken, remove it
