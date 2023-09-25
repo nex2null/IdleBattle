@@ -26,10 +26,8 @@ class PlayerCharacterCreator {
     // Grab starting stats
     var stats = characterClass.getStartingStats();
 
-    // Setup some default gambits
-    var defaultGambits = [
-      new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack)
-    ];
+    // Setup gambits
+    var defaultGambits = characterClass.getStartingGambits();
 
     return new PlayerCharacter({
       name: characterName,

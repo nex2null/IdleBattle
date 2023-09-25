@@ -12,6 +12,7 @@ class PlayerEquipment {
   boots: Equipment | null;
   gloves: Equipment | null;
   helmet: Equipment | null;
+  flask: Equipment | null;
 
   //
   // Constructor
@@ -22,7 +23,8 @@ class PlayerEquipment {
     this.chest = null;
     this.boots = null;
     this.gloves = null;
-    this.helmet = null
+    this.helmet = null;
+    this.flask = null;
   }
 
   //
@@ -36,6 +38,7 @@ class PlayerEquipment {
     playerEquipment.boots = savedData.boots ? Equipment.load(savedData.boots) : null;
     playerEquipment.gloves = savedData.gloves ? Equipment.load(savedData.gloves) : null;
     playerEquipment.helmet = savedData.helmet ? Equipment.load(savedData.helmet) : null;
+    playerEquipment.flask = savedData.flask ? Equipment.load(savedData.flask) : null;
     return playerEquipment;
   }
 
@@ -50,6 +53,7 @@ class PlayerEquipment {
       case EquipmentSlotEnum.OffHand: return this.offHand;
       case EquipmentSlotEnum.Gloves: return this.gloves;
       case EquipmentSlotEnum.Helmet: return this.helmet;
+      case EquipmentSlotEnum.Flask: return this.flask;
       default: return null;
     }
   }
@@ -77,6 +81,9 @@ class PlayerEquipment {
       case EquipmentSlotEnum.Helmet:
         this.helmet = equipment;
         break;
+      case EquipmentSlotEnum.Flask:
+        this.flask = equipment;
+        break;
     }
   }
 
@@ -103,6 +110,9 @@ class PlayerEquipment {
       case EquipmentSlotEnum.Helmet:
         this.helmet = null;
         break;
+      case EquipmentSlotEnum.Flask:
+        this.flask = null;
+        break;
     }
   }
 
@@ -117,6 +127,7 @@ class PlayerEquipment {
     if (this.boots) amt += this.boots.getStatValue(stat);
     if (this.gloves) amt += this.gloves.getStatValue(stat);
     if (this.helmet) amt += this.helmet.getStatValue(stat);
+    if (this.flask) amt += this.flask.getStatValue(stat);
     return amt;
   }
 }

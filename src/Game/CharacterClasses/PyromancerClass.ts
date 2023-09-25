@@ -1,4 +1,6 @@
+import GambitConditionEnum from "../BattleSystem/Enums/GambitConditionEnum";
 import SkillEnum from "../BattleSystem/Enums/SkillEnum";
+import Gambit from "../BattleSystem/Gambits/Gambit";
 import CharacterClassEnum from "../Enums/CharacterClassEnum";
 import PlayerSkill from "../PlayerSkill";
 import Stats from "../Stats";
@@ -28,14 +30,21 @@ class PyromancerClass implements ICharacterClass {
     ];
   }
 
+  // Gets the starting gambits
+  getStartingGambits(): Gambit[] {
+    return [
+      new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Fireball),
+      new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack)
+    ];
+  }
+
   // Get stats the class starts with
   getStartingStats(): Stats {
     return new Stats({
       maxHp: 50,
       maxMp: 75,
       strength: 2,
-      intelligence: 6,
-      mpRegen: 2
+      intelligence: 6
     });
   }
 
@@ -44,8 +53,7 @@ class PyromancerClass implements ICharacterClass {
     return new Stats({
       maxHp: 3,
       maxMp: 2,
-      intelligence: 2,
-      mpRegen: 1
+      intelligence: 2
     });
   }
 

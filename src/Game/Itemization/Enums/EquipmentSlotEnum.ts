@@ -4,7 +4,8 @@ enum EquipmentSlotEnum {
     ChestPiece = 'chest-piece',
     Boots = 'boots',
     Gloves = 'gloves',
-    Helmet = 'helmet'
+    Helmet = 'helmet',
+    Flask = 'flask'
 }
 
 export default EquipmentSlotEnum;

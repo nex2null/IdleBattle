@@ -1,4 +1,6 @@
+import GambitConditionEnum from "../BattleSystem/Enums/GambitConditionEnum";
 import SkillEnum from "../BattleSystem/Enums/SkillEnum";
+import Gambit from "../BattleSystem/Gambits/Gambit";
 import CharacterClassEnum from "../Enums/CharacterClassEnum";
 import PlayerSkill from "../PlayerSkill";
 import Stats from "../Stats";
@@ -28,15 +30,21 @@ class PaladinClass implements ICharacterClass {
     ];
   }
 
+  // Gets the starting gambits
+  getStartingGambits(): Gambit[] {
+    return [
+      new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.HolyStrike),
+      new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack)
+    ];
+  }
+
   // Get stats the class starts with
   getStartingStats(): Stats {
     return new Stats({
       maxHp: 70,
       maxMp: 50,
       strength: 5,
-      intelligence: 4,
-      hpRegen: 3,
-      mpRegen: 2
+      intelligence: 4
     });
   }
 
@@ -46,9 +54,7 @@ class PaladinClass implements ICharacterClass {
       maxHp: 4,
       maxMp: 4,
       intelligence: 1,
-      strength: 1,
-      hpRegen: 2,
-      mpRegen: 1
+      strength: 1
     });
   }
 

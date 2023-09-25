@@ -1,4 +1,6 @@
+import GambitConditionEnum from "../BattleSystem/Enums/GambitConditionEnum";
 import SkillEnum from "../BattleSystem/Enums/SkillEnum";
+import Gambit from "../BattleSystem/Gambits/Gambit";
 import CharacterClassEnum from "../Enums/CharacterClassEnum";
 import PlayerSkill from "../PlayerSkill";
 import Stats from "../Stats";
@@ -25,6 +27,14 @@ class CryomancerClass implements ICharacterClass {
   getStartingSkills(): PlayerSkill[] {
     return [
       new PlayerSkill(SkillEnum.IceBolt, 1, false)
+    ];
+  }
+
+  // Gets the starting gambits
+  getStartingGambits(): Gambit[] {
+    return [
+      new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.IceBolt),
+      new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack)
     ];
   }
 

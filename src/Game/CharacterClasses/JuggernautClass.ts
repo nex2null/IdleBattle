@@ -1,4 +1,6 @@
+import GambitConditionEnum from "../BattleSystem/Enums/GambitConditionEnum";
 import SkillEnum from "../BattleSystem/Enums/SkillEnum";
+import Gambit from "../BattleSystem/Gambits/Gambit";
 import CharacterClassEnum from "../Enums/CharacterClassEnum";
 import PlayerSkill from "../PlayerSkill";
 import Stats from "../Stats";
@@ -28,6 +30,13 @@ class JuggernautClass implements ICharacterClass {
     ];
   }
 
+  // Gets the starting gambits
+  getStartingGambits(): Gambit[] {
+    return [
+      new Gambit(GambitConditionEnum.EnemyAny, null, SkillEnum.Attack)
+    ];
+  }
+
   // Get stats the class starts with
   getStartingStats(): Stats {
     return new Stats({
@@ -35,7 +44,7 @@ class JuggernautClass implements ICharacterClass {
       maxMp: 45,
       strength: 3,
       intelligence: 2,
-      hpRegen: 5
+      hpRegen: 2
     });
   }
 
@@ -45,7 +54,7 @@ class JuggernautClass implements ICharacterClass {
       maxHp: 8,
       maxMp: 3,
       strength: 1,
-      hpRegen: 4
+      hpRegen: 1
     });
   }
 

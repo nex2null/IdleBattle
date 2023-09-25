@@ -1,4 +1,5 @@
 import SkillEnum from "../BattleSystem/Enums/SkillEnum";
+import Gambit from "../BattleSystem/Gambits/Gambit";
 import CharacterClassEnum from "../Enums/CharacterClassEnum";
 import PlayerSkill from "../PlayerSkill";
 import Stats from "../Stats";
@@ -16,6 +17,9 @@ interface ICharacterClass {
 
   // Gets skills the class starts with
   getStartingSkills(): PlayerSkill[];
+
+  // Gets the starting gambits
+  getStartingGambits(): Gambit[]
 
   // Get stats the class starts with
   getStartingStats(): Stats;

@@ -94,7 +94,7 @@ class EquipmentScreen implements IScreen {
     this.screenElements.weaponBox = blessed.box({
       parent: this.screenElements.characterBox,
       top: 5,
-      height: 5,
+      height: 4,
       width: 26,
       left: 'center',
       border: {
@@ -114,8 +114,8 @@ class EquipmentScreen implements IScreen {
     // Equipped off-hand box
     this.screenElements.offHandBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 11,
-      height: 5,
+      top: 10,
+      height: 4,
       width: 26,
       left: 'center',
       border: {
@@ -135,8 +135,8 @@ class EquipmentScreen implements IScreen {
     // Equipped helmet box
     this.screenElements.helmetBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 17,
-      height: 5,
+      top: 15,
+      height: 4,
       width: 26,
       left: 'center',
       border: {
@@ -156,8 +156,8 @@ class EquipmentScreen implements IScreen {
     // Equipped chestpiece box
     this.screenElements.chestBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 23,
-      height: 5,
+      top: 20,
+      height: 4,
       width: 26,
       left: 'center',
       border: {
@@ -177,8 +177,8 @@ class EquipmentScreen implements IScreen {
     // Equipped gloves box
     this.screenElements.glovesBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 29,
-      height: 5,
+      top: 25,
+      height: 4,
       width: 26,
       left: 'center',
       border: {
@@ -198,8 +198,8 @@ class EquipmentScreen implements IScreen {
     // Equipped boots box
     this.screenElements.bootsBox = blessed.box({
       parent: this.screenElements.characterBox,
-      top: 35,
-      height: 5,
+      top: 30,
+      height: 4,
       width: 26,
       left: 'center',
       border: {
@@ -216,8 +216,29 @@ class EquipmentScreen implements IScreen {
       tags: true
     });
 
+    // Flask
+    this.screenElements.flaskBox = blessed.box({
+      parent: this.screenElements.characterBox,
+      top: 35,
+      height: 4,
+      width: 26,
+      left: 'center',
+      border: {
+        type: 'line'
+      },
+      style: {
+        focus: {
+          bg: 'white',
+          fg: 'black'
+        }
+      },
+      label: 'Flask',
+      content: 'Empty',
+      tags: true
+    });
+
     // Container for equipment list
-    this.screenElements.equipmentListBox = blessed.box({
+    this.screenElements.equipmentListContainer = blessed.box({
       top: 0,
       left: 31,
       width: 40,
@@ -312,9 +333,14 @@ class EquipmentScreen implements IScreen {
     this.screenElements.glovesBox.key(['escape'], () => this.exitScreen());
     this.screenElements.glovesBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Gloves));
     this.screenElements.bootsBox.key(['up'], () => this.screenElements.glovesBox.focus());
+    this.screenElements.bootsBox.key(['down'], () => this.screenElements.flaskBox.focus());
     this.screenElements.bootsBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.Boots));
     this.screenElements.bootsBox.key(['escape'], () => this.exitScreen());
     this.screenElements.bootsBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Boots));
+    this.screenElements.flaskBox.key(['up'], () => this.screenElements.bootsBox.focus());
+    this.screenElements.flaskBox.key(['enter'], () => this.loadEquipmentList(EquipmentSlotEnum.Flask));
+    this.screenElements.flaskBox.key(['escape'], () => this.exitScreen());
+    this.screenElements.flaskBox.key(['u'], () => this.unequipEquipment(EquipmentSlotEnum.Boots));
     this.screenElements.equipmentListBox.key(['escape'], () => this.unloadEquipmentList());
     this.screenElements.equipmentListBox.on('select', (el: any, sel: any) => this.handleEquipmentListSelected(el, sel));
     this.screenElements.equipmentListBox.on('select item', (el: any, sel: any) => this.handleEquipmentListFocused(el, sel));
@@ -409,6 +435,10 @@ class EquipmentScreen implements IScreen {
     // Update the boots name
     var equippedBoots = character.equipment.boots;
     this.screenElements.bootsBox.setContent(equippedBoots ? equippedBoots.name : 'Empty');
+
+    // Update the flask name
+    var equippedFlask = character.equipment.flask;
+    this.screenElements.flaskBox.setContent(equippedFlask ? equippedFlask.name : 'Empty');
 
     // Render the screen
     this.screen.render();
