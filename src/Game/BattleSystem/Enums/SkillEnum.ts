@@ -2,6 +2,7 @@ enum SkillEnum {
   Attack = 'Attack',
   Defend = 'Defend',
   Focus = 'Focus',
+  UseFlask = 'Use Flask',
   WebShoot = 'Web Shoot',
   PowerStrike = 'Power Strike',
   IceBolt = 'Ice Bolt',

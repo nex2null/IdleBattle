@@ -35,7 +35,8 @@ class Spider extends BattleCharacter {
       equipment: null,
       maxNumberOfItemsToDrop: 1,
       lootGenerationOptions: [
-        new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 25)
+        new LootGenerationOption(ItemTypeEnum.SpiderFang, 1, 25),
+        new LootGenerationOption(ItemTypeEnum.SpiderIchor, 1, 2)
       ],
       goldWorth: 75,
       xpWorth: 25

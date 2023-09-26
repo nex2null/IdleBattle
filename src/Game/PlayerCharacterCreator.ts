@@ -16,7 +16,8 @@ class PlayerCharacterCreator {
     // Basic skills for all characters
     var skills = [
       new PlayerSkill(SkillEnum.Attack, 1, false),
-      new PlayerSkill(SkillEnum.Defend, 1, false)
+      new PlayerSkill(SkillEnum.Defend, 1, false),
+      new PlayerSkill(SkillEnum.UseFlask, 1, false)
     ];
 
     // Add class-specific skills

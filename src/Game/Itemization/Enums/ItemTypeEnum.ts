@@ -2,6 +2,7 @@ enum ItemTypeEnum {
 
   // Material items
   SpiderFang = 'spider-fang',
+  SpiderIchor = 'spider-ichor',
   FunnelWeaverFang = 'funnel-weaver-fang',
   TarantulaFang = 'tarantula-fang',
   BrownRecluseFang = 'brown-recluse-fang',
@@ -33,5 +34,8 @@ enum ItemTypeEnum {
 
   // Offhand - Weaver
   WeaverFangShield = 'weaver-fang-shield',
+
+  // Minor healing flask
+  MinorHealingFlask = 'minor-healing-flask'
 }
 export default ItemTypeEnum;

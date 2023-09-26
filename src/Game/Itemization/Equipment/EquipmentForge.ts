@@ -11,6 +11,7 @@ import RandomHelpers from '../../Utilities/RandomHelpers';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 import { EquipmentInformation, itemInformations } from "../ItemInformation";
 import Game from "../../Game";
+import EquipmentTagEnum from "../Enums/EquipmentTagEnum";
 
 //
 // A cost to use a forge action
@@ -92,6 +93,10 @@ class EquipmentForge {
 
       // Action is only allowed for normal and magic equipment
       if (equipment.rarity !== ItemRarityEnum.Normal && equipment.rarity !== ItemRarityEnum.Magic)
+        return null;
+
+      // Action is not allowed for flask
+      if (equipment.tags.includes(EquipmentTagEnum.CannotUpgrade))
         return null;
 
       // Set the rarity modifier

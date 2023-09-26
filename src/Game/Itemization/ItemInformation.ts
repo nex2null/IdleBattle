@@ -90,8 +90,8 @@ var itemInformations = new Array<ItemInformation>();
 
 // Material items
 itemInformations.push(new MaterialInformation(ItemTypeEnum.SpiderFang, "Spider Fang", ItemRarityEnum.Normal, 1));
+itemInformations.push(new MaterialInformation(ItemTypeEnum.SpiderIchor, "Spider Ichor", ItemRarityEnum.Normal, 3));
 itemInformations.push(new MaterialInformation(ItemTypeEnum.FunnelWeaverFang, "Funnel Weaver Fang", ItemRarityEnum.Normal, 10));
-
 
 //
 // Equipment
@@ -186,6 +186,19 @@ itemInformations.push(new EquipmentInformation(
   true,
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 5)),
   new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderFang, 'Spider Fang', 1))
+));
+
+// Minor healing flask
+itemInformations.push(new EquipmentInformation(
+  ItemTypeEnum.MinorHealingFlask,
+  'Minor Healing Flask',
+  1,
+  1,
+  EquipmentSlotEnum.Flask,
+  [EquipmentTagEnum.CannotUpgrade],
+  true,
+  new Array<ForgeReagentCost>(new ForgeReagentCost(ItemTypeEnum.SpiderIchor, 'Spider Ichor', 1)),
+  []
 ));
 
 // Weaver silk robe

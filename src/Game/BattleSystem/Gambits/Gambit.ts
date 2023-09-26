@@ -56,7 +56,7 @@ class Gambit {
     var potentialTargets = condition.getTargets(user, characters, this.conditionInput);
 
     // Filter the targets by which ones are valid
-    var targets = potentialTargets.filter(x => skill.isValidTarget(x));
+    var targets = potentialTargets.filter(x => skill.isValidTarget(x, user));
 
     // If the skill target is 'not-self' then remove the caster from the targets list
     if (skill.targetType === TargetTypeEnum.NotSelf)

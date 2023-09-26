@@ -55,6 +55,9 @@ implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFa
 implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangShield, StatEnum.PhysicalResistance, 5, 15));
 implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.SpiderFangShield, StatEnum.IncreasedHpPercent, 5, 10));
 
+// Minor healing flask
+implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.MinorHealingFlask, StatEnum.HpRegen, 1, 3));
+
 // Weaver Silk Robe
 implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkRobe, StatEnum.Hp, 11, 20));
 implicitInformations.push(new EquipmentImplicitInformation(ItemTypeEnum.WeaverSilkRobe, StatEnum.Mp, 6, 10));

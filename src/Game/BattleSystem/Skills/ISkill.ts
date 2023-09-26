@@ -28,7 +28,7 @@ interface ISkill {
   targetType: TargetTypeEnum;
 
   // Determine if the skill is valid for a target
-  isValidTarget(target: BattleCharacter): boolean;
+  isValidTarget(target: BattleCharacter, character?: BattleCharacter): boolean;
 
   // Get the skill description
   getDescription(): string;

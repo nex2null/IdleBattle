@@ -13,6 +13,8 @@ import BattleStats from './BattleStats';
 import { calculateCrit } from './BattleFormulas';
 import SkillEnum from './Enums/SkillEnum';
 import PlayerEquipment from '../PlayerEquipment';
+import IFlaskSkill from './Skills/Flask/IFlaskSkill';
+import FlaskSkillFactory from './Skills/Flask/FlaskSkillFactory';
 
 const REQUIRED_CHARGE_TO_ACT = 250;
 const REQUIRED_REGEN_TICKS = 30;
@@ -33,6 +35,7 @@ export default class BattleCharacter {
   skills: Array<PlayerSkill>;
   equipment: PlayerEquipment | null;
   cooldowns: Map<SkillEnum, number> = new Map<SkillEnum, number>();
+  hasUsedFlask: boolean;
 
   // Regen properties
   regenCountdown: number;
@@ -73,8 +76,9 @@ export default class BattleCharacter {
     this.effects = args.effects || [];
     this.equipment = args.equipment;
 
-    // Regen properties
+    // Random properties
     this.regenCountdown = REQUIRED_REGEN_TICKS;
+    this.hasUsedFlask = false;
 
     // TODO: Refactor enemy specific things to enemy base class
     this.maxNumberOfItemsToDrop = args.maxNumberOfItemsToDrop || 0;
@@ -395,5 +399,40 @@ export default class BattleCharacter {
         this.cooldowns.set(skill, existingTurns - 1);
       }
     });
+  }
+
+  // Determine if we can use our flask
+  canUseFlask() {
+    return this.equipment?.flask != null && !this.hasUsedFlask;
+  }
+
+  // Reset flask
+  resetFlask() {
+    this.hasUsedFlask = false;
+  }
+
+  // Mark that the flask was used
+  useFlask(targets: BattleCharacter[], battleLog: BattleLog, damageTracker: DamageTracker, allCharacters: BattleCharacter[]) {
+    
+    // Get the flask skill
+    const flaskSkill = this.getFlaskSkill();
+    if (!flaskSkill) return;
+
+    // Use the flask skill
+    flaskSkill.use(this, targets, battleLog, damageTracker, allCharacters);
+    
+    // Set that we have used our flask
+    this.hasUsedFlask = true;
+  }
+
+  // Get the character's flask skill
+  getFlaskSkill(): IFlaskSkill | null {
+    if (!this.equipment?.flask) return null;
+    return FlaskSkillFactory.getSkill(this.equipment.flask);
+  }
+
+  // Process advancing a dungeon level
+  onDungeonLevelAdvance() {
+    this.resetFlask();
   }
 }

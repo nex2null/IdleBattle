@@ -113,6 +113,9 @@ class Battle {
     this.dungeon.advanceToNextLevel();
     this.updateCharactersInCurrentLevel();
 
+    // Let all player characters know a level was advanced
+    this.playerCharacters.forEach(x => x.onDungeonLevelAdvance());
+
     // Return to battle
     this.currentState = BattleStateEnum.InBattle;
   }
